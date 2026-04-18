@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/26848555/README.md)
+[README.md](https://github.com/user-attachments/files/26848580/README.md)
 # OverOwned Landing Page
 
 Static single-page marketing site for OverOwned (https://overowned.io). Built as plain HTML/CSS/JS for fast loads and easy hosting.
