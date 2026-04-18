@@ -49,6 +49,71 @@
       line-height: 1.5;
     }
 
+    /* ── Scroll-triggered fade-in animations ──── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.12s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.19s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 0.26s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.33s; opacity: 1; transform: translateY(0); }
+    .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.40s; opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* ── Scroll progress bar ────────────────── */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      background: var(--primary);
+      width: 0%;
+      z-index: 200;
+      transition: width 0.1s linear;
+      pointer-events: none;
+    }
+
+    /* ── Cursor glow in hero ────────────────── */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(245, 197, 24, 0.08),
+        transparent 40%
+      );
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: 1;
+    }
+    .hero:hover::before { opacity: 1; }
+    @media (hover: none) {
+      .hero::before { display: none; }
+    }
+
     a { color: inherit; text-decoration: none; }
 
     /* ── Nav ──────────────────────────────── */
@@ -90,6 +155,8 @@
       height: 240px;
       opacity: 0.12;
       pointer-events: none;
+      will-change: transform;
+      transition: transform 0.1s linear;
     }
     .hero > *:not(.hero-mountains) { position: relative; z-index: 2; }
     .hero-badge {
@@ -229,11 +296,12 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 24px;
-      transition: border-color 0.2s, transform 0.2s;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
     }
     .feat:hover {
       border-color: var(--primary);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px -12px rgba(245, 197, 24, 0.25);
     }
     .feat-icon {
       width: 40px;
@@ -271,11 +339,47 @@
       border-radius: 12px;
       padding: 28px;
       position: relative;
-      transition: border-color 0.2s;
+      transition: border-color 0.3s, transform 0.3s;
     }
-    .price-card:hover { border-color: var(--border-light); }
+    .price-card:hover {
+      border-color: var(--border-light);
+      transform: translateY(-2px);
+    }
     .price-card.featured {
       border: 2px solid var(--primary);
+      overflow: hidden;
+    }
+    .price-card.featured::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 12px;
+      padding: 2px;
+      background: conic-gradient(
+        from var(--angle, 0deg),
+        transparent 0%,
+        transparent 70%,
+        rgba(245, 197, 24, 0.6) 85%,
+        #F5C518 90%,
+        rgba(245, 197, 24, 0.6) 95%,
+        transparent 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: rotate-border 6s linear infinite;
+      pointer-events: none;
+    }
+    @property --angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    @keyframes rotate-border {
+      to { --angle: 360deg; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .price-card.featured::before { animation: none; }
     }
     .price-badge {
       position: absolute;
@@ -514,6 +618,8 @@
 </head>
 <body>
 
+  <div class="scroll-progress" id="scroll-progress"></div>
+
   <nav class="nav">
     <a href="/" class="nav-brand">
       <img src="/logo.png" alt="OverOwned" />
@@ -533,21 +639,21 @@
       <path d="M0,200 L60,140 L160,170 L280,120 L400,160 L520,130 L640,155 L760,125 L880,150 L1000,135 L1000,200 Z" fill="#F5C518" opacity="0.5"/>
     </svg>
 
-    <div class="hero-badge">
+    <div class="hero-badge reveal">
       <span class="hero-badge-dot"></span>
       Limited spots · Season 1 closing soon
     </div>
 
-    <h1>Beat the field in<br><span class="accent">DraftKings DFS.</span></h1>
+    <h1 class="reveal">Beat the field in<br><span class="accent">DraftKings DFS.</span></h1>
 
-    <p class="hero-sub">Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge.</p>
+    <p class="hero-sub reveal">Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge.</p>
 
-    <div class="hero-cta">
+    <div class="hero-cta reveal">
       <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
       <a href="#features" class="btn btn-secondary">See How It Works</a>
     </div>
 
-    <div class="featured">
+    <div class="featured reveal">
       <div class="featured-label">FEATURED BY</div>
       <div class="featured-logos">
         <div>AltaPicks</div>
@@ -558,12 +664,12 @@
   </section>
 
   <section class="section" id="features">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="section-label">WHAT YOU GET</div>
       <div class="section-title">Every edge the sharps keep to themselves.</div>
     </div>
 
-    <div class="features">
+    <div class="features reveal-stagger">
       <div class="feat">
         <div class="feat-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
@@ -615,12 +721,12 @@
   </section>
 
   <section class="section section-alt" id="pricing">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="section-label">PRICING</div>
       <div class="section-title">Choose your edge.</div>
     </div>
 
-    <div class="pricing">
+    <div class="pricing reveal-stagger">
       <div class="price-card">
         <div class="price-tier">Weekly</div>
         <div class="price-amount">$19<small>/wk</small></div>
@@ -664,12 +770,12 @@
   </section>
 
   <section class="section">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="section-label">INSIDE THE PRODUCT</div>
       <div class="section-title">Built for players who take it seriously.</div>
     </div>
 
-    <div class="preview-wrap">
+    <div class="preview-wrap reveal">
       <div class="preview-header">
         <div>#</div><div></div><div>PLAYER</div>
         <div class="num">SALARY</div><div class="num">PROJ</div>
@@ -712,10 +818,10 @@
   </section>
 
   <section class="waitlist" id="waitlist">
-    <div class="waitlist-title">Ready to <span class="accent">sharpen</span> your edge?</div>
-    <div class="waitlist-sub">Join the waitlist — we'll email you the moment Season 1 opens.</div>
+    <div class="waitlist-title reveal">Ready to <span class="accent">sharpen</span> your edge?</div>
+    <div class="waitlist-sub reveal">Join the waitlist — we'll email you the moment Season 1 opens.</div>
 
-    <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="waitlist-form" id="waitlist-form">
+    <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="waitlist-form reveal" id="waitlist-form">
       <input type="hidden" name="form-name" value="waitlist" />
       <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
       <input type="email" name="email" placeholder="your@email.com" required class="waitlist-input" />
@@ -741,6 +847,57 @@
   </footer>
 
   <script>
+    // ── Scroll-triggered reveal animations ────────────
+    const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -50px 0px'
+    });
+    revealEls.forEach(el => observer.observe(el));
+
+    // ── Scroll progress bar + mountain parallax ───────
+    const progressBar = document.getElementById('scroll-progress');
+    const mountains = document.querySelector('.hero-mountains');
+    let ticking = false;
+
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollTop = window.scrollY;
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = (scrollTop / docHeight) * 100;
+          progressBar.style.width = progress + '%';
+
+          if (mountains && scrollTop < 800) {
+            mountains.style.transform = 'translateY(' + (scrollTop * 0.35) + 'px)';
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // ── Cursor glow on hero ───────────────────────────
+    const hero = document.querySelector('.hero');
+    if (hero && window.matchMedia('(hover: hover)').matches) {
+      hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        hero.style.setProperty('--mouse-x', x + '%');
+        hero.style.setProperty('--mouse-y', y + '%');
+      });
+    }
+
+    // ── Waitlist form submission ──────────────────────
     const form = document.getElementById('waitlist-form');
     const success = document.getElementById('waitlist-success');
 
