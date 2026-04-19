@@ -333,12 +333,56 @@
       max-width: 900px;
       margin: 0 auto;
     }
+
+    /* ── Spots banner ────────────────────── */
+    .spots-banner {
+      max-width: 900px;
+      margin: 0 auto 24px;
+      padding: 14px 20px;
+      background: linear-gradient(90deg,
+        rgba(245, 197, 24, 0.10) 0%,
+        rgba(245, 197, 24, 0.04) 100%);
+      border: 1px solid rgba(245, 197, 24, 0.35);
+      border-radius: 10px;
+      text-align: center;
+    }
+    .spots-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .spots-left-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .spots-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 10px rgba(245, 197, 24, 0.6);
+      animation: pulse 2s infinite;
+      display: inline-block;
+    }
+    .spots-note {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    #spots-remaining, #spots-total {
+      font-variant-numeric: tabular-nums;
+    }
     .price-card {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 28px;
       position: relative;
+      min-width: 0;
       transition: border-color 0.3s, transform 0.3s;
     }
     .price-card:hover {
@@ -346,8 +390,8 @@
       transform: translateY(-2px);
     }
     .price-card.featured {
-      border: 2px solid var(--primary);
-      overflow: hidden;
+      border: 1px solid var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
     }
     .price-card.featured::before {
       content: '';
@@ -501,80 +545,6 @@
       font-size: 11px;
     }
 
-    /* ── Waitlist CTA ─────────────────────── */
-    .waitlist {
-      padding: 70px 40px;
-      text-align: center;
-      border-top: 1px solid var(--border);
-      background: var(--card);
-    }
-    .waitlist-title {
-      font-size: 36px;
-      font-weight: 800;
-      letter-spacing: -0.8px;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-    .waitlist-title .accent { color: var(--primary); }
-    .waitlist-sub {
-      font-size: 15px;
-      color: var(--text-muted);
-      margin-bottom: 28px;
-    }
-    .waitlist-form {
-      display: flex;
-      gap: 8px;
-      max-width: 480px;
-      margin: 0 auto;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .waitlist-input {
-      flex: 1;
-      min-width: 240px;
-      padding: 13px 16px;
-      background: var(--bg);
-      border: 1px solid var(--border-light);
-      border-radius: 8px;
-      color: var(--text);
-      font-size: 14px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .waitlist-input:focus { border-color: var(--primary); }
-    .waitlist-btn {
-      padding: 13px 28px;
-      background: var(--primary);
-      color: var(--bg);
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.15s;
-    }
-    .waitlist-btn:hover { background: var(--primary-light); }
-    .waitlist-note {
-      font-size: 11px;
-      color: var(--text-dim);
-      margin-top: 14px;
-    }
-    .waitlist-success {
-      display: none;
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 20px 24px;
-      background: rgba(74, 222, 128, 0.1);
-      border: 1px solid rgba(74, 222, 128, 0.3);
-      border-radius: 8px;
-      color: var(--green);
-      font-size: 14px;
-      font-weight: 600;
-    }
-    .waitlist-success.visible { display: block; }
-
     /* ── Footer ───────────────────────────── */
     .footer {
       padding: 32px 40px;
@@ -610,8 +580,6 @@
         font-size: 11px;
       }
       .preview-header > :nth-child(7), .preview-row > :nth-child(7) { display: none; }
-      .waitlist { padding: 48px 20px; }
-      .waitlist-title { font-size: 26px; }
       .footer { padding: 24px 20px; flex-direction: column; text-align: center; }
     }
   </style>
@@ -629,7 +597,7 @@
       <a href="#features">Features</a>
       <a href="#pricing">Pricing</a>
       <a href="mailto:overowneddfs@gmail.com">Support</a>
-      <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+      <a href="#pricing" class="nav-cta">Claim Your Spot</a>
     </div>
   </nav>
 
@@ -641,7 +609,7 @@
 
     <div class="hero-badge reveal">
       <span class="hero-badge-dot"></span>
-      Limited spots · Season 1 closing soon
+      Season 1 is open · Limited spots per week
     </div>
 
     <h1 class="reveal">Beat the field in<br><span class="accent">DraftKings DFS.</span></h1>
@@ -649,7 +617,7 @@
     <p class="hero-sub reveal">Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge.</p>
 
     <div class="hero-cta reveal">
-      <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
+      <a href="#pricing" class="btn btn-primary">Claim Your Spot</a>
       <a href="#features" class="btn btn-secondary">See How It Works</a>
     </div>
 
@@ -726,12 +694,22 @@
       <div class="section-title">Choose your edge.</div>
     </div>
 
+    <div class="spots-banner reveal" id="spots-banner">
+      <div class="spots-inner">
+        <div class="spots-left-row">
+          <span class="spots-dot"></span>
+          <span><span id="spots-remaining">23</span> of <span id="spots-total">50</span> spots left this window</span>
+        </div>
+        <div class="spots-note">Next window prices go up 10%. Your rate locks in forever.</div>
+      </div>
+    </div>
+
     <div class="pricing reveal-stagger">
       <div class="price-card">
         <div class="price-tier">Weekly</div>
-        <div class="price-amount">$19<small>/wk</small></div>
-        <div class="price-note muted">Cancel anytime</div>
-        <a href="#waitlist" class="price-btn">Join Waitlist</a>
+        <div class="price-amount">$20<small>/wk</small></div>
+        <div class="price-note muted">Cancel anytime · Price locked forever</div>
+        <a href="#" data-tier="weekly" class="price-btn">Claim Your Spot</a>
         <div class="price-feats">
           <div>All projections</div>
           <div>Lineup builder</div>
@@ -743,9 +721,9 @@
       <div class="price-card featured">
         <div class="price-badge">MOST POPULAR</div>
         <div class="price-tier">Monthly</div>
-        <div class="price-amount">$49<small>/mo</small></div>
-        <div class="price-note save">Save 35% vs weekly</div>
-        <a href="#waitlist" class="price-btn featured-btn">Join Waitlist</a>
+        <div class="price-amount">$50<small>/mo</small></div>
+        <div class="price-note save">Save 38% vs weekly · Price locked forever</div>
+        <a href="#" data-tier="monthly" class="price-btn featured-btn">Claim Your Spot</a>
         <div class="price-feats">
           <div>Everything in Weekly</div>
           <div>Priority Discord access</div>
@@ -756,12 +734,12 @@
 
       <div class="price-card">
         <div class="price-tier">Season Pass</div>
-        <div class="price-amount">$199<small>/3mo</small></div>
-        <div class="price-note save">Best value — save 32%</div>
-        <a href="#waitlist" class="price-btn">Join Waitlist</a>
+        <div class="price-amount">$100<small>/3mo</small></div>
+        <div class="price-note save">Best value — save 58% · Locked forever</div>
+        <a href="#" data-tier="season" class="price-btn">Claim Your Spot</a>
         <div class="price-feats">
           <div>Everything in Monthly</div>
-          <div>Locked-in price</div>
+          <div>Locked-in price forever</div>
           <div>Grand Slam coverage</div>
           <div>Custom Discord role</div>
         </div>
@@ -815,24 +793,6 @@
       </div>
       <div class="preview-more">+ 12 more players</div>
     </div>
-  </section>
-
-  <section class="waitlist" id="waitlist">
-    <div class="waitlist-title reveal">Ready to <span class="accent">sharpen</span> your edge?</div>
-    <div class="waitlist-sub reveal">Join the waitlist — we'll email you the moment Season 1 opens.</div>
-
-    <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="waitlist-form reveal" id="waitlist-form">
-      <input type="hidden" name="form-name" value="waitlist" />
-      <p style="display:none;"><label>Don't fill this out: <input name="bot-field" /></label></p>
-      <input type="email" name="email" placeholder="your@email.com" required class="waitlist-input" />
-      <button type="submit" class="waitlist-btn">Join Waitlist</button>
-    </form>
-
-    <div class="waitlist-success" id="waitlist-success">
-      ✓ You're on the list. We'll email you when Season 1 opens.
-    </div>
-
-    <div class="waitlist-note">No spam. Launch notification only.</div>
   </section>
 
   <footer class="footer">
@@ -896,30 +856,6 @@
         hero.style.setProperty('--mouse-y', y + '%');
       });
     }
-
-    // ── Waitlist form submission ──────────────────────
-    const form = document.getElementById('waitlist-form');
-    const success = document.getElementById('waitlist-success');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(form);
-      try {
-        const res = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(formData).toString()
-        });
-        if (res.ok) {
-          form.style.display = 'none';
-          success.classList.add('visible');
-        } else {
-          alert('Something went wrong. Please try again or email overowneddfs@gmail.com');
-        }
-      } catch (err) {
-        alert('Something went wrong. Please try again or email overowneddfs@gmail.com');
-      }
-    });
   </script>
 
 </body>
