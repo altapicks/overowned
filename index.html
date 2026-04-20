@@ -856,6 +856,62 @@
         hero.style.setProperty('--mouse-y', y + '%');
       });
     }
+
+    // ── Stripe Checkout wiring ────────────────────────
+    // Each pricing button has data-tier="weekly|monthly|season".
+    // On click: POST to /.netlify/functions/create-checkout-session with the tier
+    // → receive Stripe Checkout URL → redirect browser.
+    document.querySelectorAll('[data-tier]').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const tier = btn.getAttribute('data-tier');
+        const originalText = btn.textContent;
+        btn.textContent = 'Loading…';
+        btn.style.pointerEvents = 'none';
+        try {
+          const res = await fetch('/.netlify/functions/create-checkout-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tier })
+          });
+          if (!res.ok) throw new Error('Checkout session failed');
+          const { url } = await res.json();
+          if (url) {
+            window.location.href = url;
+          } else {
+            throw new Error('No checkout URL returned');
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Checkout is temporarily unavailable. Please try again in a moment.');
+          btn.textContent = originalText;
+          btn.style.pointerEvents = '';
+        }
+      });
+    });
+
+    // ── Post-checkout success handler ─────────────────
+    // Stripe redirects to overowned.io/?checkout=success after payment.
+    // We send the user to app.overowned.io immediately — by the time they
+    // arrive, the webhook has (almost always) already written the subscription
+    // row. A 1-second pause smooths out the rare race condition.
+    (function handleCheckoutReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const status = params.get('checkout');
+      if (status === 'success') {
+        document.body.style.opacity = '0.35';
+        document.body.style.transition = 'opacity 0.3s';
+        const msg = document.createElement('div');
+        msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;padding:20px 28px;background:#0F1D33;border:1px solid rgba(245,197,24,0.4);border-radius:10px;color:#E8ECF4;font-family:Inter,sans-serif;font-size:15px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6)';
+        msg.innerHTML = '<div style="color:#F5C518;font-weight:700;font-size:17px;margin-bottom:6px">Payment successful</div><div style="color:#8B9ABA">Redirecting to the app…</div>';
+        document.body.appendChild(msg);
+        setTimeout(() => { window.location.href = 'https://app.overowned.io'; }, 1200);
+      } else if (status === 'cancel') {
+        // Clean the URL so a refresh doesn't repeat behavior
+        history.replaceState({}, '', window.location.pathname + '#pricing');
+      }
+    })();
+
   </script>
 
 </body>
