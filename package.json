@@ -1,0 +1,9 @@
+{
+  "name": "overowned-landing",
+  "version": "1.0.0",
+  "description": "OverOwned landing page with Stripe checkout + Supabase sync",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "stripe": "^17.3.1"
+  }
+}
