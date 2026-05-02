@@ -22,7 +22,7 @@ const SEASON = 1;
 const DAY_PASS_DURATION_HOURS = 24;
 const APP_URL = 'https://app.overowned.io';
 const FROM_EMAIL = 'OverOwned <noreply@overowned.io>';
-const REPLY_TO = 'overowneddfs@gmail.com';
+const REPLY_TO = 'support@overowned.io';
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
