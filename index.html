@@ -1,918 +1,1099 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OverOwned — Beat the field in DraftKings DFS</title>
-  <meta name="description" content="Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge." />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>OverOwned — Beat the field in DraftKings DFS</title>
+<meta name="description" content="Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge." />
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" href="/logo.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<meta property="og:title" content="OverOwned — Beat the field in DraftKings DFS" />
+<meta property="og:description" content="Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge." />
+<meta property="og:image" content="/og-image.png" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://overowned.io" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@OverOwnedDFS" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0A1628;
+  --card: #0F1D33;
+  --card-alt: #162948;
+  --border: #1E2D4A;
+  --border-light: #2A3D5F;
+  --primary: #F5C518;
+  --primary-dark: #D4A912;
+  --primary-light: #FFD73D;
+  --text: #FFFFFF;
+  --text-muted: #8B9ABA;
+  --text-dim: #5F728F;
+  --green: #4ADE80;
+  --red: #EF4444;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
 
-  <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" href="/logo.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+/* ── Scroll-triggered fade-in animations ──── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.12s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.19s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 0.26s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.33s; opacity: 1; transform: translateY(0); }
+.reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.40s; opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-stagger > * {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
 
-  <meta property="og:title" content="OverOwned — Beat the field in DraftKings DFS" />
-  <meta property="og:description" content="Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge." />
-  <meta property="og:image" content="/og-image.png" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://overowned.io" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@OverOwnedDFS" />
+/* ── Scroll progress bar ────────────────── */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--primary);
+  width: 0%;
+  z-index: 200;
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+/* ── Cursor glow in hero ────────────────── */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(245, 197, 24, 0.08),
+    transparent 40%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: 1;
+}
+.hero:hover::before { opacity: 1; }
+@media (hover: none) {
+  .hero::before { display: none; }
+}
 
-  <style>
-    :root {
-      --bg: #0A1628;
-      --card: #0F1D33;
-      --card-alt: #162948;
-      --border: #1E2D4A;
-      --border-light: #2A3D5F;
-      --primary: #F5C518;
-      --primary-dark: #D4A912;
-      --primary-light: #FFD73D;
-      --text: #FFFFFF;
-      --text-muted: #8B9ABA;
-      --text-dim: #5F728F;
-      --green: #4ADE80;
-      --red: #EF4444;
-    }
+a { color: inherit; text-decoration: none; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+/* ── Nav ──────────────────────────────── */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 40px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(10, 22, 40, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 12px; }
+.nav-brand img { width: 36px; height: 36px; border-radius: 50%; }
+.nav-brand span { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
+.nav-brand .brand-o { color: var(--primary); }
+.nav-links { display: flex; align-items: center; gap: 28px; font-size: 13px; color: var(--text-muted); }
+.nav-links a { transition: color 0.15s; }
+.nav-links a:hover { color: var(--text); }
+.nav-links .nav-cta { color: var(--primary); font-weight: 600; }
 
-    html { scroll-behavior: smooth; }
+/* ── Hero ─────────────────────────────── */
+.hero {
+  position: relative;
+  padding: 100px 40px 80px;
+  text-align: center;
+  overflow: hidden;
+}
+.hero-mountains {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 240px;
+  opacity: 0.12;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+.hero > *:not(.hero-mountains) { position: relative; z-index: 2; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(245, 197, 24, 0.1);
+  border: 1px solid rgba(245, 197, 24, 0.3);
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: inline-block;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.hero h1 {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.hero h1 .accent { color: var(--primary); }
+.hero-sub {
+  font-size: 18px;
+  color: var(--text-muted);
+  max-width: 620px;
+  margin: 0 auto 36px;
+  line-height: 1.6;
+}
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      line-height: 1.5;
-    }
+/* ── Buttons ──────────────────────────── */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  font-family: inherit;
+}
+.btn-primary {
+  background: var(--primary);
+  color: var(--bg);
+}
+.btn-primary:hover {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border-light);
+}
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
 
-    /* ── Scroll-triggered fade-in animations ──── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.is-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-stagger > * {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal-stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.is-visible > *:nth-child(2) { transition-delay: 0.12s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.is-visible > *:nth-child(3) { transition-delay: 0.19s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.is-visible > *:nth-child(4) { transition-delay: 0.26s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.33s; opacity: 1; transform: translateY(0); }
-    .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.40s; opacity: 1; transform: translateY(0); }
+/* ── Featured By ──────────────────────── */
+.featured {
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.featured-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.featured-logos {
+  display: flex;
+  gap: 48px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  opacity: 0.6;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text);
+}
 
-    @media (prefers-reduced-motion: reduce) {
-      .reveal, .reveal-stagger > * {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-      }
-    }
+/* ── Sections ─────────────────────────── */
+.section { padding: 60px 40px; border-top: 1px solid var(--border); }
+.section-alt { background: var(--card); }
+.section-head {
+  text-align: center;
+  margin-bottom: 44px;
+}
+.section-label {
+  font-size: 11px;
+  color: var(--primary);
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.section-title {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
 
-    /* ── Scroll progress bar ────────────────── */
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 2px;
-      background: var(--primary);
-      width: 0%;
-      z-index: 200;
-      transition: width 0.1s linear;
-      pointer-events: none;
-    }
+/* ── Features ─────────────────────────── */
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.feat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.feat:hover {
+  border-color: var(--primary);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px -12px rgba(245, 197, 24, 0.25);
+}
+.feat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(245, 197, 24, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.feat-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.feat-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
 
-    /* ── Cursor glow in hero ────────────────── */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-        rgba(245, 197, 24, 0.08),
-        transparent 40%
-      );
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s;
-      z-index: 1;
-    }
-    .hero:hover::before { opacity: 1; }
-    @media (hover: none) {
-      .hero::before { display: none; }
-    }
+/* ── Season 1 Pricing — single product ────────── */
+.season-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.spots-banner {
+  margin: 0 auto 24px;
+  padding: 14px 20px;
+  background: linear-gradient(90deg,
+    rgba(245, 197, 24, 0.10) 0%,
+    rgba(245, 197, 24, 0.04) 100%);
+  border: 1px solid rgba(245, 197, 24, 0.35);
+  border-radius: 10px;
+  text-align: center;
+}
+.spots-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.spots-left-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--primary);
+  font-weight: 700;
+  font-size: 15px;
+}
+.spots-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(245, 197, 24, 0.6);
+  animation: pulse 2s infinite;
+  display: inline-block;
+}
+.spots-note {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+#season-remaining, #season-total {
+  font-variant-numeric: tabular-nums;
+}
 
-    a { color: inherit; text-decoration: none; }
+.season-card {
+  background: var(--bg);
+  border: 1px solid var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+  border-radius: 12px;
+  padding: 36px;
+  position: relative;
+  transition: transform 0.3s;
+}
+.season-card:hover { transform: translateY(-2px); }
+.season-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 12px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    transparent 0%,
+    transparent 70%,
+    rgba(245, 197, 24, 0.6) 85%,
+    #F5C518 90%,
+    rgba(245, 197, 24, 0.6) 95%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: rotate-border 6s linear infinite;
+  pointer-events: none;
+}
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes rotate-border {
+  to { --angle: 360deg; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .season-card::before { animation: none; }
+}
+.season-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: var(--bg);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+.season-tier {
+  font-size: 13px;
+  color: var(--primary);
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-align: center;
+}
+.season-amount {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  color: var(--text);
+  text-align: center;
+  line-height: 1;
+}
+.season-amount small {
+  font-size: 16px;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.season-note {
+  font-size: 13px;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  color: var(--text-muted);
+  text-align: center;
+}
+.season-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  background: var(--primary);
+  color: var(--bg);
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.season-btn:hover { background: var(--primary-light); transform: translateY(-1px); }
+.season-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.season-feats {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+}
+.season-feats div { display: flex; align-items: center; gap: 8px; }
+.season-feats div::before {
+  content: '✓';
+  color: var(--primary);
+  font-weight: 700;
+}
 
-    /* ── Nav ──────────────────────────────── */
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 40px;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: rgba(10, 22, 40, 0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      z-index: 100;
-    }
-    .nav-brand { display: flex; align-items: center; gap: 12px; }
-    .nav-brand img { width: 36px; height: 36px; border-radius: 50%; }
-    .nav-brand span { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; }
-    .nav-brand .brand-o { color: var(--primary); }
-    .nav-links { display: flex; align-items: center; gap: 28px; font-size: 13px; color: var(--text-muted); }
-    .nav-links a { transition: color 0.15s; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-links .nav-cta { color: var(--primary); font-weight: 600; }
+/* ── Day Pass section ─────────────────── */
+.daypass-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+}
+.daypass-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.daypass-card:hover {
+  border-color: var(--border-light);
+  transform: translateY(-2px);
+}
+.daypass-tier {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-align: center;
+}
+.daypass-headline {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 4px;
+}
+.daypass-headline .accent { color: var(--primary); }
+.daypass-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-bottom: 18px;
+}
+.daypass-spots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.daypass-spots .spots-dot { width: 6px; height: 6px; }
+#daypass-remaining, #daypass-total {
+  color: var(--primary);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.daypass-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.daypass-input {
+  flex: 1;
+  padding: 12px 14px;
+  background: var(--card);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.daypass-input:focus { border-color: var(--primary); }
+.daypass-input::placeholder { color: var(--text-dim); }
+.daypass-btn {
+  padding: 12px 20px;
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.daypass-btn:hover { background: rgba(245, 197, 24, 0.08); }
+.daypass-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.daypass-msg {
+  font-size: 12px;
+  text-align: center;
+  min-height: 18px;
+  color: var(--text-muted);
+}
+.daypass-msg.error { color: var(--red); }
+.daypass-msg.success { color: var(--green); }
+.daypass-fineprint {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 14px;
+  line-height: 1.5;
+}
 
-    /* ── Hero ─────────────────────────────── */
-    .hero {
-      position: relative;
-      padding: 100px 40px 80px;
-      text-align: center;
-      overflow: hidden;
-    }
-    .hero-mountains {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 240px;
-      opacity: 0.12;
-      pointer-events: none;
-      will-change: transform;
-      transition: transform 0.1s linear;
-    }
-    .hero > *:not(.hero-mountains) { position: relative; z-index: 2; }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 14px;
-      border-radius: 100px;
-      background: rgba(245, 197, 24, 0.1);
-      border: 1px solid rgba(245, 197, 24, 0.3);
-      font-size: 12px;
-      color: var(--primary);
-      font-weight: 600;
-      margin-bottom: 24px;
-    }
-    .hero-badge-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: inline-block;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-    .hero h1 {
-      font-size: 64px;
-      font-weight: 800;
-      letter-spacing: -2px;
-      line-height: 1.05;
-      margin-bottom: 20px;
-      color: var(--text);
-    }
-    .hero h1 .accent { color: var(--primary); }
-    .hero-sub {
-      font-size: 18px;
-      color: var(--text-muted);
-      max-width: 620px;
-      margin: 0 auto 36px;
-      line-height: 1.6;
-    }
-    .hero-cta {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
+/* ── Disclaimer ───────────────────────── */
+.disclaimer {
+  max-width: 720px;
+  margin: 36px auto 0;
+  padding: 14px 18px;
+  background: rgba(15, 29, 51, 0.5);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  text-align: center;
+}
 
-    /* ── Buttons ──────────────────────────── */
-    .btn {
-      display: inline-block;
-      padding: 14px 32px;
-      border-radius: 8px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-      border: none;
-      font-family: inherit;
-    }
-    .btn-primary {
-      background: var(--primary);
-      color: var(--bg);
-    }
-    .btn-primary:hover {
-      background: var(--primary-light);
-      transform: translateY(-1px);
-    }
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border-light);
-    }
-    .btn-secondary:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
+/* ── Product Preview ──────────────────── */
+.preview-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.preview-header {
+  display: grid;
+  grid-template-columns: 30px 30px 1fr 80px 70px 70px 70px;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: 6px;
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  margin-bottom: 6px;
+}
+.preview-row {
+  display: grid;
+  grid-template-columns: 30px 30px 1fr 80px 70px 70px 70px;
+  gap: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  border-bottom: 1px solid #1A2942;
+}
+.preview-row.trap { background: rgba(239, 68, 68, 0.04); }
+.preview-row.gem { background: rgba(74, 222, 128, 0.05); border-bottom: none; }
+.preview-row .num { text-align: right; }
+.preview-row .dim { color: var(--text-dim); }
+.preview-row .muted { color: var(--text-muted); }
+.preview-row .name { font-weight: 600; color: var(--text); }
+.preview-row .gold { color: var(--primary); }
+.preview-row .gold-b { color: var(--primary); font-weight: 700; }
+.preview-more {
+  text-align: center;
+  padding: 12px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
 
-    /* ── Featured By ──────────────────────── */
-    .featured {
-      margin-top: 48px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-    }
-    .featured-label {
-      font-size: 11px;
-      color: var(--text-dim);
-      letter-spacing: 2px;
-      font-weight: 600;
-      margin-bottom: 18px;
-    }
-    .featured-logos {
-      display: flex;
-      gap: 48px;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      opacity: 0.6;
-      font-weight: 700;
-      font-size: 16px;
-      color: var(--text);
-    }
+/* ── Footer ───────────────────────────── */
+.footer {
+  padding: 32px 40px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
+.footer-links a { transition: color 0.15s; }
+.footer-links a:hover { color: var(--primary); }
 
-    /* ── Sections ─────────────────────────── */
-    .section { padding: 60px 40px; border-top: 1px solid var(--border); }
-    .section-alt { background: var(--card); }
-    .section-head {
-      text-align: center;
-      margin-bottom: 44px;
-    }
-    .section-label {
-      font-size: 11px;
-      color: var(--primary);
-      letter-spacing: 2px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .section-title {
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text);
-    }
-
-    /* ── Features ─────────────────────────── */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .feat {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    }
-    .feat:hover {
-      border-color: var(--primary);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 32px -12px rgba(245, 197, 24, 0.25);
-    }
-    .feat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      background: rgba(245, 197, 24, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .feat-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-    .feat-desc {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ── Pricing ──────────────────────────── */
-    .pricing {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    /* ── Spots banner ────────────────────── */
-    .spots-banner {
-      max-width: 900px;
-      margin: 0 auto 24px;
-      padding: 14px 20px;
-      background: linear-gradient(90deg,
-        rgba(245, 197, 24, 0.10) 0%,
-        rgba(245, 197, 24, 0.04) 100%);
-      border: 1px solid rgba(245, 197, 24, 0.35);
-      border-radius: 10px;
-      text-align: center;
-    }
-    .spots-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-    }
-    .spots-left-row {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--primary);
-      font-weight: 700;
-      font-size: 15px;
-    }
-    .spots-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--primary);
-      box-shadow: 0 0 10px rgba(245, 197, 24, 0.6);
-      animation: pulse 2s infinite;
-      display: inline-block;
-    }
-    .spots-note {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    #spots-remaining, #spots-total {
-      font-variant-numeric: tabular-nums;
-    }
-    .price-card {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      position: relative;
-      min-width: 0;
-      transition: border-color 0.3s, transform 0.3s;
-    }
-    .price-card:hover {
-      border-color: var(--border-light);
-      transform: translateY(-2px);
-    }
-    .price-card.featured {
-      border: 1px solid var(--primary);
-      box-shadow: 0 0 0 1px var(--primary);
-    }
-    .price-card.featured::before {
-      content: '';
-      position: absolute;
-      inset: -2px;
-      border-radius: 12px;
-      padding: 2px;
-      background: conic-gradient(
-        from var(--angle, 0deg),
-        transparent 0%,
-        transparent 70%,
-        rgba(245, 197, 24, 0.6) 85%,
-        #F5C518 90%,
-        rgba(245, 197, 24, 0.6) 95%,
-        transparent 100%
-      );
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      animation: rotate-border 6s linear infinite;
-      pointer-events: none;
-    }
-    @property --angle {
-      syntax: '<angle>';
-      initial-value: 0deg;
-      inherits: false;
-    }
-    @keyframes rotate-border {
-      to { --angle: 360deg; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .price-card.featured::before { animation: none; }
-    }
-    .price-badge {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--primary);
-      color: var(--bg);
-      font-size: 10px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      padding: 4px 12px;
-      border-radius: 100px;
-    }
-    .price-tier {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-    .price-card.featured .price-tier { color: var(--primary); }
-    .price-amount {
-      font-size: 40px;
-      font-weight: 800;
-      letter-spacing: -1px;
-      color: var(--text);
-    }
-    .price-amount small {
-      font-size: 14px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .price-note {
-      font-size: 12px;
-      margin-top: 4px;
-      margin-bottom: 20px;
-    }
-    .price-note.muted { color: var(--text-dim); }
-    .price-note.save { color: var(--green); }
-    .price-btn {
-      display: block;
-      width: 100%;
-      padding: 12px;
-      text-align: center;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      border: 1px solid var(--primary);
-      background: transparent;
-      color: var(--primary);
-      transition: all 0.15s;
-      font-family: inherit;
-    }
-    .price-btn:hover { background: rgba(245, 197, 24, 0.08); }
-    .price-btn.featured-btn {
-      background: var(--primary);
-      color: var(--bg);
-    }
-    .price-btn.featured-btn:hover { background: var(--primary-light); }
-    .price-feats {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-    .price-card.featured .price-feats { color: var(--text); }
-    .price-feats div { display: flex; align-items: center; gap: 8px; }
-    .price-feats div::before {
-      content: '✓';
-      color: var(--primary);
-      font-weight: 700;
-    }
-
-    /* ── Product Preview ──────────────────── */
-    .preview-wrap {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 24px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .preview-header {
-      display: grid;
-      grid-template-columns: 30px 30px 1fr 80px 70px 70px 70px;
-      gap: 8px;
-      padding: 8px 12px;
-      background: var(--bg);
-      border-radius: 6px;
-      font-size: 10px;
-      color: var(--text-dim);
-      font-weight: 700;
-      letter-spacing: 0.6px;
-      margin-bottom: 6px;
-    }
-    .preview-row {
-      display: grid;
-      grid-template-columns: 30px 30px 1fr 80px 70px 70px 70px;
-      gap: 8px;
-      padding: 10px 12px;
-      font-size: 12px;
-      border-bottom: 1px solid #1A2942;
-    }
-    .preview-row.trap { background: rgba(239, 68, 68, 0.04); }
-    .preview-row.gem { background: rgba(74, 222, 128, 0.05); border-bottom: none; }
-    .preview-row .num { text-align: right; }
-    .preview-row .dim { color: var(--text-dim); }
-    .preview-row .muted { color: var(--text-muted); }
-    .preview-row .name { font-weight: 600; color: var(--text); }
-    .preview-row .gold { color: var(--primary); }
-    .preview-row .gold-b { color: var(--primary); font-weight: 700; }
-    .preview-more {
-      text-align: center;
-      padding: 12px;
-      color: var(--text-dim);
-      font-size: 11px;
-    }
-
-    /* ── Footer ───────────────────────────── */
-    .footer {
-      padding: 32px 40px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--text-dim);
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-    .footer-links { display: flex; gap: 20px; flex-wrap: wrap; }
-    .footer-links a { transition: color 0.15s; }
-    .footer-links a:hover { color: var(--primary); }
-
-    /* ── Mobile ───────────────────────────── */
-    @media (max-width: 768px) {
-      .nav { padding: 14px 20px; }
-      .nav-links { gap: 16px; font-size: 12px; }
-      .nav-links a:nth-child(-n+3) { display: none; }
-      .hero { padding: 60px 20px 60px; }
-      .hero h1 { font-size: 40px; letter-spacing: -1px; }
-      .hero-sub { font-size: 15px; }
-      .section { padding: 48px 20px; }
-      .section-title { font-size: 24px; }
-      .features { grid-template-columns: 1fr; }
-      .pricing { grid-template-columns: 1fr; }
-      .featured-logos { gap: 24px; font-size: 14px; }
-      .preview-wrap { padding: 14px; overflow-x: auto; }
-      .preview-header, .preview-row {
-        grid-template-columns: 24px 24px 1fr 70px 60px 60px;
-        font-size: 11px;
-      }
-      .preview-header > :nth-child(7), .preview-row > :nth-child(7) { display: none; }
-      .footer { padding: 24px 20px; flex-direction: column; text-align: center; }
-    }
-  </style>
+/* ── Mobile ───────────────────────────── */
+@media (max-width: 768px) {
+  .nav { padding: 14px 20px; }
+  .nav-links { gap: 16px; font-size: 12px; }
+  .nav-links a:nth-child(-n+3) { display: none; }
+  .hero { padding: 60px 20px 60px; }
+  .hero h1 { font-size: 40px; letter-spacing: -1px; }
+  .hero-sub { font-size: 15px; }
+  .section { padding: 48px 20px; }
+  .section-title { font-size: 24px; }
+  .features { grid-template-columns: 1fr; }
+  .season-card { padding: 28px 20px; }
+  .season-amount { font-size: 44px; }
+  .featured-logos { gap: 24px; font-size: 14px; }
+  .preview-wrap { padding: 14px; overflow-x: auto; }
+  .preview-header, .preview-row {
+    grid-template-columns: 24px 24px 1fr 70px 60px 60px;
+    font-size: 11px;
+  }
+  .preview-header > :nth-child(7), .preview-row > :nth-child(7) { display: none; }
+  .daypass-form { flex-direction: column; }
+  .footer { padding: 24px 20px; flex-direction: column; text-align: center; }
+}
+</style>
 </head>
 <body>
 
-  <div class="scroll-progress" id="scroll-progress"></div>
+<div class="scroll-progress" id="scroll-progress"></div>
 
-  <nav class="nav">
-    <a href="/" class="nav-brand">
-      <img src="/logo.png" alt="OverOwned" />
-      <span>Over<span class="brand-o">O</span>wned</span>
-    </a>
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="mailto:overowneddfs@gmail.com">Support</a>
-      <a href="#pricing" class="nav-cta">Claim Your Spot</a>
+<nav class="nav">
+  <a href="/" class="nav-brand">
+    <img src="/logo.png" alt="OverOwned" />
+    <span>Over<span class="brand-o">O</span>wned</span>
+  </a>
+  <div class="nav-links">
+    <a href="#features">Features</a>
+    <a href="#pricing">Pricing</a>
+    <a href="mailto:overowneddfs@gmail.com">Support</a>
+    <a href="#pricing" class="nav-cta">Claim Your Spot</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <svg class="hero-mountains" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,200 L80,80 L180,130 L300,50 L420,110 L540,70 L660,100 L780,60 L900,90 L1000,70 L1000,200 Z" fill="#F5C518"/>
+    <path d="M0,200 L60,140 L160,170 L280,120 L400,160 L520,130 L640,155 L760,125 L880,150 L1000,135 L1000,200 Z" fill="#F5C518" opacity="0.5"/>
+  </svg>
+  <div class="hero-badge reveal">
+    <span class="hero-badge-dot"></span>
+    Season 1 is open · 25 spots · Closes July 12
+  </div>
+  <h1 class="reveal">Beat the field in<br><span class="accent">DraftKings DFS.</span></h1>
+  <p class="hero-sub reveal">Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge.</p>
+  <div class="hero-cta reveal">
+    <a href="#pricing" class="btn btn-primary">Claim Your Spot</a>
+    <a href="#features" class="btn btn-secondary">See How It Works</a>
+  </div>
+  <div class="featured reveal">
+    <div class="featured-label">FEATURED BY</div>
+    <div class="featured-logos">
+      <div>AltaPicks</div>
+      <div>Whop</div>
+      <div>DubClub</div>
     </div>
-  </nav>
+  </div>
+</section>
 
-  <section class="hero">
-    <svg class="hero-mountains" viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M0,200 L80,80 L180,130 L300,50 L420,110 L540,70 L660,100 L780,60 L900,90 L1000,70 L1000,200 Z" fill="#F5C518"/>
-      <path d="M0,200 L60,140 L160,170 L280,120 L400,160 L520,130 L640,155 L760,125 L880,150 L1000,135 L1000,200 Z" fill="#F5C518" opacity="0.5"/>
-    </svg>
-
-    <div class="hero-badge reveal">
-      <span class="hero-badge-dot"></span>
-      Season 1 is open · Limited spots per week
+<section class="section" id="features">
+  <div class="section-head reveal">
+    <div class="section-label">WHAT YOU GET</div>
+    <div class="section-title">Every edge the sharps keep to themselves.</div>
+  </div>
+  <div class="features reveal-stagger">
+    <div class="feat">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
+      </div>
+      <div class="feat-title">Real Projections</div>
+      <div class="feat-desc">Bet365 odds → tennis-specific scoring model with Poisson scenario simulation.</div>
     </div>
-
-    <h1 class="reveal">Beat the field in<br><span class="accent">DraftKings DFS.</span></h1>
-
-    <p class="hero-sub reveal">Real projections, custom trap formulas, live leverage — built for PrizePicks and DraftKings players who strive for an edge.</p>
-
-    <div class="hero-cta reveal">
-      <a href="#pricing" class="btn btn-primary">Claim Your Spot</a>
-      <a href="#features" class="btn btn-secondary">See How It Works</a>
+    <div class="feat">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>
+      </div>
+      <div class="feat-title">Trap Detection</div>
+      <div class="feat-desc">Custom formulas flag high-owned bust risks so you fade with confidence.</div>
     </div>
-
-    <div class="featured reveal">
-      <div class="featured-label">FEATURED BY</div>
-      <div class="featured-logos">
-        <div>AltaPicks</div>
-        <div>Whop</div>
-        <div>DubClub</div>
+    <div class="feat">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 Z"/></svg>
       </div>
+      <div class="feat-title">Lineup Optimizer</div>
+      <div class="feat-desc">Build unique lineups in seconds with exposure caps and global constraints that actually work.</div>
     </div>
-  </section>
-
-  <section class="section" id="features">
-    <div class="section-head reveal">
-      <div class="section-label">WHAT YOU GET</div>
-      <div class="section-title">Every edge the sharps keep to themselves.</div>
+    <div class="feat">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 L9 6 L13 10 L21 4"/><path d="M21 4 L21 10"/><path d="M21 4 L15 4"/></svg>
+      </div>
+      <div class="feat-title">Live Leverage</div>
+      <div class="feat-desc">Post-lock contest ownership vs your exposure. Know who you're overweight and who the field missed.</div>
     </div>
-
-    <div class="features reveal-stagger">
-      <div class="feat">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
-        </div>
-        <div class="feat-title">Real Projections</div>
-        <div class="feat-desc">Bet365 odds → tennis-specific scoring model with Poisson scenario simulation.</div>
+    <div class="feat">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
       </div>
-
-      <div class="feat">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>
-        </div>
-        <div class="feat-title">Trap Detection</div>
-        <div class="feat-desc">Custom formulas flag high-owned bust risks so you fade with confidence.</div>
-      </div>
-
-      <div class="feat">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 L3 14 L12 14 L11 22 L21 10 L12 10 Z"/></svg>
-        </div>
-        <div class="feat-title">Lineup Optimizer</div>
-        <div class="feat-desc">Build unique lineups in seconds with exposure caps and global constraints that actually work.</div>
-      </div>
-
-      <div class="feat">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 L9 6 L13 10 L21 4"/><path d="M21 4 L21 10"/><path d="M21 4 L15 4"/></svg>
-        </div>
-        <div class="feat-title">Live Leverage</div>
-        <div class="feat-desc">Post-lock contest ownership vs your exposure. Know who you're overweight and who the field missed.</div>
-      </div>
-
-      <div class="feat">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M3 12h18"/><path d="M3 18h18"/></svg>
-        </div>
-        <div class="feat-title">PrizePicks Edge</div>
-        <div class="feat-desc">Fantasy Score and Breaks — every line devigged vs Bet365 so you only play real edges.</div>
-      </div>
-
-      <div class="feat">
-        <div class="feat-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg>
-        </div>
-        <div class="feat-title">One-Click DK Upload</div>
-        <div class="feat-desc">Export your lineups as a DraftKings-ready CSV and upload directly to your contest in seconds.</div>
-      </div>
+      <div class="feat-title">PrizePicks Edge</div>
+      <div class="feat-desc">Fantasy Score and Breaks — every line devigged vs Bet365 so you only play real edges.</div>
     </div>
-  </section>
-
-  <section class="section section-alt" id="pricing">
-    <div class="section-head reveal">
-      <div class="section-label">PRICING</div>
-      <div class="section-title">Choose your edge.</div>
+    <div class="feat">
+      <div class="feat-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5C518" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg>
+      </div>
+      <div class="feat-title">One-Click DK Upload</div>
+      <div class="feat-desc">Export your lineups as a DraftKings-ready CSV and upload directly to your contest in seconds.</div>
     </div>
+  </div>
+</section>
 
-    <div class="spots-banner reveal" id="spots-banner">
+<section class="section section-alt" id="pricing">
+  <div class="section-head reveal">
+    <div class="section-label">SEASON 1 PASS</div>
+    <div class="section-title">Limited drop. Real edge.</div>
+  </div>
+
+  <div class="season-wrap reveal">
+    <div class="spots-banner">
       <div class="spots-inner">
         <div class="spots-left-row">
           <span class="spots-dot"></span>
-          <span><span id="spots-remaining">23</span> of <span id="spots-total">50</span> spots left this window</span>
+          <span><span id="season-remaining">25</span> of <span id="season-total">25</span> spots remaining</span>
         </div>
-        <div class="spots-note">Next window prices go up 10%. Your rate locks in forever.</div>
+        <div class="spots-note">Season 1 closes July 12, 2026 · One-time payment · No auto-renewal</div>
       </div>
     </div>
 
-    <div class="pricing reveal-stagger">
-      <div class="price-card">
-        <div class="price-tier">Weekly</div>
-        <div class="price-amount">$20<small>/wk</small></div>
-        <div class="price-note muted">Cancel anytime · Price locked forever</div>
-        <a href="#" data-tier="weekly" class="price-btn">Claim Your Spot</a>
-        <div class="price-feats">
-          <div>All projections</div>
-          <div>Lineup builder</div>
-          <div>Live leverage</div>
-          <div>DK CSV export</div>
-        </div>
-      </div>
-
-      <div class="price-card featured">
-        <div class="price-badge">MOST POPULAR</div>
-        <div class="price-tier">Monthly</div>
-        <div class="price-amount">$50<small>/mo</small></div>
-        <div class="price-note save">Save 38% vs weekly · Price locked forever</div>
-        <a href="#" data-tier="monthly" class="price-btn featured-btn">Claim Your Spot</a>
-        <div class="price-feats">
-          <div>Everything in Weekly</div>
-          <div>Priority Discord access</div>
-          <div>Direct line for questions</div>
-          <div>First access to new slates</div>
-        </div>
-      </div>
-
-      <div class="price-card">
-        <div class="price-tier">Season Pass</div>
-        <div class="price-amount">$100<small>/3mo</small></div>
-        <div class="price-note save">Best value — save 58% · Locked forever</div>
-        <a href="#" data-tier="season" class="price-btn">Claim Your Spot</a>
-        <div class="price-feats">
-          <div>Everything in Monthly</div>
-          <div>Locked-in price forever</div>
-          <div>Grand Slam coverage</div>
-          <div>Custom Discord role</div>
-        </div>
+    <div class="season-card">
+      <div class="season-badge">SEASON 1</div>
+      <div class="season-tier">FULL ACCESS UNTIL JULY 12</div>
+      <div class="season-amount">$200<small> one-time</small></div>
+      <div class="season-note">Full Season 1 access · Tennis, NBA &amp; Golf coverage · Closed beta cohort</div>
+      <button id="season-buy-btn" class="season-btn">Claim Your Spot</button>
+      <div class="season-feats">
+        <div>All projections, all slates</div>
+        <div>Trap detection &amp; live leverage</div>
+        <div>Lineup optimizer + DK CSV export</div>
+        <div>PrizePicks line analysis</div>
+        <div>Direct line for questions</div>
+        <div>First access to Season 2 (priority pricing)</div>
       </div>
     </div>
-  </section>
 
-  <section class="section">
-    <div class="section-head reveal">
-      <div class="section-label">INSIDE THE PRODUCT</div>
-      <div class="section-title">Built for players who take it seriously.</div>
+    <div class="disclaimer">
+      OverOwned provides analytical software tools for research and entertainment purposes only.
+      We do not facilitate wagers, accept bets, guarantee outcomes, or provide gambling advice.
+      Use at your own discretion. Not affiliated with DraftKings, PrizePicks, Kalshi, Bet365, or any sportsbook.
+      By purchasing, you agree to our <a href="/terms.html" style="color: var(--text-muted); text-decoration: underline;">Terms of Service</a>
+      and <a href="/refund.html" style="color: var(--text-muted); text-decoration: underline;">Refund Policy</a>.
     </div>
+  </div>
+</section>
 
-    <div class="preview-wrap reveal">
-      <div class="preview-header">
-        <div>#</div><div></div><div>PLAYER</div>
-        <div class="num">SALARY</div><div class="num">PROJ</div>
-        <div class="num">VALUE</div><div class="num">P(2-0)</div>
+<section class="section" id="daypass">
+  <div class="section-head reveal">
+    <div class="section-label">FREE TRIAL</div>
+    <div class="section-title">Try it for 24 hours.</div>
+  </div>
+
+  <div class="daypass-wrap reveal">
+    <div class="daypass-card">
+      <div class="daypass-tier">DAY PASS</div>
+      <div class="daypass-headline">First <span class="accent">50</span> emails get free access</div>
+      <div class="daypass-sub">Full product access for 24 hours, no credit card required.</div>
+      <div class="daypass-spots">
+        <span class="spots-dot"></span>
+        <span><span id="daypass-remaining">50</span> of <span id="daypass-total">50</span> trials remaining</span>
       </div>
-      <div class="preview-row">
-        <div class="dim">1</div><div>🏆</div>
-        <div class="name">Sorana Cirstea</div>
-        <div class="num">$10,100</div>
-        <div class="num gold">69.60</div>
-        <div class="num gold-b">6.89</div>
-        <div class="num gold">62%</div>
+      <form id="daypass-form" class="daypass-form" novalidate>
+        <input type="email" id="daypass-email" class="daypass-input" placeholder="your@email.com" required autocomplete="email" />
+        <button type="submit" id="daypass-submit" class="daypass-btn">Get Day Pass</button>
+      </form>
+      <div id="daypass-msg" class="daypass-msg" aria-live="polite"></div>
+      <div class="daypass-fineprint">
+        We'll email you a sign-in link instantly. One trial per email.
+        Trial expires 24 hours after first sign-in.
       </div>
-      <div class="preview-row trap">
-        <div class="dim">2</div><div>💣</div>
-        <div class="name">Alex Molcan</div>
-        <div class="num">$6,100</div>
-        <div class="num gold">41.97</div>
-        <div class="num gold-b">6.88</div>
-        <div class="num muted">16%</div>
-      </div>
-      <div class="preview-row">
-        <div class="dim">3</div><div>🎯</div>
-        <div class="name">Marta Kostyuk</div>
-        <div class="num">$10,700</div>
-        <div class="num gold">70.68</div>
-        <div class="num gold-b">6.61</div>
-        <div class="num gold">69%</div>
-      </div>
-      <div class="preview-row gem">
-        <div class="dim">13</div><div>💎</div>
-        <div class="name">Ben Shelton</div>
-        <div class="num">$9,000</div>
-        <div class="num gold">53.81</div>
-        <div class="num">5.98</div>
-        <div class="num muted">40%</div>
-      </div>
-      <div class="preview-more">+ 12 more players</div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <footer class="footer">
-    <div>© 2026 OverOwned. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="#">Terms</a>
-      <a href="#">Privacy</a>
-      <a href="#">Responsible Play</a>
-      <a href="mailto:overowneddfs@gmail.com">overowneddfs@gmail.com</a>
-      <a href="https://x.com/OverOwnedDFS" target="_blank" rel="noopener noreferrer">@OverOwnedDFS</a>
+<section class="section section-alt">
+  <div class="section-head reveal">
+    <div class="section-label">INSIDE THE PRODUCT</div>
+    <div class="section-title">Built for players who take it seriously.</div>
+  </div>
+  <div class="preview-wrap reveal">
+    <div class="preview-header">
+      <div>#</div><div></div><div>PLAYER</div>
+      <div class="num">SALARY</div><div class="num">PROJ</div>
+      <div class="num">VALUE</div><div class="num">P(2-0)</div>
     </div>
-  </footer>
+    <div class="preview-row">
+      <div class="dim">1</div><div>🏆</div>
+      <div class="name">Sorana Cirstea</div>
+      <div class="num">$10,100</div>
+      <div class="num gold">69.60</div>
+      <div class="num gold-b">6.89</div>
+      <div class="num gold">62%</div>
+    </div>
+    <div class="preview-row trap">
+      <div class="dim">2</div><div>💣</div>
+      <div class="name">Alex Molcan</div>
+      <div class="num">$6,100</div>
+      <div class="num gold">41.97</div>
+      <div class="num gold-b">6.88</div>
+      <div class="num muted">16%</div>
+    </div>
+    <div class="preview-row">
+      <div class="dim">3</div><div>🎯</div>
+      <div class="name">Marta Kostyuk</div>
+      <div class="num">$10,700</div>
+      <div class="num gold">70.68</div>
+      <div class="num gold-b">6.61</div>
+      <div class="num gold">69%</div>
+    </div>
+    <div class="preview-row gem">
+      <div class="dim">13</div><div>💎</div>
+      <div class="name">Ben Shelton</div>
+      <div class="num">$9,000</div>
+      <div class="num gold">53.81</div>
+      <div class="num">5.98</div>
+      <div class="num muted">40%</div>
+    </div>
+    <div class="preview-more">+ 12 more players</div>
+  </div>
+</section>
 
-  <script>
-    // ── Scroll-triggered reveal animations ────────────
-    const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -50px 0px'
-    });
-    revealEls.forEach(el => observer.observe(el));
+<footer class="footer">
+  <div>© 2026 OverOwned. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="/terms.html">Terms</a>
+    <a href="/privacy.html">Privacy</a>
+    <a href="/refund.html">Refund Policy</a>
+    <a href="mailto:overowneddfs@gmail.com">overowneddfs@gmail.com</a>
+    <a href="https://x.com/OverOwnedDFS" target="_blank" rel="noopener noreferrer">@OverOwnedDFS</a>
+  </div>
+</footer>
 
-    // ── Scroll progress bar + mountain parallax ───────
-    const progressBar = document.getElementById('scroll-progress');
-    const mountains = document.querySelector('.hero-mountains');
-    let ticking = false;
-
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const scrollTop = window.scrollY;
-          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-          const progress = (scrollTop / docHeight) * 100;
-          progressBar.style.width = progress + '%';
-
-          if (mountains && scrollTop < 800) {
-            mountains.style.transform = 'translateY(' + (scrollTop * 0.35) + 'px)';
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
+<script>
+// ── Scroll-triggered reveal animations ────────────
+const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target);
     }
-    window.addEventListener('scroll', onScroll, { passive: true });
+  });
+}, {
+  threshold: 0.12,
+  rootMargin: '0px 0px -50px 0px'
+});
+revealEls.forEach(el => observer.observe(el));
 
-    // ── Cursor glow on hero ───────────────────────────
-    const hero = document.querySelector('.hero');
-    if (hero && window.matchMedia('(hover: hover)').matches) {
-      hero.addEventListener('mousemove', (e) => {
-        const rect = hero.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        hero.style.setProperty('--mouse-x', x + '%');
-        hero.style.setProperty('--mouse-y', y + '%');
-      });
+// ── Scroll progress bar + mountain parallax ───────
+const progressBar = document.getElementById('scroll-progress');
+const mountains = document.querySelector('.hero-mountains');
+let ticking = false;
+function onScroll() {
+  if (!ticking) {
+    window.requestAnimationFrame(() => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      progressBar.style.width = progress + '%';
+      if (mountains && scrollTop < 800) {
+        mountains.style.transform = 'translateY(' + (scrollTop * 0.35) + 'px)';
+      }
+      ticking = false;
+    });
+    ticking = true;
+  }
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+
+// ── Cursor glow on hero ───────────────────────────
+const hero = document.querySelector('.hero');
+if (hero && window.matchMedia('(hover: hover)').matches) {
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    hero.style.setProperty('--mouse-x', x + '%');
+    hero.style.setProperty('--mouse-y', y + '%');
+  });
+}
+
+// ── Inventory display: fetch live remaining counts ────────────
+// Both Season 1 and Day Pass remaining counts come from the same
+// /.netlify/functions/inventory endpoint. Failure is silent — we
+// keep the static "25/25" and "50/50" defaults if the call fails.
+(async function loadInventory() {
+  try {
+    const res = await fetch('/.netlify/functions/inventory');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (typeof data.season_remaining === 'number') {
+      document.getElementById('season-remaining').textContent = data.season_remaining;
+    }
+    if (typeof data.daypass_remaining === 'number') {
+      document.getElementById('daypass-remaining').textContent = data.daypass_remaining;
+    }
+    // If either is at zero, disable the relevant CTA
+    if (data.season_remaining === 0) {
+      const btn = document.getElementById('season-buy-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sold Out — Season 2 coming soon';
+    }
+    if (data.daypass_remaining === 0) {
+      document.getElementById('daypass-submit').disabled = true;
+      document.getElementById('daypass-submit').textContent = 'Closed';
+    }
+  } catch (_) { /* keep static defaults */ }
+})();
+
+// ── Season 1 Stripe Checkout ──────────────────────
+document.getElementById('season-buy-btn').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  if (btn.disabled) return;
+  const originalText = btn.textContent;
+  btn.textContent = 'Loading…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/.netlify/functions/create-checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Checkout session failed');
+    }
+    const { url } = await res.json();
+    if (url) {
+      window.location.href = url;
+    } else {
+      throw new Error('No checkout URL returned');
+    }
+  } catch (err) {
+    console.error(err);
+    alert(err.message || 'Checkout is temporarily unavailable. Please try again in a moment.');
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
+});
+
+// ── Day Pass form ─────────────────────────────────
+document.getElementById('daypass-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const emailInput = document.getElementById('daypass-email');
+  const submitBtn = document.getElementById('daypass-submit');
+  const msg = document.getElementById('daypass-msg');
+  const email = emailInput.value.trim().toLowerCase();
+  msg.className = 'daypass-msg';
+  msg.textContent = '';
+
+  // Lightweight client-side email shape check.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msg.className = 'daypass-msg error';
+    msg.textContent = 'Please enter a valid email.';
+    return;
+  }
+
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = 'Sending…';
+  submitBtn.disabled = true;
+  emailInput.disabled = true;
+
+  try {
+    const res = await fetch('/.netlify/functions/claim-day-pass', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      msg.className = 'daypass-msg error';
+      msg.textContent = data.error || 'Something went wrong. Please try again.';
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+      emailInput.disabled = false;
+      return;
     }
 
-    // ── Stripe Checkout wiring ────────────────────────
-    // Each pricing button has data-tier="weekly|monthly|season".
-    // On click: POST to /.netlify/functions/create-checkout-session with the tier
-    // → receive Stripe Checkout URL → redirect browser.
-    document.querySelectorAll('[data-tier]').forEach(btn => {
-      btn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const tier = btn.getAttribute('data-tier');
-        const originalText = btn.textContent;
-        btn.textContent = 'Loading…';
-        btn.style.pointerEvents = 'none';
-        try {
-          const res = await fetch('/.netlify/functions/create-checkout-session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tier })
-          });
-          if (!res.ok) throw new Error('Checkout session failed');
-          const { url } = await res.json();
-          if (url) {
-            window.location.href = url;
-          } else {
-            throw new Error('No checkout URL returned');
-          }
-        } catch (err) {
-          console.error(err);
-          alert('Checkout is temporarily unavailable. Please try again in a moment.');
-          btn.textContent = originalText;
-          btn.style.pointerEvents = '';
-        }
-      });
-    });
+    // Success — replace form with confirmation.
+    msg.className = 'daypass-msg success';
+    msg.textContent = 'Sign-in link sent. Check your inbox.';
+    submitBtn.textContent = 'Sent ✓';
+    emailInput.value = '';
+    // Re-enable after 30s in case email was wrong.
+    setTimeout(() => {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+      emailInput.disabled = false;
+    }, 30000);
+  } catch (err) {
+    console.error(err);
+    msg.className = 'daypass-msg error';
+    msg.textContent = 'Network error. Please try again.';
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+    emailInput.disabled = false;
+  }
+});
 
-    // ── Post-checkout success handler ─────────────────
-    // Stripe redirects to overowned.io/?checkout=success after payment.
-    // We send the user to app.overowned.io immediately — by the time they
-    // arrive, the webhook has (almost always) already written the subscription
-    // row. A 1-second pause smooths out the rare race condition.
-    (function handleCheckoutReturn() {
-      const params = new URLSearchParams(window.location.search);
-      const status = params.get('checkout');
-      if (status === 'success') {
-        document.body.style.opacity = '0.35';
-        document.body.style.transition = 'opacity 0.3s';
-        const msg = document.createElement('div');
-        msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;padding:20px 28px;background:#0F1D33;border:1px solid rgba(245,197,24,0.4);border-radius:10px;color:#E8ECF4;font-family:Inter,sans-serif;font-size:15px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6)';
-        msg.innerHTML = '<div style="color:#F5C518;font-weight:700;font-size:17px;margin-bottom:6px">Payment successful</div><div style="color:#8B9ABA">Redirecting to the app…</div>';
-        document.body.appendChild(msg);
-        setTimeout(() => { window.location.href = 'https://app.overowned.io'; }, 1200);
-      } else if (status === 'cancel') {
-        // Clean the URL so a refresh doesn't repeat behavior
-        history.replaceState({}, '', window.location.pathname + '#pricing');
-      }
-    })();
-
-  </script>
+// ── Post-checkout success handler ─────────────────
+// Stripe redirects to overowned.io/?checkout=success after payment.
+// We send the user to app.overowned.io after a brief pause to let the
+// webhook write the season_pass row + send the magic link email.
+(function handleCheckoutReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const status = params.get('checkout');
+  if (status === 'success') {
+    document.body.style.opacity = '0.35';
+    document.body.style.transition = 'opacity 0.3s';
+    const msg = document.createElement('div');
+    msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;padding:24px 32px;background:#0F1D33;border:1px solid rgba(245,197,24,0.4);border-radius:10px;color:#E8ECF4;font-family:Inter,sans-serif;font-size:15px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6);max-width:90%';
+    msg.innerHTML = '<div style="color:#F5C518;font-weight:700;font-size:18px;margin-bottom:8px">Welcome to Season 1.</div><div style="color:#8B9ABA;line-height:1.5">Check your email for your sign-in link.<br>It arrives within seconds.</div>';
+    document.body.appendChild(msg);
+    // Clean URL so refresh doesn't re-trigger
+    history.replaceState({}, '', window.location.pathname);
+  } else if (status === 'cancel') {
+    history.replaceState({}, '', window.location.pathname + '#pricing');
+  }
+})();
+</script>
 
 </body>
 </html>
