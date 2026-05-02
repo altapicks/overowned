@@ -17,7 +17,7 @@ const SEASON = 1;
 const SEASON_EXPIRES_AT = '2026-07-12T23:59:59-04:00';   // EDT, end of July 12
 const APP_URL = 'https://app.overowned.io';
 const FROM_EMAIL = 'OverOwned <noreply@overowned.io>';
-const REPLY_TO = 'overowneddfs@gmail.com';
+const REPLY_TO = 'support@overowned.io';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
