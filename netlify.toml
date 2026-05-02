@@ -1,18 +1,17 @@
+# Netlify deploy config
+# Static site at root (.) + serverless functions in netlify/functions
+
 [build]
   publish = "."
   functions = "netlify/functions"
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-[[headers]]
-  for = "/public/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
 [functions]
+  # Node 18 supports the modern Stripe / Supabase / Resend SDKs.
   node_bundler = "esbuild"
+
+[functions.environment]
+  NODE_VERSION = "18"
+
+# Stripe webhook needs the raw request body for signature verification.
+# Netlify's Lambda runtime gives us the raw body via event.body, so no
+# special config needed — but documenting that we depend on this.
