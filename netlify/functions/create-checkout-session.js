@@ -1,120 +1,108 @@
-// Netlify serverless function: create-checkout-session.js
+// netlify/functions/create-checkout-session.js
 //
-// Called by landing page Subscribe buttons (weekly / monthly / season).
-// Returns a Stripe Checkout Session URL. Frontend redirects the browser there.
+// Creates a Stripe Checkout session for the Season 1 Pass.
+// Inventory check happens both here (pre-flight) and in the webhook
+// (post-payment), so a sold-out attempt can't even reach Stripe.
 //
-// Flow:
-//   1. Landing page POSTs { tier: 'weekly'|'monthly'|'season', email?: string } to this function
-//   2. We map tier → Stripe price ID (from env vars)
-//   3. Create a Checkout session with that price + success/cancel URLs
-//   4. Return { url } — browser redirects
-//
-// After user pays, Stripe redirects them back to the `success_url` we set.
-// The `stripe-webhook.js` function will also fire (async) to write the
-// subscription row into Supabase — that's the source of truth.
+// On success, returns { url } pointing to Stripe's hosted checkout.
+// The customer's email is collected by Stripe and used as the canonical
+// identity for the magic-link sign-in.
 
-const Stripe = require('stripe');
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2024-06-20',
-});
+const SEASON_1_TOTAL = 25;
+const STRIPE_PRICE_LOOKUP_KEY = 'season_1';
 
-const PRICE_MAP = {
-  weekly:  process.env.STRIPE_PRICE_WEEKLY,
-  monthly: process.env.STRIPE_PRICE_MONTHLY,
-  season:  process.env.STRIPE_PRICE_SEASON,
-};
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY,
+  { auth: { persistSession: false } }
+);
 
-exports.handler = async (event) => {
-  // CORS preflight — handle OPTIONS for cross-origin requests from app.overowned.io
-  if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-      body: '',
-    };
-  }
-
+export const handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   try {
-    const { tier, email, user_id } = JSON.parse(event.body || '{}');
+    // ── 1. Inventory check ───────────────────────────────────────────────
+    const { count } = await supabase
+      .from('season_passes')
+      .select('id', { count: 'exact', head: true })
+      .eq('season', 1)
+      .in('status', ['active', 'pending']);
 
-    if (!tier || !PRICE_MAP[tier]) {
+    const used = count ?? 0;
+    if (used >= SEASON_1_TOTAL) {
       return {
-        statusCode: 400,
-        headers: corsHeaders(),
-        body: JSON.stringify({ error: 'Invalid or missing tier. Use weekly|monthly|season.' }),
+        statusCode: 409,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: 'Season 1 is sold out. Season 2 coming soon.' }),
       };
     }
 
-    const priceId = PRICE_MAP[tier];
-    if (!priceId) {
+    // ── 2. Resolve the Stripe price by lookup_key ───────────────────────
+    // Using lookup_key keeps the code season-agnostic — when Season 2
+    // ships, just create a `season_2` price in Stripe and bump the
+    // STRIPE_PRICE_LOOKUP_KEY constant above.
+    const prices = await stripe.prices.list({
+      lookup_keys: [STRIPE_PRICE_LOOKUP_KEY],
+      active: true,
+      limit: 1,
+    });
+    const price = prices.data[0];
+    if (!price) {
+      console.error(`No active Stripe price with lookup_key=${STRIPE_PRICE_LOOKUP_KEY}`);
       return {
         statusCode: 500,
-        headers: corsHeaders(),
-        body: JSON.stringify({ error: `Price ID not configured for tier: ${tier}` }),
+        body: JSON.stringify({ error: 'Pricing configuration error.' }),
       };
     }
 
-    // Success URL: lands on landing page with ?checkout=success, which
-    // our JS detects and redirects to app.overowned.io.
-    // Cancel URL: returns to the pricing section of landing page.
-    const successUrl = 'https://overowned.io/?checkout=success&session_id={CHECKOUT_SESSION_ID}';
-    const cancelUrl  = 'https://overowned.io/?checkout=cancel#pricing';
-
-    const sessionParams = {
-      mode: 'subscription',
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: successUrl,
-      cancel_url: cancelUrl,
-      allow_promotion_codes: true,
-      // Store tier + user_id in metadata so the webhook knows which tier
-      // was purchased and (if user was signed in) which Supabase user to attach.
-      metadata: {
-        tier,
-        ...(user_id ? { supabase_user_id: user_id } : {}),
+    // ── 3. Build the Checkout session ───────────────────────────────────
+    const origin = event.headers.origin || 'https://overowned.io';
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      line_items: [{ price: price.id, quantity: 1 }],
+      // Customer's email is what we'll use for the magic link.
+      // Stripe collects it natively and we receive it on the webhook.
+      customer_creation: 'always',
+      // Success URL has ?checkout=success so the landing page knows to
+      // show the "check your email" message and clean the query string.
+      success_url: `${origin}/?checkout=success`,
+      cancel_url: `${origin}/?checkout=cancel#pricing`,
+      // Surface the legal links in Stripe's checkout footer.
+      consent_collection: {
+        terms_of_service: 'required',
       },
-      // Also attach to the subscription itself, because the subscription.updated
-      // webhook event doesn't carry session metadata — it carries subscription metadata.
-      subscription_data: {
-        metadata: {
-          tier,
-          ...(user_id ? { supabase_user_id: user_id } : {}),
+      custom_text: {
+        terms_of_service_acceptance: {
+          message: 'I agree to the OverOwned [Terms of Service](https://overowned.io/terms.html) and [Refund Policy](https://overowned.io/refund.html).',
+        },
+        submit: {
+          message: 'Season 1 access expires July 12, 2026. One-time payment.',
         },
       },
-    };
-
-    // Pre-fill customer email if we have it (signed-in user path).
-    // If not, Stripe Checkout prompts them for it — that's also fine.
-    if (email) sessionParams.customer_email = email;
-
-    const session = await stripe.checkout.sessions.create(sessionParams);
+      // Metadata flows through to the webhook so we know which season this is.
+      metadata: { season: '1' },
+      // Tax — let Stripe Tax handle if enabled in your dashboard.
+      automatic_tax: { enabled: false },
+    });
 
     return {
       statusCode: 200,
-      headers: corsHeaders(),
-      body: JSON.stringify({ url: session.url, id: session.id }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: session.url }),
     };
   } catch (err) {
-    console.error('[create-checkout-session]', err);
+    console.error('create-checkout-session error', err);
     return {
       statusCode: 500,
-      headers: corsHeaders(),
-      body: JSON.stringify({ error: err.message || 'Internal error' }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ error: 'Checkout temporarily unavailable.' }),
     };
   }
 };
-
-function corsHeaders() {
-  return {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  };
-}
