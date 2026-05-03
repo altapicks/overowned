@@ -12,7 +12,9 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
 const SEASON_1_TOTAL = 25;
-const STRIPE_PRICE_LOOKUP_KEY = 'season_1';
+// Hardcoded price ID for Season 1. When Season 2 ships, create a new
+// price in Stripe and replace this constant.
+const SEASON_1_PRICE_ID = 'price_1TSjmVE4LrzggN5fCaY3T9Yg';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
@@ -43,30 +45,12 @@ export const handler = async (event) => {
       };
     }
 
-    // ── 2. Resolve the Stripe price by lookup_key ───────────────────────
-    // Using lookup_key keeps the code season-agnostic — when Season 2
-    // ships, just create a `season_2` price in Stripe and bump the
-    // STRIPE_PRICE_LOOKUP_KEY constant above.
-    const prices = await stripe.prices.list({
-      lookup_keys: [STRIPE_PRICE_LOOKUP_KEY],
-      active: true,
-      limit: 1,
-    });
-    const price = prices.data[0];
-    if (!price) {
-      console.error(`No active Stripe price with lookup_key=${STRIPE_PRICE_LOOKUP_KEY}`);
-      return {
-        statusCode: 500,
-        body: JSON.stringify({ error: 'Pricing configuration error.' }),
-      };
-    }
-
-    // ── 3. Build the Checkout session ───────────────────────────────────
+    // ── 2. Build the Checkout session ───────────────────────────────────
     const origin = event.headers.origin || 'https://overowned.io';
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
-      line_items: [{ price: price.id, quantity: 1 }],
+      line_items: [{ price: SEASON_1_PRICE_ID, quantity: 1 }],
       // Customer's email is what we'll use for the magic link.
       // Stripe collects it natively and we receive it on the webhook.
       customer_creation: 'always',
