@@ -704,11 +704,19 @@ a { color: inherit; text-decoration: none; }
   .nav-links { gap: 16px; font-size: 12px; }
   .nav-links a:nth-child(-n+3) { display: none; }
   .hero {
-    padding: 60px 20px 200px;
+    /* Padding-bottom 130 = mountain height (140) - peak offset (35) + 25 gap.
+       Lands the featured strip ~25px above the peak crests on mobile. */
+    padding: 60px 20px 130px;
     /* Override the desktop nav offset with the mobile nav height (~64px). */
     min-height: calc(100vh - 64px);
     min-height: calc(100dvh - 64px);
   }
+  /* Shorter mountain on mobile. The viewBox is 1000:200 (5:1) and renders
+     non-uniformly via preserveAspectRatio="none"; a 240px height on a ~390px
+     wide phone makes peaks ~3× steeper than they look on desktop. Cutting
+     the height to 140 keeps the slopes gentle and the silhouette readable
+     as a horizon line rather than jagged teeth. */
+  .hero-mountains { height: 140px; }
   .hero h1 { font-size: 40px; letter-spacing: -1px; }
   .hero-sub { font-size: 15px; }
   .section { padding: 48px 20px; }
