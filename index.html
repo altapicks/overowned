@@ -134,9 +134,18 @@ a { color: inherit; text-decoration: none; }
 /* ── Hero ─────────────────────────────── */
 .hero {
   position: relative;
-  padding: 100px 40px 80px;
+  padding: 100px 40px 200px;
   text-align: center;
   overflow: hidden;
+  /* Hero fills exactly one viewport so the next section can't peek
+     through. 73px = desktop nav height (18 padding + 36 logo + 18 padding + 1 border). */
+  min-height: calc(100vh - 73px);
+  min-height: calc(100dvh - 73px);
+  /* Flex column so .featured can be pushed to the bottom of the hero
+     (just above the mountain peaks) regardless of how tall the viewport is. */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .hero-mountains {
   position: absolute;
@@ -231,7 +240,12 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Featured By ──────────────────────── */
 .featured {
-  margin-top: 48px;
+  /* margin-top: auto pushes this strip to the bottom of the hero flex column,
+     so it lands just above the mountains regardless of viewport height.
+     align-self: stretch keeps the divider line spanning the full hero width
+     (other hero children are content-width via align-items: center on the parent). */
+  margin-top: auto;
+  align-self: stretch;
   padding-top: 32px;
   border-top: 1px solid var(--border);
   text-align: center;
@@ -689,7 +703,12 @@ a { color: inherit; text-decoration: none; }
   .nav { padding: 14px 20px; }
   .nav-links { gap: 16px; font-size: 12px; }
   .nav-links a:nth-child(-n+3) { display: none; }
-  .hero { padding: 60px 20px 60px; }
+  .hero {
+    padding: 60px 20px 200px;
+    /* Override the desktop nav offset with the mobile nav height (~64px). */
+    min-height: calc(100vh - 64px);
+    min-height: calc(100dvh - 64px);
+  }
   .hero h1 { font-size: 40px; letter-spacing: -1px; }
   .hero-sub { font-size: 15px; }
   .section { padding: 48px 20px; }
