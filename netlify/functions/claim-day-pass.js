@@ -136,11 +136,15 @@ export const handler = async (event) => {
         hadActionLink: !!linkData?.properties?.action_link,
         userEmail: email,
       }, null, 2));
+      // TEMPORARY DEBUG: surface the actual Supabase error to the frontend
+      // so we can diagnose the config issue. REMOVE THIS once fixed.
+      const debugMsg = linkErr?.message || 'no error object returned';
+      const debugStatus = linkErr?.status || 'no status';
       return {
         statusCode: 500,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          error: 'Could not create sign-in link. Please try again or contact support@overowned.io.',
+          error: `[debug] generateLink failed — status: ${debugStatus} — message: ${debugMsg}`,
         }),
       };
     }
