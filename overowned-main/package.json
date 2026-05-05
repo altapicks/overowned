@@ -1,0 +1,15 @@
+{
+  "name": "overowned-landing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Landing page for OverOwned with Stripe + Supabase + Resend integration",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "resend": "^4.0.0",
+    "stripe": "^17.0.0"
+  }
+}
