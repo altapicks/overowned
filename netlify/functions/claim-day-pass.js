@@ -99,21 +99,49 @@ export const handler = async (event) => {
       };
     }
 
+    // ── Sanity-check env config up front so logs show clear cause ─────
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('[claim-day-pass] Missing env: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+      return {
+        statusCode: 500,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ error: 'Server configuration error. Please contact support.' }),
+      };
+    }
+
     // ── Generate Supabase magic link ──────────────────────────────────
     // generateLink with type=magiclink creates a link that, when clicked,
     // signs the user in and redirects to redirectTo. Supabase auto-creates
-    // the user if they don't exist.
+    // the user if they don't exist. Common failure causes:
+    //   - SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY missing/wrong in Netlify
+    //   - APP_URL not in Supabase Auth → URL Configuration → Redirect URLs
+    //   - Email signups disabled under Supabase Auth → Providers → Email
+    //   - Service role key has been rotated and the env var wasn't updated
     const { data: linkData, error: linkErr } = await supabase.auth.admin.generateLink({
       type: 'magiclink',
       email,
       options: { redirectTo: APP_URL },
     });
     if (linkErr || !linkData?.properties?.action_link) {
-      console.error('generateLink failed', linkErr);
+      // Log the FULL Supabase error so it's visible in Netlify function logs.
+      // (Function logs: Netlify dashboard → site → Logs → Functions →
+      // claim-day-pass.) The user sees the friendly message; the dev sees
+      // the actual cause.
+      console.error('[claim-day-pass] generateLink failed:', JSON.stringify({
+        message: linkErr?.message,
+        status: linkErr?.status,
+        name: linkErr?.name,
+        cause: linkErr?.cause,
+        details: linkErr,
+        hadActionLink: !!linkData?.properties?.action_link,
+        userEmail: email,
+      }, null, 2));
       return {
         statusCode: 500,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ error: 'Could not create sign-in link. Please try again.' }),
+        body: JSON.stringify({
+          error: 'Could not create sign-in link. Please try again or contact support@overowned.io.',
+        }),
       };
     }
     const magicLink = linkData.properties.action_link;

@@ -519,52 +519,89 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Day Pass section ─────────────────── */
 .daypass-wrap {
-  max-width: 520px;
+  max-width: 600px;
   margin: 0 auto;
+  padding: 0 16px;
 }
 .daypass-card {
-  background: var(--bg);
+  background: linear-gradient(180deg, rgba(15, 29, 51, 0.6) 0%, rgba(10, 22, 40, 0.4) 100%);
   border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 28px;
-  transition: border-color 0.3s, transform 0.3s;
+  border-radius: 16px;
+  padding: 36px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+/* subtle gold glow on the top edge */
+.daypass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(245, 197, 24, 0.4) 50%, transparent 100%);
+  opacity: 0.6;
 }
 .daypass-card:hover {
-  border-color: var(--border-light);
+  border-color: rgba(245, 197, 24, 0.25);
   transform: translateY(-2px);
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.5);
 }
 .daypass-tier {
-  font-size: 13px;
-  color: var(--text-muted);
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
   text-align: center;
+  text-transform: uppercase;
 }
 .daypass-headline {
-  font-size: 28px;
+  font-size: clamp(24px, 4.5vw, 34px);
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.7px;
+  line-height: 1.15;
   color: var(--text);
   text-align: center;
-  margin-bottom: 4px;
+  margin-bottom: 10px;
 }
 .daypass-headline .accent { color: var(--primary); }
 .daypass-sub {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-muted);
   text-align: center;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
+  line-height: 1.5;
 }
 .daypass-spots {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  margin-bottom: 18px;
+  margin: 0 auto 24px;
+  padding: 6px 14px;
   font-size: 12px;
   color: var(--text-muted);
+  background: rgba(245, 197, 24, 0.06);
+  border: 1px solid rgba(245, 197, 24, 0.18);
+  border-radius: 999px;
+  width: fit-content;
 }
-.daypass-spots .spots-dot { width: 6px; height: 6px; }
+.daypass-spots-wrap {
+  display: flex;
+  justify-content: center;
+}
+.daypass-spots .spots-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 8px rgba(245, 197, 24, 0.6);
+  animation: pulseDot 2.4s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
 #daypass-remaining, #daypass-total {
   color: var(--primary);
   font-weight: 700;
@@ -572,52 +609,64 @@ a { color: inherit; text-decoration: none; }
 }
 .daypass-form {
   display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 .daypass-input {
   flex: 1;
-  padding: 12px 14px;
-  background: var(--card);
+  min-width: 0;
+  padding: 14px 16px;
+  background: rgba(10, 22, 40, 0.6);
   border: 1px solid var(--border-light);
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 10px;
+  font-size: 15px;
   font-family: inherit;
   color: var(--text);
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
 }
-.daypass-input:focus { border-color: var(--primary); }
+.daypass-input:focus {
+  border-color: var(--primary);
+  background: rgba(10, 22, 40, 0.85);
+  box-shadow: 0 0 0 3px rgba(245, 197, 24, 0.12);
+}
 .daypass-input::placeholder { color: var(--text-dim); }
 .daypass-btn {
-  padding: 12px 20px;
-  background: transparent;
-  color: var(--primary);
+  padding: 14px 24px;
+  background: var(--primary);
+  color: var(--bg);
   border: 1px solid var(--primary);
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 10px;
+  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   white-space: nowrap;
   transition: all 0.15s;
+  box-shadow: 0 4px 14px rgba(245, 197, 24, 0.18);
 }
-.daypass-btn:hover { background: rgba(245, 197, 24, 0.08); }
-.daypass-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.daypass-btn:hover:not(:disabled) {
+  background: var(--primary-light);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245, 197, 24, 0.28);
+}
+.daypass-btn:active:not(:disabled) { transform: translateY(0); }
+.daypass-btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
 .daypass-msg {
-  font-size: 12px;
+  font-size: 13px;
   text-align: center;
-  min-height: 18px;
+  min-height: 20px;
   color: var(--text-muted);
+  line-height: 1.4;
 }
 .daypass-msg.error { color: var(--red); }
 .daypass-msg.success { color: var(--green); }
 .daypass-fineprint {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--text-dim);
   text-align: center;
-  margin-top: 14px;
-  line-height: 1.5;
+  margin-top: 16px;
+  line-height: 1.6;
 }
 
 /* ── Disclaimer ───────────────────────── */
@@ -733,7 +782,9 @@ a { color: inherit; text-decoration: none; }
     font-size: 11px;
   }
   .preview-header > :nth-child(7), .preview-row > :nth-child(7) { display: none; }
+  .daypass-card { padding: 28px 20px; }
   .daypass-form { flex-direction: column; }
+  .daypass-btn { padding: 14px 20px; }
   .footer { padding: 24px 20px; flex-direction: column; text-align: center; }
 }
 </style>
@@ -885,9 +936,11 @@ a { color: inherit; text-decoration: none; }
       <div class="daypass-tier">DAY PASS</div>
       <div class="daypass-headline">First <span class="accent">50</span> emails get free access</div>
       <div class="daypass-sub">Full product access for 24 hours, no credit card required.</div>
-      <div class="daypass-spots">
-        <span class="spots-dot"></span>
-        <span><span id="daypass-remaining">50</span> of <span id="daypass-total">50</span> trials remaining</span>
+      <div class="daypass-spots-wrap">
+        <div class="daypass-spots">
+          <span class="spots-dot"></span>
+          <span><span id="daypass-remaining">50</span> of <span id="daypass-total">50</span> trials remaining</span>
+        </div>
       </div>
       <form id="daypass-form" class="daypass-form" novalidate>
         <input type="email" id="daypass-email" class="daypass-input" placeholder="your@email.com" required autocomplete="email" />
