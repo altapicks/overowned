@@ -1,21 +1,28 @@
 // netlify/functions/stripe-webhook.js
 //
 // Receives Stripe webhook events. Specifically watches:
-//   - checkout.session.completed     → grant Season Pass + send magic link
-//   - charge.refunded               → mark season pass as refunded (lose access)
+//   - checkout.session.completed  → grant Season 1 license key + email it
+//   - charge.refunded             → mark license key as refunded (revokes access)
 //
 // Webhook signature is verified using STRIPE_WEBHOOK_SECRET. Without a
 // valid signature, the request is rejected — this is critical, because
-// otherwise anyone who guesses the URL could grant themselves a Season
-// Pass.
+// otherwise anyone who guesses the URL could grant themselves a Season Pass.
+//
+// Replaces the previous Supabase magic-link flow — keys live in
+// public.license_keys and are validated by app.overowned.io/sign-in?key=...
 
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
+import { generateAccessKey } from './_shared/generate-key.js';
+import { renderKeyEmail } from './_shared/render-key-email.js';
 
-const SEASON = 1;
-const SEASON_EXPIRES_AT = '2026-07-12T23:59:59-04:00';   // EDT, end of July 12
+const TIER = 'season';
+const PLAN = 'season';
+const SEASON = '2026';
+const SEASON_EXPIRES_AT = '2026-07-12T23:59:59-04:00'; // EDT, end of July 12
 const APP_URL = 'https://app.overowned.io';
+const SIGN_IN_PATH = '/sign-in';
 const FROM_EMAIL = 'OverOwned <noreply@overowned.io>';
 const REPLY_TO = 'support@overowned.io';
 
@@ -35,18 +42,17 @@ export const handler = async (event) => {
   const sig = event.headers['stripe-signature'];
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!sig || !webhookSecret) {
-    console.error('Missing webhook signature or secret');
+    console.error('[stripe-webhook] Missing webhook signature or secret');
     return { statusCode: 400, body: 'Missing signature' };
   }
 
   // Stripe needs the raw body for signature verification — Netlify
-  // passes it as event.body. We use Stripe's constructEvent which throws
-  // on invalid signatures.
+  // passes it as event.body. constructEvent throws on invalid signatures.
   let stripeEvent;
   try {
     stripeEvent = stripe.webhooks.constructEvent(event.body, sig, webhookSecret);
   } catch (err) {
-    console.error('Webhook signature verification failed', err.message);
+    console.error('[stripe-webhook] signature verification failed', err.message);
     return { statusCode: 400, body: `Webhook Error: ${err.message}` };
   }
 
@@ -59,184 +65,205 @@ export const handler = async (event) => {
         await handleChargeRefunded(stripeEvent.data.object);
         break;
       default:
-        // No-op for events we don't care about. Stripe will retry
-        // failed events; returning 200 stops retries for ignored types.
+        // No-op for events we don't care about. Returning 200 stops retries.
         break;
     }
     return { statusCode: 200, body: JSON.stringify({ received: true }) };
   } catch (err) {
-    console.error(`Webhook handler failed for ${stripeEvent.type}`, err);
-    // Return 500 so Stripe retries — we want to recover from transient
-    // Supabase / Resend errors.
+    console.error(`[stripe-webhook] handler failed for ${stripeEvent.type}`, err);
+    // 500 so Stripe retries — recover from transient Supabase / Resend errors.
     return { statusCode: 500, body: 'Handler error' };
   }
 };
 
+/* ────────────────────────────────────────────────────────────────────
+   checkout.session.completed → grant Season 1 license key
+   ──────────────────────────────────────────────────────────────────── */
 async function handleCheckoutCompleted(session) {
   const email = (session.customer_details?.email || session.customer_email || '').toLowerCase();
   if (!email) {
-    console.error('checkout.session.completed missing email', session.id);
+    console.error('[stripe-webhook] checkout.session.completed missing email', session.id);
     return;
   }
 
-  // ── Idempotency: if we already recorded this checkout, do nothing.
-  // Stripe occasionally re-delivers webhook events; without this, a
-  // re-delivery could grant duplicate passes or send duplicate emails.
-  const { data: existing } = await supabase
-    .from('season_passes')
-    .select('id, status')
-    .eq('stripe_checkout_session_id', session.id)
+  // ── Idempotency: if this email already has an active season key, skip.
+  // Stripe occasionally re-delivers webhook events; without this guard, a
+  // re-delivery would grant duplicate keys + send duplicate emails.
+  //
+  // TODO (recommended): add a `stripe_session_id` column to license_keys
+  // and index it UNIQUE so we can dedup by Stripe event rather than email.
+  const { data: existingKey } = await supabase
+    .from('license_keys')
+    .select('key')
+    .eq('email', email)
+    .eq('plan', PLAN)
+    .eq('status', 'active')
     .maybeSingle();
-  if (existing) {
-    console.log(`Idempotent skip — session ${session.id} already processed`);
+  if (existingKey) {
+    console.log(`[stripe-webhook] Idempotent skip — ${email} already has season key ${existingKey.key}`);
     return;
   }
 
-  // ── Generate the magic link FIRST so user creation is atomic.
-  // Supabase auto-creates the user if they don't exist.
-  const { data: linkData, error: linkErr } = await supabase.auth.admin.generateLink({
-    type: 'magiclink',
-    email,
-    options: { redirectTo: APP_URL },
-  });
-  if (linkErr || !linkData?.properties?.action_link) {
-    console.error('generateLink failed for paid checkout', linkErr);
-    throw new Error('Failed to generate sign-in link');
+  // ── Inventory check (best-effort — Stripe charge is already captured)
+  const { data: stock } = await supabase
+    .from('license_stock')
+    .select('available, sold')
+    .eq('tier', TIER)
+    .eq('season', SEASON)
+    .maybeSingle();
+  if (stock && stock.available !== null && stock.sold >= stock.available) {
+    // Oversold — log loudly. We still grant the key because the customer
+    // already paid; refund handling is manual at this point.
+    console.error(`[stripe-webhook] OVERSOLD: ${email} purchased after ${stock.available} cap. Granting anyway — review and refund manually if needed.`);
   }
-  const magicLink = linkData.properties.action_link;
-  const userId = linkData.user?.id;
 
-  // ── Record the season pass.
-  const { error: insertErr } = await supabase
-    .from('season_passes')
+  // ── Generate key (retry on extremely-unlikely UNIQUE collision)
+  let accessKey, insertErr, attempts = 0;
+  while (attempts < 3) {
+    accessKey = generateAccessKey();
+    const { error } = await supabase
+      .from('license_keys')
+      .insert({
+        key: accessKey,
+        plan: PLAN,
+        status: 'active',
+        email,
+        expires_at: SEASON_EXPIRES_AT,
+      });
+    if (!error) { insertErr = null; break; }
+    if (error.code !== '23505') { insertErr = error; break; }
+    attempts++;
+  }
+  if (insertErr) {
+    console.error('[stripe-webhook] license_keys insert failed', insertErr);
+    throw new Error('Failed to record season key');
+  }
+
+  // ── Also insert into licenses (the table active_access reads from).
+  // We store stripe_pi_id so refunds can resolve directly back to this row.
+  const { error: licenseErr } = await supabase
+    .from('licenses')
     .insert({
       email,
-      season: SEASON,
-      user_id: userId ?? null,
-      stripe_checkout_session_id: session.id,
-      stripe_customer_id: session.customer,
-      stripe_payment_intent_id: session.payment_intent,
-      amount_paid: session.amount_total,
-      currency: session.currency,
+      tier: 'season',
+      status: 'active',
       purchased_at: new Date().toISOString(),
       expires_at: SEASON_EXPIRES_AT,
-      status: 'active',
+      stripe_pi_id: session.payment_intent,
+      notes: `Season 1 · key ${accessKey}`,
     });
-  if (insertErr) {
-    console.error('season_pass insert failed', insertErr);
-    throw new Error('Failed to record season pass');
+  if (licenseErr) {
+    // Non-fatal — key was created and charge already captured.
+    console.error('[stripe-webhook] licenses insert failed (non-fatal)', licenseErr);
   }
 
-  // ── Send welcome + magic-link email.
+  // ── Increment license_stock.sold
+  const newSold = (stock?.sold ?? 0) + 1;
+  const { error: stockErr } = await supabase
+    .from('license_stock')
+    .update({ sold: newSold, updated_at: new Date().toISOString() })
+    .eq('tier', TIER)
+    .eq('season', SEASON);
+  if (stockErr) {
+    console.error('[stripe-webhook] license_stock increment failed (non-fatal)', stockErr);
+  }
+
+  // ── Send welcome + key email
+  const signInUrl = `${APP_URL}${SIGN_IN_PATH}?key=${encodeURIComponent(accessKey)}`;
+  const { subject, html, text } = renderKeyEmail({
+    key: accessKey,
+    signInUrl,
+    tier: 'season-1',
+    expiresAt: new Date(SEASON_EXPIRES_AT),
+  });
   await resend.emails.send({
     from: FROM_EMAIL,
     reply_to: REPLY_TO,
     to: email,
-    subject: 'Welcome to OverOwned Season 1',
-    html: seasonPassEmailHtml(magicLink),
-    text: seasonPassEmailText(magicLink),
+    subject,
+    html,
+    text,
   });
 
-  console.log(`Season 1 pass granted: ${email}`);
+  console.log(`[stripe-webhook] Season 1 key granted: ${email} → ${accessKey}`);
 }
 
+/* ────────────────────────────────────────────────────────────────────
+   charge.refunded → revoke license access
+   ──────────────────────────────────────────────────────────────────── */
 async function handleChargeRefunded(charge) {
-  // charge.payment_intent links back to the season pass we recorded.
-  const paymentIntentId = charge.payment_intent;
-  if (!paymentIntentId) return;
+  const piId = charge.payment_intent;
+  if (!piId) return;
 
-  const { error } = await supabase
-    .from('season_passes')
-    .update({
-      status: 'refunded',
-      refunded_at: new Date().toISOString(),
-    })
-    .eq('stripe_payment_intent_id', paymentIntentId)
-    .eq('status', 'active');
-  if (error) {
-    console.error('season_pass refund update failed', error);
-    throw new Error('Failed to mark season pass as refunded');
+  // Primary path: find the licenses row by stripe_pi_id, get the email,
+  // mark both licenses + license_keys refunded.
+  const { data: licenseRow } = await supabase
+    .from('licenses')
+    .select('id, email')
+    .eq('stripe_pi_id', piId)
+    .eq('status', 'active')
+    .maybeSingle();
+
+  let email = licenseRow?.email;
+
+  // Fallback: if licenses row wasn't found (old data, manual entry, etc),
+  // resolve email via the Stripe PaymentIntent → Customer chain.
+  if (!email) {
+    try {
+      const pi = await stripe.paymentIntents.retrieve(piId, { expand: ['customer'] });
+      email = (pi.receipt_email || pi.customer?.email || '').toLowerCase();
+    } catch (err) {
+      console.error('[stripe-webhook] failed to retrieve PaymentIntent for refund', piId, err);
+      return;
+    }
   }
-  console.log(`Season pass refunded: payment_intent=${paymentIntentId}`);
-}
+  if (!email) {
+    console.error('[stripe-webhook] refund could not resolve customer email', piId);
+    return;
+  }
 
-// ── Email templates ───────────────────────────────────────────────────
+  // Mark the active license row(s) refunded
+  if (licenseRow) {
+    await supabase
+      .from('licenses')
+      .update({ status: 'refunded', updated_at: new Date().toISOString() })
+      .eq('id', licenseRow.id);
+  } else {
+    await supabase
+      .from('licenses')
+      .update({ status: 'refunded', updated_at: new Date().toISOString() })
+      .eq('email', email)
+      .eq('tier', TIER)
+      .eq('status', 'active');
+  }
 
-function seasonPassEmailHtml(link) {
-  return `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Welcome to OverOwned</title></head>
-<body style="margin:0;padding:0;background:#0A1628;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#0A1628;padding:40px 20px;">
-    <tr><td align="center">
-      <table role="presentation" cellpadding="0" cellspacing="0" width="520" style="max-width:520px;background:#0F1D33;border:1px solid #F5C518;border-radius:12px;overflow:hidden;">
-        <tr><td style="padding:32px 32px 16px;">
-          <div style="font-size:22px;font-weight:800;color:#FFFFFF;letter-spacing:-0.5px;">
-            Over<span style="color:#F5C518;">O</span>wned
-          </div>
-          <div style="display:inline-block;margin-top:14px;padding:4px 12px;background:#F5C518;color:#0A1628;font-size:10px;font-weight:800;letter-spacing:1.5px;border-radius:100px;">
-            SEASON 1
-          </div>
-        </td></tr>
-        <tr><td style="padding:0 32px 8px;">
-          <h1 style="margin:0 0 12px;font-size:26px;color:#FFFFFF;font-weight:700;letter-spacing:-0.5px;line-height:1.3;">
-            Welcome to Season 1.
-          </h1>
-          <p style="margin:0 0 20px;color:#8B9ABA;font-size:15px;line-height:1.6;">
-            Your Season 1 pass is active until <strong style="color:#FFFFFF;">11:59 PM ET on July 12, 2026</strong>. Click below to sign in — full product access, all slates, every projection.
-          </p>
-        </td></tr>
-        <tr><td align="center" style="padding:8px 32px 24px;">
-          <a href="${link}" style="display:inline-block;padding:14px 36px;background:#F5C518;color:#0A1628;text-decoration:none;border-radius:8px;font-size:15px;font-weight:700;">
-            Sign in to OverOwned
-          </a>
-        </td></tr>
-        <tr><td style="padding:0 32px 24px;">
-          <p style="margin:0;color:#5F728F;font-size:12px;line-height:1.6;">
-            Or paste this URL into your browser:<br>
-            <span style="color:#8B9ABA;word-break:break-all;">${link}</span>
-          </p>
-        </td></tr>
-        <tr><td style="padding:24px 32px;border-top:1px solid #1E2D4A;">
-          <p style="margin:0 0 12px;color:#FFFFFF;font-size:14px;font-weight:600;">
-            What's inside:
-          </p>
-          <ul style="margin:0 0 12px 20px;padding:0;color:#8B9ABA;font-size:13px;line-height:1.8;">
-            <li>Real projections for every DK and PrizePicks slate</li>
-            <li>Live leverage and trap detection</li>
-            <li>Lineup optimizer with DK CSV export</li>
-            <li>Direct line for questions — just reply to this email</li>
-          </ul>
-        </td></tr>
-        <tr><td style="padding:18px 32px 24px;border-top:1px solid #1E2D4A;">
-          <p style="margin:0;color:#5F728F;font-size:11px;line-height:1.6;">
-            Sign-in link expires in 1 hour. If it expires, request another at <a href="https://app.overowned.io" style="color:#F5C518;text-decoration:none;">app.overowned.io</a>. Sessions stay active for 30 days — no constant re-logins on mobile.
-          </p>
-        </td></tr>
-      </table>
-      <p style="margin:20px 0 0;color:#5F728F;font-size:11px;text-align:center;">
-        © 2026 OverOwned · <a href="https://overowned.io/terms.html" style="color:#5F728F;">Terms</a> · <a href="https://overowned.io/privacy.html" style="color:#5F728F;">Privacy</a> · <a href="https://overowned.io/refund.html" style="color:#5F728F;">Refund Policy</a>
-      </p>
-    </td></tr>
-  </table>
-</body></html>`;
-}
+  // Mark the active season key(s) for this email as refunded.
+  const { data: updated, error } = await supabase
+    .from('license_keys')
+    .update({ status: 'refunded' })
+    .eq('email', email)
+    .eq('plan', PLAN)
+    .eq('status', 'active')
+    .select('key');
+  if (error) {
+    console.error('[stripe-webhook] license_keys refund update failed', error);
+    throw new Error('Failed to mark key as refunded');
+  }
 
-function seasonPassEmailText(link) {
-  return `Welcome to OverOwned Season 1.
+  // Also decrement license_stock.sold so the inventory frees up.
+  const { data: stock } = await supabase
+    .from('license_stock')
+    .select('sold')
+    .eq('tier', TIER)
+    .eq('season', SEASON)
+    .maybeSingle();
+  if (stock && stock.sold > 0 && updated && updated.length > 0) {
+    await supabase
+      .from('license_stock')
+      .update({ sold: stock.sold - updated.length, updated_at: new Date().toISOString() })
+      .eq('tier', TIER)
+      .eq('season', SEASON);
+  }
 
-Your pass is active until 11:59 PM ET on July 12, 2026.
-
-Sign in here:
-${link}
-
-What's inside:
-• Real projections for every DK and PrizePicks slate
-• Live leverage and trap detection
-• Lineup optimizer with DK CSV export
-• Direct line for questions — just reply to this email
-
-Sign-in link expires in 1 hour. Sessions stay active for 30 days.
-
-— OverOwned
-https://overowned.io`;
+  console.log(`[stripe-webhook] Refunded ${updated?.length || 0} key(s) for ${email} (pi=${piId})`);
 }
