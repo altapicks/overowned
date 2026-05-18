@@ -309,7 +309,7 @@ main, nav, footer { position: relative; z-index: 1; }
 /* ── Layout ──────────────────────────────────────────────── */
 .container {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1680px;
   margin: 0 auto;
   padding: 0 clamp(20px, 4vw, 48px);
 }
@@ -326,7 +326,7 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .nav__inner {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1680px;
   margin: 0 auto;
   padding: 16px clamp(20px, 4vw, 48px);
   display: flex;
@@ -378,7 +378,26 @@ main, nav, footer { position: relative; z-index: 1; }
 .hero {
   position: relative;
   overflow: hidden;
-  padding: clamp(48px, 6vw, 80px) 0 clamp(64px, 8vw, 100px);
+  /* Fill exactly one viewport (minus the sticky nav) so the featured strip
+     sits at the bottom and no dark void opens between hero and what's below */
+  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
+  display: flex;
+  flex-direction: column;
+  padding: clamp(36px, 5vw, 64px) 0 0;
+}
+.hero > .container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.hero__grid {
+  flex: 1;
+  align-content: center;
+}
+.featured--in-hero {
+  margin-top: auto;
+  padding: 24px 0 28px;
 }
 .hero__bg {
   position: absolute;
@@ -585,12 +604,14 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .preview__table-head, .preview__table-row {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1.5fr) 60px 60px 70px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.15fr) 60px 64px 56px;
   gap: 8px;
   align-items: center;
   padding: 8px 14px;
   font-size: 11px;
 }
+.preview__table-head > div, .preview__table-row > div { min-width: 0; overflow: hidden; }
+.preview__table-row .preview__name { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
 .preview__table-head {
   font-size: 9px;
   font-weight: 700;
@@ -813,29 +834,42 @@ main, nav, footer { position: relative; z-index: 1; }
 .demo-trap__row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 18px;
   font-size: 12px;
 }
-.demo-trap__name { color: var(--oo-text); font-weight: 600; }
+.demo-trap__name {
+  color: var(--oo-text);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
 .demo-trap__chip {
   position: relative;
-  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 22px;
+  /* Wide enough to fit either face without reflow */
+  min-width: 132px;
 }
-.feat:hover .demo-trap__chip { transform: rotateY(180deg); }
-.demo-trap__face {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.demo-trap__face,
+.demo-trap__back {
+  transition: opacity 280ms ease, transform 280ms ease;
 }
 .demo-trap__back {
   position: absolute;
   inset: 0;
-  transform: rotateY(180deg);
   display: flex;
   align-items: center;
   justify-content: center;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+  opacity: 0;
+  transform: translateY(2px);
+  pointer-events: none;
 }
+.feat:hover .demo-trap__face { opacity: 0; transform: translateY(-2px); }
+.feat:hover .demo-trap__back { opacity: 1; transform: translateY(0); }
 .demo-trap__hint {
   font-size: 10px;
   color: var(--oo-muted-2);
@@ -951,15 +985,15 @@ main, nav, footer { position: relative; z-index: 1; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px; height: 44px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #44ad29, #2e8d1a);
-  color: white;
-  font-weight: 800;
-  font-size: 13px;
-  letter-spacing: 0.5px;
-  box-shadow: 0 0 16px rgba(68, 173, 41, 0.4);
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4dc233, #2e8d1a);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 14px rgba(68, 173, 41, 0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+  padding: 0;
+  overflow: hidden;
 }
+.demo-csv__dk svg { width: 100%; height: 100%; display: block; }
 
 /* ── How It Works ────────────────────────────────────────── */
 .steps {
@@ -1034,24 +1068,61 @@ main, nav, footer { position: relative; z-index: 1; }
   overflow: hidden;
 }
 
-/* step 1: pulsing data lines */
-.step-anim-1 { display: flex; gap: 4px; align-items: flex-end; }
-.step-anim-1 span {
-  display: block;
-  width: 4px;
-  background: var(--oo-blue);
-  border-radius: 2px;
-  animation: bar-pulse 1.4s ease-in-out infinite;
+/* step 1: streaming data tape (sharp lines being pulled in) */
+.step-anim-1 {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
-.step-anim-1 span:nth-child(1) { height: 30%; animation-delay: 0s; }
-.step-anim-1 span:nth-child(2) { height: 60%; animation-delay: 0.1s; }
-.step-anim-1 span:nth-child(3) { height: 45%; animation-delay: 0.2s; }
-.step-anim-1 span:nth-child(4) { height: 80%; animation-delay: 0.3s; }
-.step-anim-1 span:nth-child(5) { height: 55%; animation-delay: 0.4s; }
-.step-anim-1 span:nth-child(6) { height: 70%; animation-delay: 0.5s; }
-@keyframes bar-pulse {
-  0%, 100% { opacity: 0.4; transform: scaleY(1); }
-  50%      { opacity: 1; transform: scaleY(1.15); }
+.step-anim-1__tape {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  animation: tape-pull 12s linear infinite;
+  padding-left: 6px;
+}
+@keyframes tape-pull {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.step-anim-1__tick {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: var(--oo-mono);
+  border-radius: 4px;
+  border: 1px solid var(--oo-border);
+  background: rgba(138, 170, 210, 0.06);
+  color: var(--oo-text);
+  font-variant-numeric: tabular-nums;
+}
+.step-anim-1__tick--g { background: var(--oo-green-soft); color: var(--oo-green); border-color: rgba(25, 210, 127, 0.32); }
+.step-anim-1__tick--r { background: var(--oo-red-soft); color: var(--oo-red); border-color: rgba(255, 93, 79, 0.32); }
+.step-anim-1__tick--b { background: var(--oo-blue-soft); color: var(--oo-blue); border-color: rgba(74, 163, 255, 0.32); }
+.step-anim-1__tick--y { background: var(--oo-gold-soft); color: var(--oo-gold); border-color: rgba(255, 209, 26, 0.32); }
+/* Edge fades: gives the "data flowing in" feel */
+.step-anim-1::before,
+.step-anim-1::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 24px;
+  pointer-events: none;
+  z-index: 2;
+}
+.step-anim-1::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(13, 29, 48, 0.95), transparent);
+}
+.step-anim-1::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(13, 29, 48, 0.95), transparent);
 }
 
 /* step 2: model badge */
@@ -1091,15 +1162,16 @@ main, nav, footer { position: relative; z-index: 1; }
   animation: csv-jump 2.8s ease-in-out infinite;
 }
 .step-anim-3 .dk {
-  width: 34px; height: 34px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #44ad29, #2e8d1a);
-  color: white;
-  font-weight: 800;
-  font-size: 11px;
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #4dc233, #2e8d1a);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 12px rgba(68, 173, 41, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 12px rgba(68, 173, 41, 0.4);
+  overflow: hidden;
+  padding: 0;
 }
+.step-anim-3 .dk svg { width: 100%; height: 100%; display: block; }
 @keyframes csv-jump {
   0%, 30%   { transform: translateX(-10px); opacity: 1; }
   60%, 100% { transform: translateX(20px); opacity: 0; }
@@ -1341,7 +1413,34 @@ main, nav, footer { position: relative; z-index: 1; }
   display: flex;
   flex-direction: column;
   gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--oo-gold) transparent;
 }
+.pp-rail__list::-webkit-scrollbar { width: 8px; }
+.pp-rail__list::-webkit-scrollbar-track { background: transparent; }
+.pp-rail__list::-webkit-scrollbar-thumb {
+  background: var(--oo-gold);
+  border-radius: 4px;
+  border: 2px solid rgba(13, 29, 48, 0.6);
+  background-clip: padding-box;
+}
+.pp-rail__list::-webkit-scrollbar-thumb:hover { background-color: #ffdb3d; }
+
+/* Gold scrollbar for the horizontal product table scrollers too */
+.product-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--oo-gold) transparent;
+}
+.product-scroll::-webkit-scrollbar { height: 8px; }
+.product-scroll::-webkit-scrollbar-track { background: transparent; }
+.product-scroll::-webkit-scrollbar-thumb {
+  background: var(--oo-gold);
+  border-radius: 4px;
+  border: 2px solid rgba(13, 29, 48, 0.6);
+  background-clip: padding-box;
+}
+.product-scroll::-webkit-scrollbar-thumb:hover { background-color: #ffdb3d; }
 .pp-mover {
   display: grid;
   grid-template-columns: 56px 1fr;
@@ -2178,7 +2277,7 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .sport-card {
   position: relative;
-  padding: 32px 24px;
+  padding: 36px 24px;
   background: var(--oo-panel);
   border: 1px solid var(--oo-border);
   border-radius: var(--oo-radius-lg);
@@ -2187,10 +2286,16 @@ main, nav, footer { position: relative; z-index: 1; }
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   gap: 14px;
+  min-height: 260px;
   transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
   overflow: hidden;
+}
+.sport-card__caption {
+  max-width: 280px;
+  margin: 0 auto;
 }
 .sport-card:hover { transform: translateY(-4px); }
 .sport-card--live {
@@ -2340,6 +2445,23 @@ main, nav, footer { position: relative; z-index: 1; }
   vertical-align: middle;
   margin-right: 2px;
 }
+/* Real SVG flag (set by JS after page load — fixes Windows where flag emoji = two letters) */
+.flag-img {
+  display: inline-block;
+  width: auto;
+  height: 12px;
+  vertical-align: -1px;
+  margin-right: 4px;
+  border-radius: 1.5px;
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.25);
+  background: #18213a;
+  object-fit: cover;
+}
+.flag .flag-img { margin-right: 2px; }
+/* Bigger flag for the compare modal player header */
+.compare-head__flag .flag-img { height: 14px; vertical-align: middle; margin-right: 0; }
+/* Bigger flag for the player-cell profile search */
+.profile-player__search .flag .flag-img { height: 14px; }
 .table-frame__meta {
   display: inline-flex;
   align-items: center;
@@ -2859,7 +2981,7 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .footer__inner {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1680px;
   margin: 0 auto;
   padding: 0 clamp(20px, 4vw, 48px);
   display: flex;
@@ -2944,9 +3066,10 @@ main, nav, footer { position: relative; z-index: 1; }
   .kpi { padding: 10px; }
   .kpi__value { font-size: 20px; }
   .preview__table-head, .preview__table-row {
-    grid-template-columns: 28px 1fr 52px 52px 60px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 50px 56px 46px;
     padding: 6px 10px;
     font-size: 10px;
+    gap: 6px;
   }
 
   .section { padding: 64px 0; }
@@ -3051,7 +3174,7 @@ main, nav, footer { position: relative; z-index: 1; }
     </a>
     <div class="nav__links">
       <a href="#features">Features</a>
-      <a href="#how-it-works">How it works</a>
+      <a href="#how-it-works">How It Works</a>
       <a href="#sports">Sports</a>
       <a href="#pricing">Pricing</a>
       <a href="#pricing" class="nav__cta">
@@ -3135,47 +3258,43 @@ main, nav, footer { position: relative; z-index: 1; }
               <div>Opponent</div>
               <div style="text-align: right;">Model</div>
               <div style="text-align: right;">Edge ↓</div>
-              <div class="preview__cell-right">SQ</div>
+              <div style="text-align: center;">SQ</div>
             </div>
             <div class="preview__table-row">
               <div class="preview__name"><span class="flag">🇺🇸</span>Schoenhaus</div>
               <div style="color: var(--oo-muted);"><span class="flag">🇩🇪</span>Hanfmann</div>
               <div class="preview__num"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">5.92</span></div>
               <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+28.7</span></div>
-              <div class="preview__cell-right"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 28px;">7.7</span></div>
+              <div style="text-align: center;"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">7.7</span></div>
             </div>
             <div class="preview__table-row">
               <div class="preview__name"><span class="flag">🇦🇺</span>Hijikata</div>
-              <div style="color: var(--oo-muted);"><span class="flag">🇩🇪</span>Altmaier</div>
+              <div style="color: var(--oo-muted);"><span class="flag">🇮🇹</span>Cobolli</div>
               <div class="preview__num"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">5.52</span></div>
               <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+15.0</span></div>
-              <div class="preview__cell-right"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 28px;">7.6</span></div>
+              <div style="text-align: center;"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">7.6</span></div>
             </div>
             <div class="preview__table-row">
               <div class="preview__name"><span class="flag">🇫🇷</span>Atmane</div>
               <div style="color: var(--oo-muted);"><span class="flag">🇦🇷</span>Etcheverry</div>
               <div class="preview__num"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">5.88</span></div>
               <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+12.0</span></div>
-              <div class="preview__cell-right"><span class="num-chip num-chip--blue" style="font-size: 11px; min-width: 28px;">8.1</span></div>
+              <div style="text-align: center;"><span class="num-chip num-chip--blue" style="font-size: 11px; min-width: 36px;">8.1</span></div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ═══════════════════════════════════════════════════════════
-     FEATURED BY
-     ═══════════════════════════════════════════════════════════ -->
-<section class="featured">
-  <div class="container">
-    <div class="featured__label">FEATURED BY</div>
-    <div class="featured__logos">
-      <a href="https://altapicks.com/" target="_blank" rel="noopener noreferrer" class="featured__lockup">
-        <img src="https://altapicks.com/img/logo-white.png" alt="" width="32" height="32" />
-        <span>altapicks</span>
-      </a>
+    <!-- Featured by · pinned to the bottom of the hero viewport -->
+    <div class="featured featured--in-hero">
+      <div class="featured__label">FEATURED BY</div>
+      <div class="featured__logos">
+        <a href="https://altapicks.com/" target="_blank" rel="noopener noreferrer" class="featured__lockup">
+          <img src="https://altapicks.com/img/logo-white.png" alt="" width="32" height="32" />
+          <span>altapicks</span>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -3232,7 +3351,7 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="feat__demo">
           <div class="demo-trap">
             <div class="demo-trap__row">
-              <div class="demo-trap__name">Molcan</div>
+              <div class="demo-trap__name"><span class="flag" aria-hidden="true">🇸🇰</span>Molcan</div>
               <div class="demo-trap__chip">
                 <span class="chip chip--green demo-trap__face"><span class="chip__dot"></span>Public Lock</span>
                 <div class="demo-trap__back">
@@ -3240,7 +3359,6 @@ main, nav, footer { position: relative; z-index: 1; }
                 </div>
               </div>
             </div>
-            <div class="demo-trap__hint">hover to reveal verdict</div>
           </div>
         </div>
         <div class="feat__desc">Custom formulas flag high-owned bust risks so you fade with confidence.</div>
@@ -3330,7 +3448,23 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="feat__demo">
           <div class="demo-csv">
             <div class="demo-csv__row">lineups_geneva.csv</div>
-            <div class="demo-csv__dk">DK</div>
+            <div class="demo-csv__dk" aria-label="DraftKings upload">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 20 L14 8 L19 17 L24 6 L29 17 L34 8 L40 20 L40 22 L8 22 Z"
+                      fill="#ff8a3d" stroke="rgba(0,0,0,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
+                <rect x="8" y="20" width="32" height="22" rx="3"
+                      fill="url(#dkBodyGrad)" stroke="rgba(0,0,0,0.45)" stroke-width="1.2"/>
+                <defs>
+                  <linearGradient id="dkBodyGrad" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#5ec833"/>
+                    <stop offset="100%" stop-color="#3a9520"/>
+                  </linearGradient>
+                </defs>
+                <text x="24" y="36" text-anchor="middle"
+                      font-family="Georgia, serif" font-size="15" font-weight="900"
+                      font-style="italic" fill="#fff">DK</text>
+              </svg>
+            </div>
           </div>
         </div>
         <div class="feat__desc">Export your lineups as a DraftKings-ready CSV and upload directly to your contest in seconds.</div>
@@ -3356,7 +3490,31 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="step__title">Pull real lines</div>
         <div class="step__desc">We ingest sharp markets, DK salaries, ownership, and weather every 13 minutes — automatically.</div>
         <div class="step__visual">
-          <div class="step-anim-1"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="step-anim-1">
+            <div class="step-anim-1__tape">
+              <span class="step-anim-1__tick">5.92</span>
+              <span class="step-anim-1__tick step-anim-1__tick--y">22.5%</span>
+              <span class="step-anim-1__tick step-anim-1__tick--g">+28.7</span>
+              <span class="step-anim-1__tick">7.28</span>
+              <span class="step-anim-1__tick step-anim-1__tick--b">8.1</span>
+              <span class="step-anim-1__tick">5.52</span>
+              <span class="step-anim-1__tick step-anim-1__tick--y">29.0%</span>
+              <span class="step-anim-1__tick step-anim-1__tick--g">+15.0</span>
+              <span class="step-anim-1__tick step-anim-1__tick--r">−8.5</span>
+              <span class="step-anim-1__tick">6.27</span>
+              <!-- duplicate set for seamless loop -->
+              <span class="step-anim-1__tick">5.92</span>
+              <span class="step-anim-1__tick step-anim-1__tick--y">22.5%</span>
+              <span class="step-anim-1__tick step-anim-1__tick--g">+28.7</span>
+              <span class="step-anim-1__tick">7.28</span>
+              <span class="step-anim-1__tick step-anim-1__tick--b">8.1</span>
+              <span class="step-anim-1__tick">5.52</span>
+              <span class="step-anim-1__tick step-anim-1__tick--y">29.0%</span>
+              <span class="step-anim-1__tick step-anim-1__tick--g">+15.0</span>
+              <span class="step-anim-1__tick step-anim-1__tick--r">−8.5</span>
+              <span class="step-anim-1__tick">6.27</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="step">
@@ -3380,7 +3538,23 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="step__visual">
           <div class="step-anim-3">
             <span class="csv-tag">lineups.csv</span>
-            <span class="dk">DK</span>
+            <span class="dk" aria-label="DraftKings upload">
+              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 20 L14 8 L19 17 L24 6 L29 17 L34 8 L40 20 L40 22 L8 22 Z"
+                      fill="#ff8a3d" stroke="rgba(0,0,0,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
+                <rect x="8" y="20" width="32" height="22" rx="3"
+                      fill="url(#dkBodyGradStep)" stroke="rgba(0,0,0,0.45)" stroke-width="1.2"/>
+                <defs>
+                  <linearGradient id="dkBodyGradStep" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stop-color="#5ec833"/>
+                    <stop offset="100%" stop-color="#3a9520"/>
+                  </linearGradient>
+                </defs>
+                <text x="24" y="36" text-anchor="middle"
+                      font-family="Georgia, serif" font-size="15" font-weight="900"
+                      font-style="italic" fill="#fff">DK</text>
+              </svg>
+            </span>
           </div>
         </div>
       </div>
@@ -3455,8 +3629,8 @@ main, nav, footer { position: relative; z-index: 1; }
   <div class="container">
     <div class="section__head reveal">
       <div class="section__eyebrow">Inside the Product</div>
-      <h2 class="section__title">Two views. One sharp model.<br><span class="section__title-accent">Same slate.</span></h2>
-      <p class="section__sub">The DK matchups grid and the PrizePicks projections board — every chip, edge column, and ownership delta you'll use Sunday morning. Switch between them. Watch the cursor demo the table.</p>
+      <h2 class="section__title">Three views. One sharp model.<br><span class="section__title-accent">Same slate.</span></h2>
+      <p class="section__sub">Player tactics with full radar build, devigged PrizePicks projections, and the DK lineup builder — every angle of the slate in one place. Switch between them above.</p>
     </div>
 
     <div class="product-tabs reveal" role="tablist" id="product-tabs">
@@ -3733,7 +3907,7 @@ main, nav, footer { position: relative; z-index: 1; }
           </div>
 
           <!-- projections table -->
-          <div style="overflow-x: auto;">
+          <div class="product-scroll">
             <table class="pp-table">
               <thead>
                 <tr>
@@ -3940,7 +4114,7 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="builder-search">
           <div class="builder-search__input">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--oo-muted-2);"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-            <span>Search pool by player or opponent</span>
+            <span>Search pool by player or opponent…</span>
           </div>
           <span class="builder-search__count">30 players</span>
         </div>
@@ -3958,7 +4132,7 @@ main, nav, footer { position: relative; z-index: 1; }
         </div>
 
         <!-- Player pool table -->
-        <div style="overflow-x: auto;">
+        <div class="product-scroll">
           <table class="builder-table">
             <thead>
               <tr>
@@ -4205,7 +4379,7 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="season-badge">SEASON 1</div>
         <div class="season-tier">Full Access Until July 12</div>
         <div class="season-amount">$200<small> one-time</small></div>
-        <div class="season-note">Full Season 1 Access — through End of Wimbledon</div>
+        <div class="season-note">Full Season 1 access — through the end of Wimbledon</div>
         <button id="season-buy-btn" class="season-btn">Claim Your Spot</button>
         <div class="season-urgency">Season 1 closes <strong>July 12, 2026</strong> — no extensions.</div>
         <div class="season-feats">
@@ -4310,6 +4484,68 @@ main, nav, footer { position: relative; z-index: 1; }
 (() => {
   'use strict';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Flag emoji → real SVG image replacer ─────────────────
+  // Windows doesn't render country flag emojis as flags; it shows the regional
+  // indicator letters (US, DE, FR, etc.). We walk text nodes, find any flag
+  // emoji pair, and swap it for an <img> from flagcdn.com so flags render on
+  // every OS. Runs once on DOMContentLoaded; cheap on a static page.
+  (function replaceFlags() {
+    const FLAG_RE = /[\u{1F1E6}-\u{1F1FF}]{2}/gu;
+    const BASE_OFFSET = 0x1F1E6 - 'a'.charCodeAt(0);
+
+    function flagToCountryCode(emoji) {
+      const cps = [...emoji];
+      if (cps.length !== 2) return null;
+      try {
+        return cps.map(c => String.fromCharCode(c.codePointAt(0) - BASE_OFFSET)).join('');
+      } catch { return null; }
+    }
+
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(n) {
+        if (!n.nodeValue || !FLAG_RE.test(n.nodeValue)) return NodeFilter.FILTER_SKIP;
+        const p = n.parentNode;
+        if (!p) return NodeFilter.FILTER_SKIP;
+        const tag = p.nodeName;
+        if (tag === 'SCRIPT' || tag === 'STYLE') return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+
+    const targets = [];
+    let node;
+    while ((node = walker.nextNode())) targets.push(node);
+
+    targets.forEach((textNode) => {
+      const parent = textNode.parentNode;
+      if (!parent) return;
+      const frag = document.createDocumentFragment();
+      const text = textNode.nodeValue;
+      let last = 0;
+      let m;
+      const re = new RegExp(FLAG_RE.source, 'gu');
+      while ((m = re.exec(text)) !== null) {
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        const cc = flagToCountryCode(m[0]);
+        if (cc) {
+          const img = document.createElement('img');
+          img.className = 'flag-img';
+          img.alt = cc.toUpperCase();
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          img.src = `https://flagcdn.com/h20/${cc}.png`;
+          img.srcset = `https://flagcdn.com/h40/${cc}.png 2x, https://flagcdn.com/h60/${cc}.png 3x`;
+          frag.appendChild(img);
+        } else {
+          frag.appendChild(document.createTextNode(m[0]));
+        }
+        last = m.index + m[0].length;
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      parent.replaceChild(frag, textNode);
+    });
+  })();
 
   // ── Scroll-triggered reveals ─────────────────────────────
   const revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .feat');
