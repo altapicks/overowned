@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>OverOwned Twitter Banner Preview · 1500×500</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0f1a;
+    color: #f6f8fc;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    min-height: 100vh;
+  }
+  h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.2px; }
+  .caption {
+    font-size: 13px;
+    color: #8ea0bb;
+    line-height: 1.6;
+    max-width: 720px;
+    text-align: center;
+  }
+  .caption code {
+    background: rgba(138,170,210,0.1);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #ffd11a;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  .banner-wrap {
+    width: 1500px;
+    height: 500px;
+    border: 1px solid rgba(138,170,210,0.2);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  /* Optional: simulate Twitter's avatar overlay area */
+  .with-avatar .banner-wrap {
+    position: relative;
+  }
+  .with-avatar .banner-wrap::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    left: 24px;
+    width: 134px;
+    height: 134px;
+    border: 4px solid #0a0f1a;
+    border-radius: 50%;
+    background: #18213a;
+    pointer-events: none;
+  }
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(138,170,210,0.06);
+    border: 1px solid rgba(138,170,210,0.2);
+    border-radius: 999px;
+    font-size: 12px;
+    color: #8ea0bb;
+    cursor: pointer;
+  }
+  .toggle input { accent-color: #ffd11a; }
+  svg { display: block; }
+</style>
+</head>
+<body>
+
+<h1>OverOwned · Twitter Banner Preview</h1>
+<p class="caption">
+  Rendered at exact <code>1500×500</code>. To export a PNG: full-page screenshot this page (DevTools → Cmd/Ctrl+Shift+P → "Capture node screenshot" on the banner element), or right-click the SVG file in your folder and convert via any tool.
+  <br><br>
+  <label class="toggle"><input type="checkbox" id="avatarToggle"> Show Twitter avatar safe zone</label>
+</p>
+
+<div class="banner-wrap" id="bannerWrap">
+  <object data="twitter-banner.svg" type="image/svg+xml" width="1500" height="500" aria-label="OverOwned Twitter banner">
+    <!-- Fallback: inline SVG inclusion if object fails -->
+    <img src="twitter-banner.svg" alt="OverOwned Twitter banner" width="1500" height="500"/>
+  </object>
+</div>
+
+<script>
+  const toggle = document.getElementById('avatarToggle');
+  toggle.addEventListener('change', () => {
+    document.body.classList.toggle('with-avatar', toggle.checked);
+  });
+</script>
+
+</body>
+</html>
