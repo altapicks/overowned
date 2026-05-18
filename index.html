@@ -271,27 +271,52 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 @keyframes oo-spin { to { transform: rotate(360deg); } }
 
-/* ── Reveal-on-scroll ────────────────────────────────────── */
+/* ── Reveal-on-scroll · premium ──────────────────────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  transform: translate3d(0, 24px, 0) scale(0.97);
+  filter: blur(6px);
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform, filter;
 }
-.reveal.is-in { opacity: 1; transform: translateY(0); }
+.reveal.is-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+/* Directional variants */
+.reveal--left  { transform: translate3d(-32px, 0, 0) scale(0.98); }
+.reveal--right { transform: translate3d(32px, 0, 0) scale(0.98); }
+.reveal--left.is-in,
+.reveal--right.is-in { transform: translate3d(0, 0, 0) scale(1); }
+
+/* Section eyebrow + title get layered timing for a sequenced feel */
+.reveal .section__eyebrow { opacity: 0; transform: translateY(8px); transition: opacity 700ms ease 100ms, transform 700ms cubic-bezier(0.22, 1, 0.36, 1) 100ms; }
+.reveal .section__title   { opacity: 0; transform: translateY(12px); transition: opacity 800ms ease 220ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 220ms; }
+.reveal .section__sub     { opacity: 0; transform: translateY(10px); transition: opacity 800ms ease 380ms, transform 800ms cubic-bezier(0.22, 1, 0.36, 1) 380ms; }
+.reveal.is-in .section__eyebrow,
+.reveal.is-in .section__title,
+.reveal.is-in .section__sub { opacity: 1; transform: translateY(0); }
+
 .reveal-stagger > * {
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, 18px, 0) scale(0.97);
+  filter: blur(4px);
+  transition:
+    opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 800ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 600ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-.reveal-stagger.is-in > *:nth-child(1) { transition-delay: 60ms;  opacity: 1; transform: none; }
-.reveal-stagger.is-in > *:nth-child(2) { transition-delay: 120ms; opacity: 1; transform: none; }
-.reveal-stagger.is-in > *:nth-child(3) { transition-delay: 180ms; opacity: 1; transform: none; }
-.reveal-stagger.is-in > *:nth-child(4) { transition-delay: 240ms; opacity: 1; transform: none; }
-.reveal-stagger.is-in > *:nth-child(5) { transition-delay: 300ms; opacity: 1; transform: none; }
-.reveal-stagger.is-in > *:nth-child(6) { transition-delay: 360ms; opacity: 1; transform: none; }
+.reveal-stagger.is-in > * { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+.reveal-stagger.is-in > *:nth-child(1) { transition-delay: 80ms; }
+.reveal-stagger.is-in > *:nth-child(2) { transition-delay: 180ms; }
+.reveal-stagger.is-in > *:nth-child(3) { transition-delay: 280ms; }
+.reveal-stagger.is-in > *:nth-child(4) { transition-delay: 380ms; }
+.reveal-stagger.is-in > *:nth-child(5) { transition-delay: 480ms; }
+.reveal-stagger.is-in > *:nth-child(6) { transition-delay: 580ms; }
 
 /* ── Scroll progress bar ─────────────────────────────────── */
 .scroll-progress {
@@ -579,7 +604,7 @@ main, nav, footer { position: relative; z-index: 1; }
   line-height: 1;
 }
 .kpi__value--text { color: var(--oo-text); }
-.kpi__value-unit { font-size: 14px; color: var(--oo-muted); font-weight: 600; margin-left: 2px; }
+.kpi__value-unit { font-size: 14px; color: var(--oo-muted); font-weight: 600; margin-left: 6px; }
 .kpi__chips {
   display: flex;
   align-items: center;
@@ -769,7 +794,8 @@ main, nav, footer { position: relative; z-index: 1; }
   flex-shrink: 0;
 }
 .feat__demo {
-  flex: 1;
+  flex: 0 0 100px;
+  height: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -777,7 +803,7 @@ main, nav, footer { position: relative; z-index: 1; }
   border: 1px solid var(--oo-border);
   border-radius: var(--oo-radius-sm);
   padding: 12px;
-  min-height: 110px;
+  overflow: hidden;
 }
 .feat__desc {
   font-size: 12px;
@@ -850,26 +876,62 @@ main, nav, footer { position: relative; z-index: 1; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 22px;
+  min-height: 24px;
   /* Wide enough to fit either face without reflow */
-  min-width: 132px;
+  min-width: 124px;
 }
-.demo-trap__face,
-.demo-trap__back {
-  transition: opacity 280ms ease, transform 280ms ease;
-}
-.demo-trap__back {
+.demo-trap__face {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0;
-  transform: translateY(2px);
-  pointer-events: none;
 }
-.feat:hover .demo-trap__face { opacity: 0; transform: translateY(-2px); }
-.feat:hover .demo-trap__back { opacity: 1; transform: translateY(0); }
+.demo-trap__face--lock { animation: trap-cycle-a 5.5s ease-in-out infinite; }
+.demo-trap__face--trap { animation: trap-cycle-b 5.5s ease-in-out infinite; }
+@keyframes trap-cycle-a {
+  0%, 40%   { opacity: 1; transform: translateY(0); }
+  50%, 100% { opacity: 0; transform: translateY(-4px); }
+}
+@keyframes trap-cycle-b {
+  0%, 40%   { opacity: 0; transform: translateY(4px); }
+  50%, 100% { opacity: 1; transform: translateY(0); }
+}
+.demo-trap__meta {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+.demo-trap__bar {
+  height: 4px;
+  width: 100%;
+  max-width: 200px;
+  background: rgba(138, 170, 210, 0.1);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+.demo-trap__bar span {
+  position: absolute;
+  inset: 0 62% 0 0;
+  background: rgba(255, 93, 79, 0.85);
+  border-radius: 2px;
+  animation: trap-bar-cycle 5.5s ease-in-out infinite;
+}
+@keyframes trap-bar-cycle {
+  0%, 40%   { background: rgba(25, 210, 127, 0.85); }
+  50%, 100% { background: rgba(255, 93, 79, 0.85); }
+}
+.demo-trap__bar-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  color: var(--oo-muted-2);
+  text-transform: uppercase;
+}
 .demo-trap__hint {
   font-size: 10px;
   color: var(--oo-muted-2);
@@ -880,17 +942,17 @@ main, nav, footer { position: relative; z-index: 1; }
 .demo-lineup {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   font-family: var(--oo-mono);
-  font-size: 11px;
+  font-size: 10px;
   overflow: hidden;
-  height: 84px;
+  height: 72px;
   position: relative;
 }
 .demo-lineup__strip {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   transition: transform 700ms cubic-bezier(0.65, 0, 0.35, 1);
 }
 .demo-lineup__row {
@@ -898,10 +960,10 @@ main, nav, footer { position: relative; z-index: 1; }
   grid-template-columns: auto 1fr auto;
   gap: 8px;
   align-items: center;
-  padding: 4px 8px;
+  padding: 3px 8px;
   background: rgba(138, 170, 210, 0.04);
   border-radius: 4px;
-  height: 24px;
+  height: 22px;
 }
 .demo-lineup__slot { color: var(--oo-muted-2); font-size: 9px; font-weight: 700; }
 .demo-lineup__player { color: var(--oo-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -958,42 +1020,60 @@ main, nav, footer { position: relative; z-index: 1; }
 .demo-devig__arrow { color: var(--oo-muted-2); margin: 0 4px; }
 .demo-devig__final { color: var(--oo-green); font-weight: 700; }
 
-/* Demo 6: CSV slide */
-.demo-csv {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
+/* Demo 6: DK Salary Tracker — vertical stock-ticker scroll */
+.demo-ticker {
+  width: 100%;
   height: 100%;
+  overflow: hidden;
   position: relative;
 }
-.demo-csv__row {
-  font-family: var(--oo-mono);
-  font-size: 10px;
-  padding: 6px 10px;
-  background: rgba(138, 170, 210, 0.06);
-  border: 1px solid var(--oo-border);
-  border-radius: 6px;
-  color: var(--oo-muted);
-  animation: oo-csv-slide 3.6s ease-in-out infinite;
+.demo-ticker__strip {
+  display: flex;
+  flex-direction: column;
+  animation: ticker-scroll 18s linear infinite;
 }
-@keyframes oo-csv-slide {
-  0%, 20%   { transform: translateX(0); opacity: 1; }
-  60%, 100% { transform: translateX(80px); opacity: 0.2; }
-}
-.demo-csv__dk {
-  display: inline-flex;
+.demo-ticker__row {
+  display: grid;
+  grid-template-columns: 1fr auto 52px;
+  gap: 8px;
   align-items: center;
-  justify-content: center;
-  width: 48px; height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #4dc233, #2e8d1a);
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  box-shadow: 0 4px 14px rgba(68, 173, 41, 0.45), inset 0 1px 0 rgba(255,255,255,0.15);
-  padding: 0;
-  overflow: hidden;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-family: var(--oo-mono);
+  height: 18px;
+  border-bottom: 1px solid rgba(138, 170, 210, 0.05);
 }
-.demo-csv__dk svg { width: 100%; height: 100%; display: block; }
+.demo-ticker__name { color: var(--oo-text); font-weight: 600; }
+.demo-ticker__sal { color: var(--oo-gold); font-weight: 700; font-variant-numeric: tabular-nums; }
+.demo-ticker__delta {
+  font-size: 9px;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.demo-ticker__delta--up { color: var(--oo-green); }
+.demo-ticker__delta--down { color: var(--oo-red); }
+@keyframes ticker-scroll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
+}
+.demo-ticker::before,
+.demo-ticker::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 14px;
+  pointer-events: none;
+  z-index: 2;
+}
+.demo-ticker::before {
+  top: 0;
+  background: linear-gradient(to bottom, rgba(13, 29, 48, 0.95), transparent);
+}
+.demo-ticker::after {
+  bottom: 0;
+  background: linear-gradient(to top, rgba(13, 29, 48, 0.95), transparent);
+}
 
 /* ── How It Works ────────────────────────────────────────── */
 .steps {
@@ -1144,7 +1224,7 @@ main, nav, footer { position: relative; z-index: 1; }
   50%      { transform: translateX(4px); opacity: 1; }
 }
 
-/* step 3: lineup → DK */
+/* step 3: CSV ready to ship */
 .step-anim-3 {
   display: flex;
   align-items: center;
@@ -1152,29 +1232,34 @@ main, nav, footer { position: relative; z-index: 1; }
   gap: 10px;
 }
 .step-anim-3 .csv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: var(--oo-mono);
   font-size: 10px;
-  padding: 4px 8px;
-  background: rgba(138, 170, 210, 0.06);
-  border: 1px solid var(--oo-border);
-  border-radius: 5px;
+  padding: 5px 10px;
+  background: var(--oo-gold-soft);
+  border: 1px solid var(--oo-gold-ring);
+  border-radius: 6px;
+  color: var(--oo-gold);
+  font-weight: 700;
+  box-shadow: var(--oo-glow-gold-sm);
+}
+.step-anim-3 .csv-arrow {
+  display: inline-flex;
   color: var(--oo-muted);
-  animation: csv-jump 2.8s ease-in-out infinite;
+  animation: csv-arrow-pulse 1.6s ease-in-out infinite;
 }
-.step-anim-3 .dk {
-  width: 38px; height: 38px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #4dc233, #2e8d1a);
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  box-shadow: 0 4px 12px rgba(68, 173, 41, 0.4), inset 0 1px 0 rgba(255,255,255,0.15);
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
-  padding: 0;
+.step-anim-3 .csv-ready {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  color: var(--oo-green);
+  text-transform: uppercase;
 }
-.step-anim-3 .dk svg { width: 100%; height: 100%; display: block; }
-@keyframes csv-jump {
-  0%, 30%   { transform: translateX(-10px); opacity: 1; }
-  60%, 100% { transform: translateX(20px); opacity: 0; }
+@keyframes csv-arrow-pulse {
+  0%, 100% { transform: translateX(0); opacity: 0.55; }
+  50%      { transform: translateX(4px); opacity: 1; color: var(--oo-gold); }
 }
 
 /* ── Product view tabs (Matchups / Projections) ──────────── */
@@ -1990,6 +2075,46 @@ main, nav, footer { position: relative; z-index: 1; }
 .match-row__opp { color: var(--oo-text); display: flex; align-items: center; gap: 6px; }
 .match-row__score { color: var(--oo-muted); font-family: var(--oo-mono); font-size: 11px; font-variant-numeric: tabular-nums; }
 
+/* ── Profile mockup compact override · fits common laptop heights ── */
+.profile-frame { gap: 10px; }
+.profile-frame .profile-head { padding: 14px 18px; }
+.profile-frame .profile-head__icon { width: 38px; height: 38px; border-radius: 10px; }
+.profile-frame .profile-head__title { font-size: 19px; }
+.profile-frame .profile-head__sub { font-size: 11px; }
+.profile-frame .profile-head__back { padding: 6px 12px; font-size: 10px; }
+.profile-frame .profile-subtabs { padding: 8px 12px; }
+.profile-frame .profile-subtab { padding: 6px 12px; font-size: 11px; }
+.profile-frame .profile-player { padding: 10px 16px; }
+.profile-frame .profile-player__search { padding: 7px 11px; }
+.profile-frame .profile-player__name { font-size: 12px; }
+.profile-frame .profile-player__chip { padding: 4px 10px; font-size: 9px; }
+.profile-frame .surfaces { gap: 8px; }
+.profile-frame .surface { padding: 12px; }
+.profile-frame .surface__label { font-size: 8px; margin-bottom: 6px; }
+.profile-frame .surface__val { font-size: 19px; margin-bottom: 3px; }
+.profile-frame .surface__caption { font-size: 9px; }
+.profile-frame .profile-body { gap: 10px; }
+.profile-frame .profile-radar { padding: 16px; }
+.profile-frame .profile-radar__label { font-size: 9px; margin-bottom: 10px; }
+.profile-frame .profile-radar__svg { max-width: 320px; }
+.profile-frame .tactical-notes { padding: 12px 16px; }
+.profile-frame .tactical-notes__label { font-size: 9px; margin-bottom: 8px; }
+.profile-frame .tactical-notes__callout { padding: 9px 11px; font-size: 11px; }
+.profile-frame .sw-card { padding: 12px 16px; gap: 14px; }
+.profile-frame .sw-card__col-label { font-size: 9px; margin-bottom: 4px; }
+.profile-frame .sw-card__val { font-size: 22px; margin-bottom: 3px; }
+.profile-frame .sw-card__caption { font-size: 10px; }
+.profile-frame .profile-meta { padding: 10px 16px; }
+.profile-frame .profile-meta__label { font-size: 9px; }
+.profile-frame .profile-meta__sub { font-size: 10px; margin-top: 3px; }
+.profile-frame .profile-meta__btn { padding: 5px 11px; font-size: 10px; }
+.profile-frame .match-list { padding: 10px 16px 12px; }
+.profile-frame .match-list__label { font-size: 9px; margin-bottom: 8px; }
+.profile-frame .match-row { padding: 6px 10px; font-size: 11px; margin-bottom: 4px; grid-template-columns: 16px 80px 1fr auto; gap: 8px; }
+.profile-frame .match-row__result { font-size: 10px; padding-left: 6px; }
+.profile-frame .match-row__date { font-size: 10px; }
+.profile-frame .match-row__score { font-size: 10px; }
+
 /* ── Builder tab ─────────────────────────────────────────── */
 .builder-frame {
   background: var(--oo-panel-strong);
@@ -2277,7 +2402,7 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .sport-card {
   position: relative;
-  padding: 36px 24px;
+  padding: 28px 22px;
   background: var(--oo-panel);
   border: 1px solid var(--oo-border);
   border-radius: var(--oo-radius-lg);
@@ -2288,14 +2413,10 @@ main, nav, footer { position: relative; z-index: 1; }
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 14px;
-  min-height: 260px;
+  gap: 12px;
+  min-height: 200px;
   transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
   overflow: hidden;
-}
-.sport-card__caption {
-  max-width: 280px;
-  margin: 0 auto;
 }
 .sport-card:hover { transform: translateY(-4px); }
 .sport-card--live {
@@ -2316,8 +2437,8 @@ main, nav, footer { position: relative; z-index: 1; }
 .sport-card--soon { opacity: 0.78; }
 .sport-card--soon:hover { opacity: 1; border-color: var(--oo-border-2); }
 .sport-card__icon {
-  width: 56px; height: 56px;
-  border-radius: 14px;
+  width: 46px; height: 46px;
+  border-radius: 12px;
   background: rgba(138, 170, 210, 0.08);
   border: 1px solid var(--oo-border);
   display: flex;
@@ -2334,12 +2455,33 @@ main, nav, footer { position: relative; z-index: 1; }
   box-shadow: var(--oo-glow-gold-sm);
 }
 .sport-card__name {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.4px;
   color: var(--oo-text);
   position: relative;
   z-index: 1;
+}
+/* Coming-soon loader shimmer bar */
+.sport-card__loader {
+  width: 110px;
+  height: 3px;
+  background: rgba(138, 170, 210, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.sport-card__loader span {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 209, 26, 0.7) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: sport-loader-shimmer 1.8s ease-in-out infinite;
+}
+@keyframes sport-loader-shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 .sport-card__status {
   display: inline-flex;
@@ -3023,7 +3165,12 @@ main, nav, footer { position: relative; z-index: 1; }
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal, .reveal-stagger > * { opacity: 1 !important; transform: none !important; }
+  .reveal, .reveal-stagger > *,
+  .reveal .section__eyebrow, .reveal .section__title, .reveal .section__sub {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
   .table-cursor, .compare-modal { display: none !important; }
 }
 
@@ -3353,11 +3500,13 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="demo-trap__row">
               <div class="demo-trap__name"><span class="flag" aria-hidden="true">🇸🇰</span>Molcan</div>
               <div class="demo-trap__chip">
-                <span class="chip chip--green demo-trap__face"><span class="chip__dot"></span>Public Lock</span>
-                <div class="demo-trap__back">
-                  <span class="chip chip--red"><span class="chip__dot"></span>Trap · 38% own</span>
-                </div>
+                <span class="chip chip--green demo-trap__face demo-trap__face--lock"><span class="chip__dot"></span>Public Lock</span>
+                <span class="chip chip--red demo-trap__face demo-trap__face--trap"><span class="chip__dot"></span>TRAP · 38%</span>
               </div>
+            </div>
+            <div class="demo-trap__meta">
+              <div class="demo-trap__bar"><span></span></div>
+              <div class="demo-trap__bar-label">38% public ownership</div>
             </div>
           </div>
         </div>
@@ -3437,37 +3586,38 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="feat__desc">Fantasy Score and Breaks — every line devigged against sharp market consensus so you only play real edges.</div>
       </div>
 
-      <!-- (6) DK Upload -->
+      <!-- (6) DK Salary Tracker -->
       <div class="feat">
         <div class="feat__head">
-          <div class="feat__title">One-Click DK Upload</div>
+          <div class="feat__title">DK Salary Tracker</div>
           <div class="feat__icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><rect x="3" y="18" width="18" height="3" rx="1"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L9 11 L13 15 L21 7"/><polyline points="15 7 21 7 21 13"/></svg>
           </div>
         </div>
         <div class="feat__demo">
-          <div class="demo-csv">
-            <div class="demo-csv__row">lineups_geneva.csv</div>
-            <div class="demo-csv__dk" aria-label="DraftKings upload">
-              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 20 L14 8 L19 17 L24 6 L29 17 L34 8 L40 20 L40 22 L8 22 Z"
-                      fill="#ff8a3d" stroke="rgba(0,0,0,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
-                <rect x="8" y="20" width="32" height="22" rx="3"
-                      fill="url(#dkBodyGrad)" stroke="rgba(0,0,0,0.45)" stroke-width="1.2"/>
-                <defs>
-                  <linearGradient id="dkBodyGrad" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stop-color="#5ec833"/>
-                    <stop offset="100%" stop-color="#3a9520"/>
-                  </linearGradient>
-                </defs>
-                <text x="24" y="36" text-anchor="middle"
-                      font-family="Georgia, serif" font-size="15" font-weight="900"
-                      font-style="italic" fill="#fff">DK</text>
-              </svg>
+          <div class="demo-ticker">
+            <div class="demo-ticker__strip">
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Sinner</span><span class="demo-ticker__sal">$11,300</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $200</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Andreeva</span><span class="demo-ticker__sal">$11,000</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $150</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Fils</span><span class="demo-ticker__sal">$10,600</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $300</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Sabalenka</span><span class="demo-ticker__sal">$10,000</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $100</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Shelton</span><span class="demo-ticker__sal">$9,600</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $200</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Mensik</span><span class="demo-ticker__sal">$9,000</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $50</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Cobolli</span><span class="demo-ticker__sal">$9,300</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $150</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Fonseca</span><span class="demo-ticker__sal">$8,300</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $200</span></div>
+              <!-- duplicate set for seamless loop -->
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Sinner</span><span class="demo-ticker__sal">$11,300</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $200</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Andreeva</span><span class="demo-ticker__sal">$11,000</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $150</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Fils</span><span class="demo-ticker__sal">$10,600</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $300</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Sabalenka</span><span class="demo-ticker__sal">$10,000</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $100</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Shelton</span><span class="demo-ticker__sal">$9,600</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $200</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Mensik</span><span class="demo-ticker__sal">$9,000</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $50</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Cobolli</span><span class="demo-ticker__sal">$9,300</span><span class="demo-ticker__delta demo-ticker__delta--up">▲ $150</span></div>
+              <div class="demo-ticker__row"><span class="demo-ticker__name">Fonseca</span><span class="demo-ticker__sal">$8,300</span><span class="demo-ticker__delta demo-ticker__delta--down">▼ $200</span></div>
             </div>
           </div>
         </div>
-        <div class="feat__desc">Export your lineups as a DraftKings-ready CSV and upload directly to your contest in seconds.</div>
+        <div class="feat__desc">Live DraftKings salary moves throughout the slate — catch every price drop before lock.</div>
       </div>
 
     </div>
@@ -3537,24 +3687,14 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="step__desc">Optimize lineups with exposure caps, export the CSV, and upload directly to DraftKings.</div>
         <div class="step__visual">
           <div class="step-anim-3">
-            <span class="csv-tag">lineups.csv</span>
-            <span class="dk" aria-label="DraftKings upload">
-              <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 20 L14 8 L19 17 L24 6 L29 17 L34 8 L40 20 L40 22 L8 22 Z"
-                      fill="#ff8a3d" stroke="rgba(0,0,0,0.45)" stroke-width="1.2" stroke-linejoin="round"/>
-                <rect x="8" y="20" width="32" height="22" rx="3"
-                      fill="url(#dkBodyGradStep)" stroke="rgba(0,0,0,0.45)" stroke-width="1.2"/>
-                <defs>
-                  <linearGradient id="dkBodyGradStep" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stop-color="#5ec833"/>
-                    <stop offset="100%" stop-color="#3a9520"/>
-                  </linearGradient>
-                </defs>
-                <text x="24" y="36" text-anchor="middle"
-                      font-family="Georgia, serif" font-size="15" font-weight="900"
-                      font-style="italic" fill="#fff">DK</text>
-              </svg>
+            <span class="csv-tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7;"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>
+              lineups.csv
             </span>
+            <span class="csv-arrow" aria-hidden="true">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 5 19 12 13 19"/></svg>
+            </span>
+            <span class="csv-ready">Ready to upload</span>
           </div>
         </div>
       </div>
@@ -3576,47 +3716,47 @@ main, nav, footer { position: relative; z-index: 1; }
       <!-- Tennis · LIVE -->
       <div class="sport-card sport-card--live">
         <div class="sport-card__icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M3.5 8.5c4 1 8 1 11.5 4.5s4 8 4.5 8"/>
-            <path d="M20.5 15.5c-4-1-8-1-11.5-4.5s-4-8-4.5-8"/>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9.5"/>
+            <path d="M4.5 6.5 C 8.5 10 8.5 14 4.5 17.5"/>
+            <path d="M19.5 6.5 C 15.5 10 15.5 14 19.5 17.5"/>
           </svg>
         </div>
         <div class="sport-card__name">Tennis</div>
         <div class="sport-card__status sport-card__status--live">
           <span class="chip__dot" style="color: var(--oo-gold);"></span>
-          Live now
+          Live · Interactive
         </div>
-        <div class="sport-card__caption">Real projections for DraftKings and PrizePicks Fan Score, updated in real time.</div>
       </div>
 
       <!-- Golf · COMING SOON -->
       <div class="sport-card sport-card--soon">
         <div class="sport-card__icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 18V3"/>
             <path d="M12 3l8 3-8 3"/>
             <ellipse cx="12" cy="20" rx="6" ry="1.5"/>
           </svg>
         </div>
         <div class="sport-card__name">Golf</div>
-        <div class="sport-card__status sport-card__status--soon">Coming soon</div>
-        <div class="sport-card__caption">DraftKings lineups, optimized — PGA Tour weekly slates.</div>
+        <div class="sport-card__loader" aria-hidden="true"><span></span></div>
+        <div class="sport-card__status sport-card__status--soon">Loading · Coming soon</div>
       </div>
 
       <!-- Basketball · COMING SOON -->
       <div class="sport-card sport-card--soon">
         <div class="sport-card__icon">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"/>
-            <path d="M3 12h18"/>
-            <path d="M12 3a14 14 0 0 1 0 18"/>
-            <path d="M12 3a14 14 0 0 0 0 18"/>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9.5"/>
+            <line x1="2.5" y1="12" x2="21.5" y2="12"/>
+            <line x1="12" y1="2.5" x2="12" y2="21.5"/>
+            <path d="M5 5 Q 12 12 5 19"/>
+            <path d="M19 5 Q 12 12 19 19"/>
           </svg>
         </div>
         <div class="sport-card__name">Basketball</div>
-        <div class="sport-card__status sport-card__status--soon">Coming soon</div>
-        <div class="sport-card__caption">DraftKings lineups, optimized — NBA nightly slates.</div>
+        <div class="sport-card__loader" aria-hidden="true"><span></span></div>
+        <div class="sport-card__status sport-card__status--soon">Loading · Coming soon</div>
       </div>
     </div>
   </div>
@@ -4563,8 +4703,9 @@ main, nav, footer { position: relative; z-index: 1; }
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
 
-  // ── Scroll progress bar ──────────────────────────────────
+  // ── Scroll progress bar + hero glow parallax ─────────────
   const progressBar = document.getElementById('scroll-progress');
+  const heroBg = document.querySelector('.hero__bg');
   let scrollTicking = false;
   function onScroll() {
     if (scrollTicking) return;
@@ -4574,6 +4715,11 @@ main, nav, footer { position: relative; z-index: 1; }
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       progressBar.style.width = progress + '%';
+      // Subtle parallax: hero glow drifts down ~15% of scroll while you scroll
+      // past the hero (only while hero is in viewport, ~first 900px of scroll)
+      if (heroBg && !reduceMotion && scrollTop < 1000) {
+        heroBg.style.transform = `translate3d(0, ${scrollTop * 0.18}px, 0)`;
+      }
       scrollTicking = false;
     });
   }
@@ -4614,7 +4760,7 @@ main, nav, footer { position: relative; z-index: 1; }
   const strip = document.getElementById('lineup-strip');
   if (strip && !reduceMotion) {
     let step = 0;
-    const rowH = 28; // 24 + 4 gap
+    const rowH = 25; // 22 row + 3 gap
     setInterval(() => {
       step = (step + 1) % 3;
       strip.style.transform = `translateY(-${step * rowH * 3}px)`;
