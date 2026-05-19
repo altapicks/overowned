@@ -1078,9 +1078,13 @@ main, nav, footer { position: relative; z-index: 1; }
 /* ── How It Works ────────────────────────────────────────── */
 .steps {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: clamp(14px, 2vw, 20px);
   position: relative;
+  justify-content: center;
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .steps::before {
   content: '';
@@ -1100,13 +1104,17 @@ main, nav, footer { position: relative; z-index: 1; }
 .step {
   position: relative;
   z-index: 1;
-  padding: 24px;
+  padding: clamp(18px, 3vw, 24px);
   background: var(--oo-panel);
   border: 1px solid var(--oo-border);
   border-radius: var(--oo-radius-md);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   transition: transform 200ms ease, border-color 200ms ease;
+  width: 100%;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .step:hover { transform: translateY(-3px); border-color: var(--oo-gold-ring); }
 .step__num {
@@ -3223,7 +3231,7 @@ main, nav, footer { position: relative; z-index: 1; }
   .section__head { margin-bottom: 36px; }
 
   .features-grid { grid-template-columns: 1fr; }
-  .steps { grid-template-columns: 1fr; }
+  /* .steps now uses auto-fit grid + per-card max-width — handled fluidly above. */
   .steps::before { display: none; }
   .sports { grid-template-columns: 1fr; }
   .sport-card { padding: 28px 20px; }
@@ -4594,8 +4602,8 @@ main, nav, footer { position: relative; z-index: 1; }
         </form>
         <div id="daypass-msg" class="daypass-msg" aria-live="polite"></div>
         <div class="daypass-fineprint">
-          We'll email your access key instantly. One trial per email.
-          Activates on first use · 24 hours of access.
+          We'll email you a sign-in link instantly. One trial per email.
+          Trial expires 24 hours after first sign-in.
         </div>
       </div>
     </div>
@@ -4931,7 +4939,7 @@ main, nav, footer { position: relative; z-index: 1; }
         }
 
         msg.className = 'daypass-msg success';
-        msg.textContent = 'Access key sent. Check your inbox.';
+        msg.textContent = 'Sign-in link sent. Check your inbox.';
         submitBtn.textContent = 'Sent ✓';
         emailInput.value = '';
         setTimeout(() => {
@@ -4959,7 +4967,7 @@ main, nav, footer { position: relative; z-index: 1; }
       document.body.style.transition = 'opacity 0.3s';
       const msg = document.createElement('div');
       msg.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;padding:24px 32px;background:#102339;border:1px solid rgba(255,209,26,0.4);border-radius:14px;color:#f6f8fc;font-family:Inter,sans-serif;font-size:15px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6),0 0 32px rgba(255,209,26,0.28);max-width:90%';
-      msg.innerHTML = '<div style="color:#ffd11a;font-weight:700;font-size:18px;margin-bottom:8px">Welcome to Season 1.</div><div style="color:#8ea0bb;line-height:1.5">Check your email for your access key.<br>It arrives within seconds.</div>';
+      msg.innerHTML = '<div style="color:#ffd11a;font-weight:700;font-size:18px;margin-bottom:8px">Welcome to Season 1.</div><div style="color:#8ea0bb;line-height:1.5">Check your email for your sign-in link.<br>It arrives within seconds.</div>';
       document.body.appendChild(msg);
       history.replaceState({}, '', window.location.pathname);
     } else if (status === 'cancel') {
