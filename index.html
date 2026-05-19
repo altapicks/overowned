@@ -4824,8 +4824,20 @@ main, nav, footer { position: relative; z-index: 1; }
       if (typeof data.season_remaining === 'number') {
         document.getElementById('season-remaining').textContent = data.season_remaining;
       }
+      // Per Alta 2026-05-18: also write season_total / daypass_total so the
+      // 'X of Y' display stays consistent. Previously the total spans were
+      // hardcoded in HTML — so a stale Supabase row of e.g. available=525
+      // rendered as '500 of 25 spots remaining'. Now the total updates too.
+      if (typeof data.season_total === 'number') {
+        const el = document.getElementById('season-total');
+        if (el) el.textContent = data.season_total;
+      }
       if (typeof data.daypass_remaining === 'number') {
         document.getElementById('daypass-remaining').textContent = data.daypass_remaining;
+      }
+      if (typeof data.daypass_total === 'number') {
+        const el = document.getElementById('daypass-total');
+        if (el) el.textContent = data.daypass_total;
       }
       if (data.season_remaining === 0) {
         const btn = document.getElementById('season-buy-btn');
