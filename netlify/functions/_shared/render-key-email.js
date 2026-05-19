@@ -125,12 +125,27 @@ function htmlBody({ key, signInUrl, tierBadge, expirationLine, subhead }) {
            on the key cell carry the visual weight. -->
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="520" class="oo-card" style="max-width:520px;background:${T.panel};border:1px solid ${T.border};border-radius:${T.radiusMd};">
 
-        <!-- Header row: brand left + tier pill right -->
+        <!-- Header row: logo + brand left + tier pill right.
+             Logo is hosted from overowned.io and inlined here. Width
+             is set on both the img + the table cell so Outlook scales
+             it consistently. -->
         <tr><td class="oo-pad-x" style="padding:32px 32px 0;">
           <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
             <tr>
-              <td align="left" valign="middle" style="font-size:18px;font-weight:800;color:${T.text};letter-spacing:-0.3px;line-height:1;">
-                Over<span style="color:${T.gold};">O</span>wned
+              <td align="left" valign="middle">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td valign="middle" style="padding-right:10px;width:32px;">
+                      <img src="https://overowned.io/apple-touch-icon.png"
+                           alt="OverOwned"
+                           width="32" height="32"
+                           style="display:block;width:32px;height:32px;border-radius:8px;border:1px solid ${T.goldRing};" />
+                    </td>
+                    <td valign="middle" style="font-size:18px;font-weight:800;color:${T.text};letter-spacing:-0.3px;line-height:1;font-family:${T.font};">
+                      Over<span style="color:${T.gold};">O</span>wned
+                    </td>
+                  </tr>
+                </table>
               </td>
               <td align="right" valign="middle">
                 <!-- Tier pill — mirrors SLAM/500/250 badge style -->
