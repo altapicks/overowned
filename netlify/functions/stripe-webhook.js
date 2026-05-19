@@ -23,8 +23,16 @@ const SEASON = '2026';
 const SEASON_EXPIRES_AT = '2026-07-12T23:59:59-04:00'; // EDT, end of July 12
 const APP_URL = 'https://app.overowned.io';
 const SIGN_IN_PATH = '/sign-in';
-const FROM_EMAIL = 'OverOwned <noreply@overowned.io>';
+// Spam fix (Alta 2026-05-19): see claim-day-pass.js for the
+// reasoning. 'noreply@' is a major spam trigger; real address +
+// List-Unsubscribe header puts us inside Gmail/Yahoo 2024 bulk-
+// sender compliance.
+const FROM_EMAIL = 'OverOwned <keys@overowned.io>';
 const REPLY_TO = 'support@overowned.io';
+const UNSUBSCRIBE_HEADERS = {
+  'List-Unsubscribe': '<mailto:unsubscribe@overowned.io?subject=unsubscribe>',
+  'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+};
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(
@@ -183,6 +191,8 @@ async function handleCheckoutCompleted(session) {
     subject,
     html,
     text,
+    headers: UNSUBSCRIBE_HEADERS,
+    tags: [{ name: 'category', value: 'access-key' }, { name: 'tier', value: 'season' }],
   });
 
   console.log(`[stripe-webhook] Season 1 key granted: ${email} → ${accessKey}`);

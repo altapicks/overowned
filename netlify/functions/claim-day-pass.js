@@ -27,8 +27,21 @@ const SEASON = '2026';
 const DAY_PASS_DURATION_MS = 24 * 60 * 60 * 1000;
 const APP_URL = 'https://app.overowned.io';
 const SIGN_IN_PATH = '/sign-in';
-const FROM_EMAIL = 'OverOwned <noreply@overowned.io>';
+// Spam fix (Alta 2026-05-19): 'noreply@' from-addresses universally
+// trigger spam filters at Gmail / Outlook / Yahoo. Real-looking
+// addresses backed by SPF/DKIM/DMARC pass inbox checks. Switched to
+// keys@ (a real receiving address — replies go to support@ via
+// reply_to so we don't lose user replies).
+const FROM_EMAIL = 'OverOwned <keys@overowned.io>';
 const REPLY_TO = 'support@overowned.io';
+// List-Unsubscribe header is REQUIRED by Gmail/Yahoo's 2024 bulk-
+// sender rules — any transactional sender without it gets quietly
+// scored down. Using mailto + one-click POST per RFC 8058 so Gmail
+// can render a native unsubscribe button (which lowers spam votes).
+const UNSUBSCRIBE_HEADERS = {
+  'List-Unsubscribe': '<mailto:unsubscribe@overowned.io?subject=unsubscribe>',
+  'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+};
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
@@ -188,6 +201,8 @@ export const handler = async (event) => {
         subject,
         html,
         text,
+        headers: UNSUBSCRIBE_HEADERS,
+        tags: [{ name: 'category', value: 'access-key' }, { name: 'tier', value: 'day-pass' }],
       });
     } catch (mailErr) {
       console.error('[claim-day-pass] Resend send failed (key created, email NOT delivered)', mailErr);
