@@ -72,6 +72,10 @@ export const handler = async (event) => {
       },
       // Metadata flows through to the webhook so we know which season this is.
       metadata: { season: '1' },
+      // Promo codes — customers can enter a code (e.g. LAUNCH25) at checkout.
+      // Create + manage codes in Stripe Dashboard → Products → Coupons.
+      // See: https://dashboard.stripe.com/coupons
+      allow_promotion_codes: true,
       // Tax — let Stripe Tax handle if enabled in your dashboard.
       automatic_tax: { enabled: false },
     });
