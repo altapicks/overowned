@@ -22,7 +22,10 @@ const PLAN = 'season';
 const SEASON = '2026';
 const SEASON_EXPIRES_AT = '2026-07-12T23:59:59-04:00'; // EDT, end of July 12
 const APP_URL = 'https://app.overowned.io';
-const SIGN_IN_PATH = '/sign-in';
+// Sign-in URL: matches the app's actual route. `next=%2F` sends the user
+// to the dashboard root after they paste in the key shown in the email.
+const SIGN_IN_PATH = '/signin';
+const SIGN_IN_QUERY = '?next=%2F';
 // Spam fix (Alta 2026-05-19): see claim-day-pass.js for the
 // reasoning. 'noreply@' is a major spam trigger; real address +
 // List-Unsubscribe header puts us inside Gmail/Yahoo 2024 bulk-
@@ -177,7 +180,7 @@ async function handleCheckoutCompleted(session) {
   }
 
   // ── Send welcome + key email
-  const signInUrl = `${APP_URL}${SIGN_IN_PATH}?key=${encodeURIComponent(accessKey)}`;
+  const signInUrl = `${APP_URL}${SIGN_IN_PATH}${SIGN_IN_QUERY}`;
   const { subject, html, text } = renderKeyEmail({
     key: accessKey,
     signInUrl,
