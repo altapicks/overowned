@@ -26,7 +26,10 @@ const PLAN = 'day';
 const SEASON = '2026';
 const DAY_PASS_DURATION_MS = 24 * 60 * 60 * 1000;
 const APP_URL = 'https://app.overowned.io';
-const SIGN_IN_PATH = '/sign-in';
+// Sign-in URL: matches the app's actual route. `next=%2F` sends the user
+// to the dashboard root after they paste in the key shown in the email.
+const SIGN_IN_PATH = '/signin';
+const SIGN_IN_QUERY = '?next=%2F';
 // Spam fix (Alta 2026-05-19): 'noreply@' from-addresses universally
 // trigger spam filters at Gmail / Outlook / Yahoo. Real-looking
 // addresses backed by SPF/DKIM/DMARC pass inbox checks. Switched to
@@ -186,7 +189,7 @@ export const handler = async (event) => {
     }
 
     // ── Send the email ────────────────────────────────────────────────
-    const signInUrl = `${APP_URL}${SIGN_IN_PATH}?key=${encodeURIComponent(accessKey)}`;
+    const signInUrl = `${APP_URL}${SIGN_IN_PATH}${SIGN_IN_QUERY}`;
     const { subject, html, text } = renderKeyEmail({
       key: accessKey,
       signInUrl,
