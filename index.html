@@ -3019,6 +3019,16 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .daypass-btn:active:not(:disabled) { transform: scale(0.97); }
 .daypass-btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+.daypass-btn--cta {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 15px 22px;
+  font-size: 15px;
+  border-radius: 999px;
+  text-align: center;
+  text-decoration: none;
+}
 .daypass-msg {
   font-size: 13px;
   text-align: center;
@@ -3257,6 +3267,7 @@ main, nav, footer { position: relative; z-index: 1; }
   }
   .daypass-input { padding: 12px 16px; }
   .daypass-btn { width: 100%; border-radius: var(--oo-radius-sm); }
+  .daypass-btn--cta { border-radius: 999px; }
 
   .matchups { font-size: 11px; }
   .matchups thead th, .matchups tbody td { padding: 10px 8px; }
@@ -4592,29 +4603,16 @@ main, nav, footer { position: relative; z-index: 1; }
 <section class="section" id="daypass">
   <div class="container">
     <div class="section__head reveal">
-      <div class="section__eyebrow">Free Trial</div>
-      <h2 class="section__title">Try it for 24 hours.</h2>
+      <div class="section__eyebrow">Weekly Access</div>
+      <h2 class="section__title">$7 for 1st Week</h2>
     </div>
 
     <div class="daypass-wrap reveal">
       <div class="daypass-card">
-        <div class="daypass-tier">Day Pass</div>
-        <div class="daypass-headline">First <span class="accent">50</span> emails get free access</div>
-        <div class="daypass-sub">Full product access for 24 hours, no credit card required.</div>
-        <div class="daypass-spots-wrap">
-          <div class="daypass-spots">
-            <span class="spots-dot"></span>
-            <span><span id="daypass-remaining">50</span> of <span id="daypass-total">50</span> trials remaining</span>
-          </div>
-        </div>
-        <form id="daypass-form" class="daypass-form" novalidate>
-          <input type="email" id="daypass-email" class="daypass-input" placeholder="your@email.com" required autocomplete="email" />
-          <button type="submit" id="daypass-submit" class="daypass-btn">Get Day Pass</button>
-        </form>
-        <div id="daypass-msg" class="daypass-msg" aria-live="polite"></div>
+        <div class="daypass-headline">Then <span class="accent">$70/week</span></div>
+        <a href="https://buy.stripe.com/9B6dR9bUndnH0nv3GU6Zy00?prefilled_promo_code=WEEK" class="daypass-btn daypass-btn--cta">Claim Deal</a>
         <div class="daypass-fineprint">
-          We'll email you a sign-in link instantly. One trial per email.
-          Trial expires 24 hours after first sign-in.
+          Auto-renews weekly. Cancel anytime in one click from your Stripe portal.
         </div>
       </div>
     </div>
@@ -4851,25 +4849,11 @@ main, nav, footer { position: relative; z-index: 1; }
         const el = document.getElementById('season-total');
         if (el) el.textContent = data.season_total;
       }
-      if (typeof data.daypass_remaining === 'number') {
-        document.getElementById('daypass-remaining').textContent = data.daypass_remaining;
-      }
-      if (typeof data.daypass_total === 'number') {
-        const el = document.getElementById('daypass-total');
-        if (el) el.textContent = data.daypass_total;
-      }
       if (data.season_remaining === 0) {
         const btn = document.getElementById('season-buy-btn');
         if (btn) {
           btn.disabled = true;
           btn.textContent = 'Sold Out — Season 2 coming soon';
-        }
-      }
-      if (data.daypass_remaining === 0) {
-        const sub = document.getElementById('daypass-submit');
-        if (sub) {
-          sub.disabled = true;
-          sub.textContent = 'Closed';
         }
       }
     } catch (_) { /* keep static defaults */ }
@@ -4905,66 +4889,6 @@ main, nav, footer { position: relative; z-index: 1; }
         alert(err.message || 'Checkout is temporarily unavailable. Please try again in a moment.');
         btn.textContent = originalText;
         btn.disabled = false;
-      }
-    });
-  }
-
-  // Day Pass form
-  const dpForm = document.getElementById('daypass-form');
-  if (dpForm) {
-    dpForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const emailInput = document.getElementById('daypass-email');
-      const submitBtn = document.getElementById('daypass-submit');
-      const msg = document.getElementById('daypass-msg');
-      const email = emailInput.value.trim().toLowerCase();
-      msg.className = 'daypass-msg';
-      msg.textContent = '';
-
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        msg.className = 'daypass-msg error';
-        msg.textContent = 'Please enter a valid email.';
-        return;
-      }
-
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Sending…';
-      submitBtn.disabled = true;
-      emailInput.disabled = true;
-
-      try {
-        const res = await fetch('/.netlify/functions/claim-day-pass', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
-        });
-        const data = await res.json().catch(() => ({}));
-
-        if (!res.ok) {
-          msg.className = 'daypass-msg error';
-          msg.textContent = data.error || 'Something went wrong. Please try again.';
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
-          emailInput.disabled = false;
-          return;
-        }
-
-        msg.className = 'daypass-msg success';
-        msg.innerHTML = 'Sign-in link sent. Check your inbox &mdash; if you don\'t see it, peek at your spam folder.';
-        submitBtn.textContent = 'Sent ✓';
-        emailInput.value = '';
-        setTimeout(() => {
-          submitBtn.textContent = originalText;
-          submitBtn.disabled = false;
-          emailInput.disabled = false;
-        }, 30000);
-      } catch (err) {
-        console.error(err);
-        msg.className = 'daypass-msg error';
-        msg.textContent = 'Network error. Please try again.';
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        emailInput.disabled = false;
       }
     });
   }
