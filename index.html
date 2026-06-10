@@ -3946,6 +3946,14 @@ main, nav, footer { position: relative; z-index: 1; }
   .app-frame, .builder-frame, .profile-frame { gap: 9px; }
   .builder-toolbar { gap: 8px; }
   .surfaces { gap: 7px; }
+  /* Guided-tour caption card — shrink so it doesn't cover the screen on phones */
+  .tour-pop { bottom: 12px; width: calc(100vw - 22px); padding: 12px 14px 11px; border-radius: 13px; }
+  .tour-pop__eyebrow { font-size: 9.5px; letter-spacing: 0.3px; }
+  .tour-pop__title { margin-top: 4px; font-size: 14.5px; }
+  .tour-pop__body { margin-top: 4px; font-size: 11.5px; line-height: 1.42; }
+  .tour-pop__nav { margin-top: 10px; gap: 10px; }
+  .tour-pop__close { top: 9px; right: 9px; width: 24px; height: 24px; }
+  .tour-btn { padding: 7px 13px; font-size: 12px; }
   /* Court Pace leaderboard — tighten the header/hero so it fits a phone width */
   .oo-modal__card--cpi { max-height: 88vh; }
   .cpi-head { padding: 13px 14px 10px; }
