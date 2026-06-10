@@ -6374,10 +6374,22 @@ main, nav, footer { position: relative; z-index: 1; }
   function start() { pop.hidden = false; show(0); }
   function end() { pop.hidden = true; clearHi(); closeModals(); }
 
-  launch.addEventListener('click', function () {
-    document.getElementById('inside').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function openTour() {
+    var sec = document.getElementById('inside');
+    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
     setTimeout(start, 380);
-  });
+  }
+  launch.addEventListener('click', openTour);
+  // Direct deep-link: visiting /#guide (or /#tour, /#demo) auto-opens the guide
+  function maybeOpenFromHash() {
+    var h = (window.location.hash || '').toLowerCase();
+    if (h === '#guide' || h === '#tour' || h === '#demo') {
+      // wait for layout/reveals to settle before scrolling + launching
+      setTimeout(openTour, 300);
+    }
+  }
+  window.addEventListener('hashchange', maybeOpenFromHash);
+  maybeOpenFromHash();
   nextBtn.addEventListener('click', function () { if (i === STEPS.length - 1) end(); else show(i + 1); });
   prevBtn.addEventListener('click', function () { show(i - 1); });
   closeBtn.addEventListener('click', end);
