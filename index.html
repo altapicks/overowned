@@ -226,13 +226,15 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .btn:active { transform: scale(0.97); }
 .btn--primary {
-  background: var(--oo-gold);
-  color: var(--oo-bg);
-  box-shadow: 0 6px 22px rgba(255, 209, 26, 0.28);
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.17), rgba(255, 209, 26, 0.07));
+  color: var(--oo-gold);
+  border: 1px solid var(--oo-gold-ring);
+  box-shadow: var(--oo-glow-gold-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .btn--primary:hover {
-  background: #ffdb3d;
-  box-shadow: 0 10px 32px rgba(255, 209, 26, 0.42);
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.26), rgba(255, 209, 26, 0.13));
+  border-color: var(--oo-gold);
+  box-shadow: var(--oo-glow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.09);
   transform: translateY(-1px);
 }
 .btn--ghost {
@@ -409,6 +411,26 @@ main, nav, footer { position: relative; z-index: 1; }
   transform: translateY(-1px);
   box-shadow: var(--oo-glow-gold);
 }
+.nav__app {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  background: rgba(138, 170, 210, 0.06);
+  border: 1px solid var(--oo-border-2);
+  border-radius: 999px;
+  color: var(--oo-text) !important;
+  font-weight: 700;
+  font-size: 12px;
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.nav__app svg { width: 13px; height: 13px; }
+.nav__app:hover {
+  border-color: var(--oo-gold);
+  color: var(--oo-gold) !important;
+  box-shadow: var(--oo-glow-gold-sm);
+  transform: translateY(-1px);
+}
 
 /* ── Hero ────────────────────────────────────────────────── */
 .hero {
@@ -515,14 +537,18 @@ main, nav, footer { position: relative; z-index: 1; }
 .hero__accent {
   position: relative;
   display: inline-block;
-  color: var(--oo-gold);
+  background: linear-gradient(135deg, #FFE885 0%, #FFD84A 48%, #E3AA1A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #FFD84A;
 }
 .hero__accent::before {
   content: '';
   position: absolute;
   inset: -20% -10%;
-  background: radial-gradient(ellipse, rgba(255, 209, 26, 0.45) 0%, transparent 60%);
-  filter: blur(24px);
+  background: radial-gradient(ellipse, rgba(255, 216, 74, 0.28) 0%, transparent 62%);
+  filter: blur(26px);
   z-index: -1;
   animation: oo-glow-pulse 4.5s ease-in-out infinite;
 }
@@ -640,7 +666,7 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .preview__table-head, .preview__table-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.15fr) 60px 64px 56px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1.15fr) 64px 56px;
   gap: 8px;
   align-items: center;
   padding: 8px 14px;
@@ -1308,17 +1334,19 @@ main, nav, footer { position: relative; z-index: 1; }
   background: rgba(138, 170, 210, 0.05);
 }
 .product-tab.is-active {
-  background: var(--oo-gold);
-  color: var(--oo-bg);
-  box-shadow: 0 4px 18px rgba(255, 209, 26, 0.35), inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  background: rgba(245, 197, 24, 0.12);
+  color: var(--oo-gold);
+  box-shadow: inset 0 0 0 1px rgba(245, 197, 24, 0.42);
 }
 .product-tab.is-active:hover {
-  background: var(--oo-gold);
-  color: var(--oo-bg);
+  background: rgba(245, 197, 24, 0.16);
+  color: var(--oo-gold);
   transform: translateY(-1px);
 }
 .tab-panel { display: none; }
-.tab-panel.is-active { display: block; }
+/* Consistent height across views so switching tabs doesn't jump the page. */
+.tab-panel.is-active { display: block; min-height: 560px; }
+@media (max-width: 920px) { .tab-panel.is-active { min-height: 0; } }
 
 /* ── PrizePicks Projections view ─────────────────────────── */
 .pp-layout {
@@ -1468,6 +1496,9 @@ main, nav, footer { position: relative; z-index: 1; }
 .pp-table .p-over { color: var(--oo-blue); font-weight: 700; }
 .pp-table .edge-neg { color: var(--oo-red); font-weight: 700; }
 .pp-table .edge-pos { color: var(--oo-green); font-weight: 700; }
+.pp-table .edge-warn { color: var(--oo-gold); font-weight: 700; }
+.pp-table .edge-und { color: #6BB6FF; font-weight: 700; }
+.pp-table .edge-neu { color: var(--oo-muted); font-weight: 700; }
 
 /* ── PP Line Movement rail ───────────────────────────────── */
 .pp-rail {
@@ -1518,17 +1549,17 @@ main, nav, footer { position: relative; z-index: 1; }
   flex-direction: column;
   gap: 8px;
   scrollbar-width: thin;
-  scrollbar-color: var(--oo-gold) transparent;
+  scrollbar-color: rgba(138, 170, 210, 0.22) transparent;
 }
 .pp-rail__list::-webkit-scrollbar { width: 8px; }
 .pp-rail__list::-webkit-scrollbar-track { background: transparent; }
 .pp-rail__list::-webkit-scrollbar-thumb {
-  background: var(--oo-gold);
+  background: rgba(138, 170, 210, 0.18);
   border-radius: 4px;
-  border: 2px solid rgba(13, 29, 48, 0.6);
+  border: 2px solid transparent;
   background-clip: padding-box;
 }
-.pp-rail__list::-webkit-scrollbar-thumb:hover { background-color: #ffdb3d; }
+.pp-rail__list::-webkit-scrollbar-thumb:hover { background-color: rgba(138, 170, 210, 0.32); }
 
 /* Gold scrollbar for the horizontal product table scrollers too */
 .product-scroll {
@@ -1619,6 +1650,23 @@ main, nav, footer { position: relative; z-index: 1; }
   color: #b994ee;
   background: rgba(155, 99, 230, 0.12);
 }
+.pp-mover__delta {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.pp-mover__delta--up { color: #ffd86b; background: rgba(245, 197, 24, 0.14); border: 1px solid rgba(245, 197, 24, 0.3); }
+.pp-mover__delta--down { color: #4aa3ff; background: rgba(74, 163, 255, 0.12); border: 1px solid rgba(74, 163, 255, 0.28); }
+.pp-mover__delta--flat { color: var(--oo-muted-2); background: rgba(138, 170, 210, 0.06); }
+.pp-mover__chips { align-items: center; }
+/* A moved row gets a faint gold lift so it stands out from the steady watchlist */
+.pp-mover--moved { background: rgba(245, 197, 24, 0.05); border-color: rgba(245, 197, 24, 0.22); }
+.pp-mover--moved .pp-mover__badge { background: rgba(245, 197, 24, 0.14); border-color: rgba(245, 197, 24, 0.32); color: #ffd86b; }
 .pp-mover__vs {
   font-size: 11px;
   color: var(--oo-muted);
@@ -2092,6 +2140,9 @@ main, nav, footer { position: relative; z-index: 1; }
 .match-row--l .match-row__result { color: var(--oo-red); }
 .match-row__date { color: var(--oo-muted); font-variant-numeric: tabular-nums; font-size: 11px; }
 .match-row__opp { color: var(--oo-text); display: flex; align-items: center; gap: 6px; }
+/* Fixed-width flag box so every "vs Name" lines up regardless of flag aspect ratio */
+.match-row__opp .flag { width: 20px; display: inline-flex; justify-content: center; flex: none; margin-right: 0; }
+.match-row__opp .flag .flag-img { margin-right: 0; }
 .match-row__score { color: var(--oo-muted); font-family: var(--oo-mono); font-size: 11px; font-variant-numeric: tabular-nums; }
 
 /* ── Profile mockup compact override · fits common laptop heights ── */
@@ -2358,18 +2409,26 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 .builder-projections-head__label { font-size: 13px; font-weight: 700; }
 .builder-projections-head__count { font-size: 11px; color: var(--oo-muted); margin-left: 8px; font-weight: 500; }
+.builder-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dk-pbtn { display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 13px; border-radius: 9px; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.dk-pbtn svg { width: 13px; height: 13px; }
+.dk-pbtn--ghost { background: linear-gradient(180deg, rgba(245,197,24,0.10), rgba(245,197,24,0.02)); color: var(--oo-gold); border: 1px solid rgba(245,197,24,0.42); }
+.dk-pbtn--green { background: linear-gradient(180deg, rgba(25,210,127,0.10), rgba(25,210,127,0.02)); color: var(--oo-green); border: 1px solid rgba(25,210,127,0.40); }
+.dk-pbtn:hover { transform: translateY(-1px); }
+.builder-csv--live, .builder-csv--live .chip__dot { color: var(--oo-green); }
 .build-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 16px;
-  background: var(--oo-gold);
-  color: var(--oo-bg);
-  border-radius: var(--oo-radius-sm);
+  padding: 0 16px; height: 34px;
+  background: linear-gradient(180deg, rgba(245,197,24,0.18), rgba(245,197,24,0.04));
+  color: var(--oo-gold);
+  border: 1px solid rgba(245,197,24,0.5);
+  border-radius: 9px;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.3px;
-  box-shadow: 0 4px 16px rgba(255, 209, 26, 0.35);
+  box-shadow: 0 0 18px rgba(255, 209, 26, 0.20);
 }
 .build-btn:hover { background: #ffdb3d; transform: translateY(-1px); box-shadow: 0 6px 22px rgba(255, 209, 26, 0.45); }
 .build-btn__bolt { font-size: 11px; }
@@ -2842,17 +2901,18 @@ main, nav, footer { position: relative; z-index: 1; }
   border-radius: var(--oo-radius-sm);
   font-size: 14px;
   font-weight: 700;
-  background: var(--oo-gold);
-  color: var(--oo-bg);
-  border: none;
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.18), rgba(255, 209, 26, 0.08));
+  color: var(--oo-gold);
+  border: 1px solid var(--oo-gold-ring);
   cursor: pointer;
-  transition: transform 150ms ease, box-shadow 180ms ease, background 150ms ease;
-  box-shadow: 0 8px 24px rgba(255, 209, 26, 0.32);
+  transition: transform 150ms ease, box-shadow 180ms ease, background 150ms ease, border-color 150ms ease;
+  box-shadow: var(--oo-glow-gold-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .season-btn:hover {
-  background: #ffdb3d;
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.27), rgba(255, 209, 26, 0.14));
+  border-color: var(--oo-gold);
   transform: translateY(-1px);
-  box-shadow: 0 12px 32px rgba(255, 209, 26, 0.45);
+  box-shadow: var(--oo-glow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.09);
 }
 .season-btn:active { transform: scale(0.98); }
 .season-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
@@ -2890,9 +2950,463 @@ main, nav, footer { position: relative; z-index: 1; }
   flex-shrink: 0;
 }
 
+/* ── Pricing tiers (3-up comparison) ─────────────────────── */
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  max-width: 1080px;
+  margin: 0 auto;
+  align-items: stretch;
+}
+.tier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 26px;
+  background: var(--oo-panel);
+  border: 1px solid var(--oo-border);
+  border-radius: var(--oo-radius-lg);
+  box-shadow: var(--oo-shadow-sm);
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+.tier:hover { transform: translateY(-3px); border-color: var(--oo-border-2); box-shadow: var(--oo-shadow); }
+.tier--featured {
+  border-color: var(--oo-gold-ring);
+  background: linear-gradient(180deg, rgba(255, 209, 26, 0.06), var(--oo-panel) 42%);
+  box-shadow: var(--oo-glow-gold-sm), var(--oo-shadow);
+}
+.tier--featured:hover { border-color: var(--oo-gold); box-shadow: var(--oo-glow-gold), var(--oo-shadow); }
+.tier__badge {
+  position: absolute;
+  top: -12px; left: 50%; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 15px;
+  border-radius: 999px;
+  /* Dark glass base so the gold text/ring read clearly against the
+     gold-tinted featured card — premium, not a flat gold blob. */
+  background: linear-gradient(180deg, rgba(16, 26, 44, 0.96), rgba(10, 18, 32, 0.96));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 209, 26, 0.65);
+  color: #FFE08A;
+  font-size: 10.5px; font-weight: 800; letter-spacing: 1px;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), var(--oo-glow-gold-sm);
+}
+.tier__badge::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #FFD11A;
+  box-shadow: 0 0 8px var(--oo-gold);
+}
+.tier__name {
+  font-size: 12px; font-weight: 700; letter-spacing: 0.4px;
+  text-transform: uppercase; color: var(--oo-muted);
+}
+.tier--featured .tier__name { color: var(--oo-gold); }
+.tier__who { display: none; }
+.tier__price {
+  margin-top: 20px;
+  font-size: 46px; font-weight: 800; letter-spacing: -1.8px; line-height: 1;
+  color: var(--oo-text);
+}
+.tier--featured .tier__price {
+  background: linear-gradient(135deg, #FFE885 0%, #FFD84A 50%, #E3AA1A 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.tier__price small { font-size: 13px; font-weight: 600; letter-spacing: 0; color: var(--oo-muted); -webkit-text-fill-color: var(--oo-muted); }
+.tier__sub-price { margin-top: 9px; font-size: 12.5px; color: var(--oo-muted); min-height: 18px; }
+.tier__sub-price .num-tab { color: var(--oo-text); font-weight: 700; }
+.tier__cta {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; margin-top: 22px; padding: 13px;
+  border-radius: var(--oo-radius-sm);
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; text-decoration: none; white-space: nowrap;
+  transition: transform 150ms ease, box-shadow 180ms ease, background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.tier__cta:active { transform: scale(0.98); }
+.tier__cta--ghost {
+  background: rgba(138, 170, 210, 0.06);
+  color: var(--oo-text);
+  border: 1px solid var(--oo-border-2);
+}
+.tier__cta--ghost:hover {
+  border-color: var(--oo-gold); color: var(--oo-gold);
+  box-shadow: var(--oo-glow-gold-sm); transform: translateY(-1px);
+}
+.tier__cta--flow { gap: 8px; }
+.tier__cta-arrow { display: inline-block; margin-left: 8px; transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1); }
+.tier__cta--flow:hover .tier__cta-arrow { transform: translateX(5px); }
+.tier__cta--primary {
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.18), rgba(255, 209, 26, 0.08));
+  color: var(--oo-gold);
+  border: 1px solid var(--oo-gold-ring);
+  box-shadow: var(--oo-glow-gold-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.tier__cta--primary:hover {
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.27), rgba(255, 209, 26, 0.14));
+  border-color: var(--oo-gold);
+  box-shadow: var(--oo-glow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.09);
+  transform: translateY(-1px);
+}
+.tier__cta:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; transform: none; }
+.tier__feats {
+  list-style: none;
+  margin: 22px 0 0;
+  padding: 20px 0 0;
+  border-top: 1px solid var(--oo-border);
+  display: flex; flex-direction: column; gap: 11px;
+}
+.tier__feat {
+  display: flex; align-items: flex-start; gap: 9px;
+  font-size: 13px; line-height: 1.4; color: var(--oo-text);
+}
+.tier__feat svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+.tier__feat--on svg { color: var(--oo-green); }
+.tier__feat--off { color: var(--oo-muted-2); }
+.tier__feat--off svg { color: var(--oo-muted-2); }
+.pricing-note {
+  margin: 26px auto 0;
+  text-align: center;
+  font-size: 12.5px; color: var(--oo-muted);
+}
+.pricing-note strong { color: var(--oo-gold); font-weight: 700; }
+
+/* ── Guided tour ─────────────────────────────────────────── */
+.tour-launch {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin: 18px auto 0;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.16), rgba(255, 209, 26, 0.07));
+  border: 1px solid var(--oo-gold-ring);
+  border-radius: 999px;
+  color: var(--oo-gold);
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--oo-glow-gold-sm);
+  transition: transform 150ms ease, box-shadow 180ms ease, background 150ms ease;
+}
+.tour-launch svg { width: 12px; height: 12px; }
+.tour-launch:hover {
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.26), rgba(255, 209, 26, 0.13));
+  box-shadow: var(--oo-glow-gold); transform: translateY(-1px);
+}
+.tour-highlight {
+  position: relative; z-index: 3;
+  border-radius: var(--oo-radius-md);
+  animation: tour-pulse 2s ease-in-out infinite;
+}
+@keyframes tour-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--oo-gold), 0 0 0 6px rgba(255, 209, 26, 0.16), 0 0 30px rgba(255, 209, 26, 0.26); }
+  50%      { box-shadow: 0 0 0 2px var(--oo-gold), 0 0 0 7px rgba(255, 209, 26, 0.26), 0 0 40px rgba(255, 209, 26, 0.40); }
+}
+.tour-pop {
+  position: fixed;
+  left: 50%; bottom: 24px; transform: translateX(-50%) translateY(8px);
+  width: min(420px, calc(100vw - 32px));
+  padding: 20px 22px 18px;
+  background: var(--oo-panel-strong);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid var(--oo-gold-ring);
+  border-radius: var(--oo-radius-lg);
+  box-shadow: var(--oo-shadow), var(--oo-glow-gold-sm);
+  z-index: 240;
+  opacity: 0;
+  transition: opacity 240ms ease, transform 240ms ease;
+}
+.tour-pop:not([hidden]) { opacity: 1; transform: translateX(-50%) translateY(0); }
+.tour-pop__close {
+  position: absolute; top: 12px; right: 12px;
+  width: 26px; height: 26px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(138, 170, 210, 0.08);
+  border: 1px solid var(--oo-border); border-radius: 8px;
+  color: var(--oo-muted); cursor: pointer;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+.tour-pop__close svg { width: 13px; height: 13px; }
+.tour-pop__close:hover { color: var(--oo-text); border-color: var(--oo-border-2); }
+.tour-pop__eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--oo-gold); }
+.tour-pop__title { margin-top: 7px; font-size: 18px; font-weight: 800; letter-spacing: -0.3px; color: var(--oo-text); }
+.tour-pop__body { margin-top: 7px; font-size: 13.5px; line-height: 1.55; color: var(--oo-muted); }
+.tour-pop__nav { margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.tour-dots { display: flex; gap: 6px; }
+.tour-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--oo-border-2); transition: background 150ms ease, transform 150ms ease; }
+.tour-dots span.is-on { background: var(--oo-gold); transform: scale(1.25); }
+.tour-btn {
+  padding: 9px 16px; border-radius: var(--oo-radius-sm);
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  background: rgba(138, 170, 210, 0.06);
+  border: 1px solid var(--oo-border-2); color: var(--oo-text);
+  transition: transform 150ms ease, border-color 150ms ease, color 150ms ease, background 150ms ease, box-shadow 150ms ease;
+}
+.tour-btn:hover:not(:disabled) { border-color: var(--oo-gold); color: var(--oo-gold); }
+.tour-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.tour-btn--primary {
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.18), rgba(255, 209, 26, 0.08));
+  border-color: var(--oo-gold-ring); color: var(--oo-gold);
+  box-shadow: var(--oo-glow-gold-sm);
+}
+.tour-btn--primary:hover {
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.27), rgba(255, 209, 26, 0.14));
+  border-color: var(--oo-gold); transform: translateY(-1px);
+}
+
+/* ── App-view replicas: Home / Signals / Trends ──────────── */
+.app-frame { display: flex; flex-direction: column; gap: 12px; }
+
+/* HOME */
+.home-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.hm-card { position: relative; padding: 14px 18px; background: linear-gradient(180deg, rgba(15,27,48,0.92), rgba(8,24,39,0.82)); border: 1px solid var(--oo-border); border-radius: 14px; overflow: hidden; }
+.hm-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; opacity: 0.7; }
+.hm-card--blue::before { background: linear-gradient(90deg, transparent, rgba(74,163,255,0.55), transparent); }
+.hm-card--gold::before { background: linear-gradient(90deg, transparent, rgba(255,209,26,0.45), transparent); }
+.hm-card--green::before { background: linear-gradient(90deg, transparent, rgba(25,210,127,0.55), transparent); }
+.hm-card__hint { position: absolute; top: 12px; right: 14px; font-size: 9px; letter-spacing: 0.7px; color: rgba(125,175,220,0.7); }
+.hm-card__label { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: var(--oo-muted); }
+.hm-card__value { margin-top: 8px; font-size: 21px; font-weight: 800; letter-spacing: -0.4px; background: linear-gradient(135deg, #FFE066, #F5C518 55%, #C99A12); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.hm-card__sub { margin-top: 5px; font-size: 11.5px; color: var(--oo-muted); }
+.hm-pill { -webkit-text-fill-color: initial; font-size: 9.5px; font-weight: 700; letter-spacing: 0.6px; padding: 2px 8px; border-radius: 999px; }
+.hm-pill--clay { color: rgb(232,142,90); background: rgba(204,102,51,0.18); border: 1px solid rgba(204,102,51,0.55); }
+.hm-pill--grass { color: rgb(140,220,155); background: rgba(74,168,89,0.16); border: 1px solid rgba(74,168,89,0.50); }
+.hm-pill--rank { color: rgb(165,200,235); background: rgba(125,175,220,0.10); border: 1px solid rgba(125,175,220,0.40); }
+.home-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+.home-tab { font-size: 11px; padding: 7px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.55); white-space: nowrap; }
+.home-tab.is-active { background: rgba(245,197,24,0.12); border-color: rgba(245,197,24,0.40); color: var(--oo-gold); font-weight: 700; }
+.home-board { border: 1px solid var(--oo-border); border-radius: 12px; overflow: hidden; background: var(--oo-panel); }
+.hb-head, .hb-row { display: grid; grid-template-columns: minmax(0,1.5fr) minmax(0,1.3fr) 70px 64px; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12.5px; }
+.hb-head { background: rgba(245,197,24,0.04); border-bottom: 1px solid rgba(245,197,24,0.18); font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--oo-muted); }
+.hb-head .num, .hb-row .num { text-align: right; justify-self: end; font-variant-numeric: tabular-nums; }
+.hb-kalshi { color: #00D88E; display: inline-flex; align-items: center; gap: 5px; justify-content: flex-end; }
+.hb-live { width: 6px; height: 6px; border-radius: 50%; background: #19D27F; box-shadow: 0 0 8px rgba(0,216,142,0.6); animation: oo-glow-pulse 3s ease-in-out infinite; }
+.hb-row { border-top: 1px solid rgba(255,255,255,0.04); }
+.hb-row:nth-child(odd) { background: rgba(255,255,255,0.012); }
+.hb-row--best { box-shadow: inset 2px 0 0 rgba(245,197,24,0.55); }
+.hb-name { font-weight: 700; color: var(--oo-text); display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+.hb-opp { color: var(--oo-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hb-model { color: var(--oo-text); font-weight: 700; }
+.hb-row--best .hb-model { color: var(--oo-gold); }
+.hb-k { color: #00D88E; font-weight: 700; }
+.hb-edge.pos { color: var(--oo-green); } .hb-edge.neg { color: var(--oo-red); }
+.hb-rank1 { color: var(--oo-gold); font-weight: 800; } .hb-rank2 { color: #6BB6FF; font-weight: 800; }
+.hb-oq { color: rgba(74,144,226,0.95); }
+.flag { font-size: 13px; line-height: 1; }
+
+/* SIGNALS */
+.sig-head { display: flex; align-items: center; gap: 10px; padding: 2px; }
+.sig-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--oo-gold); box-shadow: 0 0 10px rgba(245,197,24,0.7); animation: oo-glow-pulse 1.6s ease-in-out infinite; }
+.sig-head__title { font-size: 14px; font-weight: 800; color: var(--oo-text); }
+.sig-head__sub { font-size: 11px; color: var(--oo-muted); }
+.sig-head__ago { margin-left: auto; font-size: 11px; color: var(--oo-muted-2); }
+.sig-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.sig-chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); font-size: 11px; font-weight: 700; color: var(--oo-muted); }
+.sig-chip i { font-style: normal; min-width: 18px; text-align: center; padding: 1px 6px; background: rgba(0,0,0,0.25); border-radius: 999px; font-size: 10px; }
+.sig-chip.is-active { background: rgba(245,197,24,0.12); border-color: rgba(245,197,24,0.36); color: var(--oo-gold); }
+.sig-stream { display: flex; flex-direction: column; gap: 8px; }
+.sig-row { display: grid; grid-template-columns: 48px 1fr; gap: 10px; padding: 8px; border-radius: 10px; background: var(--oo-panel); border: 1px solid var(--oo-border); }
+.sig-rail { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 8px; padding: 6px 0; }
+.sig-rail__tag { font-size: 9.5px; font-weight: 900; letter-spacing: 0.5px; }
+.sig-rail__pct { font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.sig-rail--tail { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.45); color: #6EE7B7; }
+.sig-rail--fade { background: rgba(220,60,70,0.12); border: 1px solid rgba(220,60,70,0.45); color: rgb(245,135,145); }
+.sig-rail--trap { background: rgba(52,211,153,0.10); border: 1px solid rgba(52,211,153,0.40); color: #6EE7B7; }
+.sig-rail--style { background: rgba(245,197,24,0.10); border: 1px solid rgba(245,197,24,0.40); color: var(--oo-gold); }
+.sig-rail--trapdn, .sig-rail--styledn { background: rgba(74,163,255,0.10); border: 1px solid rgba(74,163,255,0.40); color: rgb(120,175,255); }
+.sig-main { display: flex; flex-direction: column; gap: 4px; justify-content: center; min-width: 0; }
+.sig-main__top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.sig-player { font-size: 13px; font-weight: 700; color: var(--oo-text); display: inline-flex; align-items: center; gap: 6px; min-width: 0; }
+.sig-player em { font-style: normal; color: var(--oo-muted-2); font-weight: 600; font-size: 11px; }
+.sig-delta { font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.sig-delta--good { color: var(--oo-gold); text-shadow: 0 0 8px rgba(245,197,24,0.25); }
+.sig-delta--bad { color: rgb(245,135,145); text-shadow: 0 0 8px rgba(220,60,70,0.25); }
+.sig-rationale { font-size: 11px; color: var(--oo-muted-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sig-rationale strong { color: var(--oo-muted); font-weight: 700; }
+
+/* TRENDS */
+.tr-status { align-self: flex-end; display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 800; letter-spacing: 0.6px; color: #FFE08A; background: rgba(245,197,24,0.08); border: 1px solid rgba(245,197,24,0.32); border-radius: 999px; padding: 5px 12px; }
+.tr-status__dot { width: 6px; height: 6px; border-radius: 50%; background: #FFE08A; box-shadow: 0 0 6px rgba(245,197,24,0.6); animation: oo-glow-pulse 1.2s ease-in-out infinite; }
+.tr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tr-donut { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 5px; padding: 18px 14px; background: rgba(13,29,48,0.45); border: 1px solid var(--oo-border); border-radius: 14px; }
+.tr-ring { width: 92px; height: 92px; }
+.tr-ring__pct { text-anchor: middle; dominant-baseline: central; font-size: 19px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.tr-donut__label { margin-top: 4px; font-size: 12.5px; font-weight: 800; color: var(--oo-text); letter-spacing: 0.2px; }
+.tr-donut__sub { font-size: 10.5px; color: var(--oo-muted); line-height: 1.35; }
+.tr-donut__n { font-size: 10px; color: var(--oo-muted-2); font-variant-numeric: tabular-nums; }
+
+/* ── App pop-ups (Matchup Compare + PP Math) ─────────────── */
+.oo-modal { position: fixed; inset: 0; z-index: 220; display: flex; align-items: center; justify-content: center; padding: 20px 14px; }
+.oo-modal[hidden] { display: none; }
+.oo-modal__overlay { position: absolute; inset: 0; background: rgba(0,5,15,0.78); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.oo-modal__card { position: relative; width: 100%; max-height: 90vh; overflow-y: auto; background: #0A1628; border: 1px solid var(--oo-border-2); border-radius: 14px; box-shadow: 0 24px 70px rgba(0,0,0,0.55); animation: oo-rise 0.24s ease-out; }
+.oo-modal__card--mc { max-width: 600px; }
+.oo-modal__card--ppm { max-width: 680px; background: linear-gradient(180deg, #0E1B33, #0A1628); border-color: rgba(245,197,24,0.20); }
+.oo-modal__close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.12); color: var(--oo-muted); font-size: 18px; line-height: 1; cursor: pointer; }
+.oo-modal__close:hover { color: var(--oo-text); background: rgba(245,197,24,0.18); }
+/* Matchup compare */
+.mc-head { display: grid; grid-template-columns: 1fr 60px 1fr; }
+.mc-side { padding: 22px 20px 16px; }
+.mc-side--fav { background: linear-gradient(135deg, rgba(245,197,24,0.08), transparent 60%); }
+.mc-side--und { text-align: right; background: linear-gradient(225deg, rgba(74,144,226,0.08), transparent 60%); }
+.mc-flag { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--oo-muted); }
+.mc-first { font-size: 19px; font-weight: 800; color: rgba(255,255,255,0.95); margin-top: 8px; }
+.mc-last { font-size: 25px; font-weight: 800; letter-spacing: -0.6px; line-height: 1; }
+.mc-last--gold { color: #F5C518; } .mc-last--blue { color: #4a90e2; }
+.mc-hand { display: inline-flex; align-items: center; gap: 6px; margin-top: 9px; font-size: 10px; padding: 3px 9px; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid var(--oo-border); color: var(--oo-muted); }
+.mc-dot { width: 5px; height: 5px; border-radius: 50%; } .mc-dot--gold { background: #F5C518; } .mc-dot--blue { background: #4a90e2; }
+.mc-vs { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: rgba(6,16,30,0.6); }
+.mc-vs__line { width: 1px; height: 30px; background: linear-gradient(180deg, #F5C518, #4a90e2); }
+.mc-vs span { font-size: 10px; letter-spacing: 1.5px; color: rgba(255,255,255,0.4); }
+.mc-chyron { padding: 7px 20px; background: rgba(0,0,0,0.35); border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 11px; color: rgba(255,255,255,0.55); }
+.mc-body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 8px; }
+.mc-prob { display: flex; align-items: center; justify-content: space-between; }
+.mc-pv { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.mc-pv--gold { color: #F5C518; } .mc-pv--blue { color: #4a90e2; } .mc-pv--mut { color: var(--oo-muted); font-size: 12px; }
+.mc-plab { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--oo-muted); font-weight: 700; }
+.mc-plab--mut { color: var(--oo-muted-2); }
+.mc-bar { height: 6px; border-radius: 3px; background: rgba(74,144,226,0.22); overflow: hidden; }
+.mc-bar--sm { height: 4px; }
+.mc-fill { display: block; height: 100%; } .mc-fill--gold { background: #F5C518; } .mc-fill--mut { background: var(--oo-muted-2); }
+.mc-edge { display: flex; align-items: center; justify-content: space-between; padding: 7px 0; margin-top: 2px; border-top: 1px dashed rgba(255,255,255,0.1); border-bottom: 1px dashed rgba(255,255,255,0.1); }
+.mc-elab { font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(245,197,24,0.75); }
+.mc-pos { color: #4ADE80; font-size: 12px; font-weight: 800; }
+.mc-skills { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+.mc-skill { display: flex; align-items: center; gap: 8px; }
+.mc-slab { order: 1; flex: 0 0 96px; font-size: 10px; color: var(--oo-muted); }
+.mc-skill > .mc-sv:first-child { order: 2; flex: 0 0 30px; text-align: right; }
+.mc-sbar { order: 3; flex: 1; display: flex; height: 6px; gap: 2px; }
+.mc-skill > .mc-sv:last-child { order: 4; flex: 0 0 30px; }
+.mc-sf { height: 100%; border-radius: 3px; } .mc-sf--gold { background: #4ade80; } .mc-sf--blue { background: #4a90e2; } .mc-sf--mut { background: rgba(255,255,255,0.30); }
+.mc-sv { font-size: 11px; font-variant-numeric: tabular-nums; color: var(--oo-muted); }
+.mc-sv--w { color: var(--oo-text); font-weight: 700; }
+.mc-insight { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--oo-border); font-size: 12px; color: var(--oo-text); }
+.mc-idot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; } .mc-idot--g { background: #4ADE80; }
+/* PP math */
+.ppm-head { padding: 16px 20px 14px; border-bottom: 1px solid rgba(245,197,24,0.18); background: radial-gradient(ellipse 60% 80% at 0% 0%, rgba(245,197,24,0.08), transparent 70%); }
+.ppm-eyebrow { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: rgba(245,197,24,0.7); }
+.ppm-title { font-size: 17px; font-weight: 800; margin-top: 4px; }
+.ppm-title em { font-style: normal; color: var(--oo-muted-2); font-size: 13px; font-weight: 700; }
+.ppm-grad { background: linear-gradient(135deg, #FFE066, #F5C518 55%, #C99A12); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.ppm-hero { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: center; padding: 16px 18px; }
+.ppm-arr { color: var(--oo-muted-2); font-size: 16px; text-align: center; }
+.ppm-tile { text-align: center; }
+.ppm-tlab { font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--oo-muted); font-weight: 800; }
+.ppm-tval { font-size: 23px; font-weight: 900; letter-spacing: -0.5px; margin-top: 4px; color: #F5C518; }
+.ppm-tsub { font-size: 10px; color: var(--oo-muted); margin-top: 3px; }
+.ppm-pos { color: #4ADE80; } .ppm-neg { color: #F87171; }
+.ppm-pill { font-size: 9px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: rgba(74,222,128,0.16); color: #4ADE80; }
+.ppm-sec { margin: 0 20px 20px; padding: 14px 16px; background: rgba(255,255,255,0.018); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; }
+.ppm-sec__title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.9px; color: #F5C518; margin-bottom: 8px; }
+.ppm-row { display: grid; grid-template-columns: 1.5fr 1fr 64px; align-items: center; gap: 8px; padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 12px; }
+.ppm-row > span:first-child { color: var(--oo-text); }
+.ppm-calc { font-family: var(--oo-mono); font-size: 11px; color: var(--oo-muted); }
+.ppm-v { text-align: right; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--oo-text); }
+.ppm-row--sum { border-bottom: none; border-top: 1px solid rgba(255,255,255,0.12); margin-top: 4px; padding-top: 11px; }
+.ppm-row--sum .ppm-v { font-size: 16px; }
+
+/* ── WTA Player Intel popup ──────────────────────────────── */
+.oo-modal__card--wta { max-width: 540px; background: linear-gradient(180deg, #0E1B33, #0A1628); border-color: rgba(245,197,24,0.20); padding: 22px; }
+.wta-head { display: flex; align-items: center; gap: 13px; }
+.wta-flag { font-size: 26px; line-height: 1; }
+.wta-head__name { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; color: var(--oo-text); }
+.wta-head__sub { font-size: 11.5px; color: var(--oo-muted); font-weight: 600; margin-top: 2px; }
+.wta-elos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0 18px; }
+.wta-elo { background: rgba(138,170,210,0.05); border: 1px solid var(--oo-border); border-radius: 11px; padding: 11px 8px; text-align: center; }
+.wta-elo__lab { font-size: 8.5px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--oo-muted-2); }
+.wta-elo__val { font-size: 19px; font-weight: 800; color: var(--oo-text); margin-top: 4px; font-variant-numeric: tabular-nums; }
+.wta-elo__rank { font-size: 10px; color: var(--oo-gold); font-weight: 700; margin-top: 2px; }
+.wta-sec__title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.9px; color: #F5C518; margin-bottom: 11px; }
+.wta-stats { display: flex; flex-direction: column; gap: 11px; }
+.wta-stat { display: grid; grid-template-columns: 116px 1fr 70px; align-items: center; gap: 11px; }
+.wta-stat__lab { font-size: 11.5px; color: var(--oo-muted); }
+.wta-stat__bar { height: 6px; border-radius: 4px; background: rgba(138,170,210,0.1); overflow: hidden; }
+.wta-stat__fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, rgba(245,197,24,0.5), var(--oo-gold)); }
+.wta-stat__r { text-align: right; }
+.wta-stat__val { font-size: 12.5px; font-weight: 800; color: var(--oo-text); font-variant-numeric: tabular-nums; }
+.wta-stat__pct { font-size: 9px; color: var(--oo-muted-2); font-weight: 700; }
+.wta-tend { margin-top: 17px; display: flex; align-items: center; gap: 9px; padding: 11px 13px; border-radius: 11px; background: rgba(25,210,127,0.08); border: 1px solid rgba(25,210,127,0.22); font-size: 12.5px; color: var(--oo-text); font-weight: 600; }
+.wta-tend__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--oo-green); flex: none; box-shadow: 0 0 8px rgba(25,210,127,0.6); }
+
+/* ── Mobile app bottom-nav (PWA look; shown ≤920px) ──────── */
+.oo-mnav { display: none; }
+.oo-mnav-btn { position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 2px; background: none; border: none; color: var(--oo-muted); cursor: pointer; transition: color 0.15s ease; -webkit-tap-highlight-color: transparent; }
+.oo-mnav-btn svg { width: 20px; height: 20px; }
+.oo-mnav-lbl { font-size: 9px; font-weight: 800; letter-spacing: 0.2px; }
+.oo-mnav-btn.is-active { color: var(--oo-gold); }
+.oo-mnav-btn.is-active::before { content: ''; position: absolute; top: -9px; left: 50%; transform: translateX(-50%); width: 16px; height: 3px; background: var(--oo-gold); border-radius: 0 0 3px 3px; box-shadow: 0 0 8px rgba(245,197,24,0.6); }
+.tr-box { display: flex; flex-direction: column; gap: 8px; min-height: 142px; padding: 14px 16px; background: rgba(13,29,48,0.45); border: 1px solid var(--oo-border); border-left-width: 3px; border-radius: 12px; }
+.tr-box--gold { border-left-color: #FFE08A; } .tr-box--blue { border-left-color: #93C5FD; } .tr-box--green { border-left-color: #6EE7B7; } .tr-box--purple { border-left-color: #C4B5FD; }
+.tr-box__head { display: flex; justify-content: space-between; font-size: 10px; font-weight: 800; letter-spacing: 0.4px; color: var(--oo-muted); }
+.tr-box__n { color: var(--oo-muted-2); font-weight: 600; }
+.tr-box__pct { font-size: 30px; font-weight: 900; letter-spacing: -0.5px; }
+.tr-box__pct--good { color: #6EE7B7; }
+.tr-box__lbl { font-size: 10.5px; color: var(--oo-muted); }
+.tr-spark { width: 100%; height: 32px; margin-top: auto; }
+.tr-box__hint { font-size: 9px; color: var(--oo-muted-2); text-align: right; }
+
+.tr-feed { margin-top: 10px; }
+.tr-feed__head { display: flex; justify-content: space-between; align-items: center; padding: 6px 6px 8px 4px; }
+.tr-feed__title { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+.tr-feed__dot { width: 6px; height: 6px; border-radius: 50%; background: #FFD84A; box-shadow: 0 0 6px rgba(245,197,24,0.6); animation: oo-glow-pulse 1.4s ease-in-out infinite; }
+.tr-feed__count { font-size: 9.5px; color: var(--oo-muted); font-weight: 700; }
+.tr-feed__rows { background: rgba(13,29,48,0.55); border: 1px solid rgba(245,197,24,0.12); border-radius: 12px; overflow: hidden; }
+.tr-feed__row { display: grid; grid-template-columns: 50px minmax(0,1fr) 96px 78px 60px; gap: 10px; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); border-left: 3px solid; font-size: 12px; }
+.tr-feed__row:last-child { border-bottom: none; }
+.trf-date { font-size: 10px; font-weight: 700; color: var(--oo-muted); font-variant-numeric: tabular-nums; }
+.trf-name { color: var(--oo-text); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trf-name em { font-style: normal; color: var(--oo-muted); font-weight: 400; }
+.trf-verd { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 2px; }
+.trf-score { text-align: right; }
+.trf-act { font-size: 13px; font-weight: 600; color: var(--oo-text); font-variant-numeric: tabular-nums; }
+.trf-base { font-size: 9.5px; color: var(--oo-muted); }
+.trf-delta { justify-self: end; padding: 2px 7px; font-size: 11px; font-weight: 700; border-radius: 4px; font-variant-numeric: tabular-nums; }
+.trf-delta--pos { background: rgba(110,231,183,0.10); color: #6EE7B7; }
+.trf-delta--neg { background: rgba(252,165,165,0.10); color: #FCA5A5; }
+.trf-hit { justify-self: end; padding: 3px 8px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.6px; border-radius: 4px; }
+.trf-hit--hit { background: rgba(110,231,183,0.16); color: #6EE7B7; }
+.trf-hit--miss { background: rgba(252,165,165,0.16); color: #FCA5A5; }
+.oo-pc-only { display: block; }
+@media (max-width: 920px) { .oo-pc-only { display: none !important; } }
+
+.pp-viewtabs { display: inline-flex; gap: 2px; padding: 3px; background: rgba(255,255,255,0.03); border: 1px solid var(--oo-border); border-radius: 10px; margin-bottom: 12px; }
+.pp-viewtab { padding: 6px 16px; border-radius: 7px; font-size: 12px; font-weight: 700; color: var(--oo-muted); cursor: pointer; background: none; border: none; transition: background 0.15s, color 0.15s; }
+.pp-viewtab.is-active { background: rgba(245,197,24,0.12); color: var(--oo-gold); }
+
+/* Signals — PrizePicks-card feed (current app UI) */
+.ppf-head { display: flex; align-items: center; gap: 10px; padding: 2px 2px 4px; }
+.ppf-dot { width: 8px; height: 8px; border-radius: 50%; background: #2ECC71; box-shadow: 0 0 10px rgba(46,204,113,0.6); animation: oo-glow-pulse 1.8s ease-in-out infinite; }
+.ppf-title { font-size: 14px; font-weight: 800; color: var(--oo-text); }
+.ppf-sub { font-size: 11px; color: var(--oo-muted); }
+.ppf-ago { margin-left: auto; font-size: 11px; color: var(--oo-muted-2); font-variant-numeric: tabular-nums; }
+.ppf-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 2px; }
+.ppf-chip { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); font-size: 11px; font-weight: 700; color: var(--oo-muted); }
+.ppf-chip i { font-style: normal; min-width: 18px; text-align: center; padding: 1px 6px; background: rgba(0,0,0,0.25); border-radius: 999px; font-size: 10px; }
+.ppf-chip.is-active { background: rgba(245,197,24,0.10); border-color: rgba(245,197,24,0.40); color: var(--oo-gold); }
+.ppf-chip--gv.is-active, .ppf-chip--gv { }
+.ppf-stream { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.ppsq { background: linear-gradient(180deg, rgba(15,28,46,0.95), rgba(11,21,36,0.95)); border: 1px solid rgba(245,197,24,0.18); border-radius: 10px; padding: 10px 12px 11px; box-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 3px 9px rgba(0,0,0,0.32); transition: border-color 0.15s, transform 0.15s; }
+.ppsq:hover { border-color: rgba(245,197,24,0.36); transform: translateY(-1px); }
+.ppsq__top { display: flex; align-items: center; gap: 6px; margin-bottom: 9px; flex-wrap: wrap; }
+.ppsq__chip { font-size: 9px; font-weight: 700; letter-spacing: 0.7px; padding: 3px 6px; border-radius: 4px; color: rgba(245,197,24,0.9); border: 1px solid rgba(245,197,24,0.32); background: rgba(245,197,24,0.04); }
+.ppsq__tag { font-size: 9px; font-weight: 700; letter-spacing: 0.7px; padding: 3px 5px; border-radius: 4px; cursor: help; }
+.ppsq__tag--gv { color: rgba(245,197,24,0.95); border: 1px solid rgba(245,197,24,0.45); background: rgba(245,197,24,0.08); }
+.ppsq__matchup { font-size: 11px; color: rgba(203,213,225,0.75); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ppsq__time { margin-left: auto; font-size: 10.5px; color: rgba(148,163,184,0.7); white-space: nowrap; }
+.ppsq__main { display: flex; align-items: center; gap: 10px; }
+.ppsq__main .flag { font-size: 19px; flex-shrink: 0; }
+.ppsq__name { font-size: 15.5px; font-weight: 600; color: #f8fafc; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
+.ppsq__card { flex-shrink: 0; padding: 7px 13px; border: 1px solid rgba(245,197,24,0.32); border-radius: 7px; background: rgba(245,197,24,0.04); min-width: 92px; text-align: center; }
+.ppsq__line { display: inline-flex; align-items: baseline; gap: 4px; font-family: var(--oo-mono); font-size: 19px; font-weight: 700; color: #f8fafc; font-variant-numeric: tabular-nums; }
+.ppsq__arrow { font-size: 13.5px; font-weight: 700; }
+.ppsq__arrow--over { color: #86efac; } .ppsq__arrow--under { color: #fca5a5; }
+.ppsq__stat { font-size: 9.5px; color: rgba(148,163,184,0.85); margin-top: 2px; }
+
 .disclaimer {
   max-width: 720px;
-  margin: 32px auto 0;
+  margin: 22px auto 0;
   padding: 14px 18px;
   background: rgba(13, 29, 48, 0.4);
   border: 1px solid var(--oo-border);
@@ -3001,21 +3515,22 @@ main, nav, footer { position: relative; z-index: 1; }
 .daypass-input::placeholder { color: var(--oo-muted-2); }
 .daypass-btn {
   padding: 12px 22px;
-  background: var(--oo-gold);
-  color: var(--oo-bg);
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.18), rgba(255, 209, 26, 0.08));
+  color: var(--oo-gold);
   border-radius: 999px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  border: none;
+  border: 1px solid var(--oo-gold-ring);
   white-space: nowrap;
-  transition: transform 150ms ease, background 150ms ease, box-shadow 180ms ease;
-  box-shadow: 0 4px 14px rgba(255, 209, 26, 0.25);
+  transition: transform 150ms ease, background 150ms ease, box-shadow 180ms ease, border-color 150ms ease;
+  box-shadow: var(--oo-glow-gold-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .daypass-btn:hover:not(:disabled) {
-  background: #ffdb3d;
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.27), rgba(255, 209, 26, 0.14));
+  border-color: var(--oo-gold);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 209, 26, 0.4);
+  box-shadow: var(--oo-glow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.09);
 }
 .daypass-btn:active:not(:disabled) { transform: scale(0.97); }
 .daypass-btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
@@ -3024,19 +3539,21 @@ main, nav, footer { position: relative; z-index: 1; }
   width: 100%;
   margin-top: 20px;
   padding: 14px;
-  background: var(--oo-gold);
-  color: var(--oo-bg);
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.18), rgba(255, 209, 26, 0.08));
+  color: var(--oo-gold);
+  border: 1px solid var(--oo-gold-ring);
   border-radius: var(--oo-radius-sm);
   font-size: 14px;
   font-weight: 700;
-  box-shadow: 0 8px 24px rgba(255, 209, 26, 0.32);
+  box-shadow: var(--oo-glow-gold-sm), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   text-align: center;
   text-decoration: none;
 }
 .daypass-btn--cta:hover:not(:disabled) {
-  background: #ffdb3d;
+  background: linear-gradient(135deg, rgba(255, 209, 26, 0.27), rgba(255, 209, 26, 0.14));
+  border-color: var(--oo-gold);
   transform: translateY(-1px);
-  box-shadow: 0 12px 32px rgba(255, 209, 26, 0.45);
+  box-shadow: var(--oo-glow-gold), inset 0 1px 0 rgba(255, 255, 255, 0.09);
 }
 .daypass-msg {
   font-size: 13px;
@@ -3240,8 +3757,9 @@ main, nav, footer { position: relative; z-index: 1; }
 /* ── Mobile ──────────────────────────────────────────────── */
 @media (max-width: 920px) {
   /* container padding is handled by clamp() — no override needed */
-  .nav__links { gap: 16px; font-size: 12px; }
-  .nav__links a:not(.nav__cta) { display: none; }
+  .nav__links { gap: 10px; font-size: 12px; }
+  .nav__links a:not(.nav__cta):not(.nav__app) { display: none; }
+  .nav__app { padding: 7px 12px; }
 
   .hero { padding: 56px 0 72px; }
   .hero__grid { grid-template-columns: 1fr; gap: 40px; }
@@ -3265,6 +3783,28 @@ main, nav, footer { position: relative; z-index: 1; }
   .steps::before { display: none; }
   .sports { grid-template-columns: 1fr; }
   .sport-card { padding: 28px 20px; }
+
+  /* App preview on mobile = the real PWA: bottom nav, no top tabs. */
+  .product-tabs { display: none !important; }
+  .oo-mnav {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px;
+    margin-top: 14px; padding: 10px 4px;
+    background: linear-gradient(180deg, rgba(10,20,38,0.92), rgba(8,16,30,1));
+    -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+    position: sticky; bottom: 8px; z-index: 6;
+  }
+  .home-board { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .hb-head, .hb-row { min-width: 440px; }
+  .home-metrics { grid-template-columns: 1fr; }
+  .oo-modal__card--ppm .ppm-hero { grid-template-columns: 1fr; gap: 4px; }
+  .oo-modal__card--ppm .ppm-arr { display: none; }
+
+  /* Pricing tiers stack; surface the featured (best value) plan first. */
+  .tiers { grid-template-columns: 1fr; max-width: 460px; gap: 14px; }
+  .tier { padding: 26px 22px; }
+  .tier__who { min-height: 0; }
+  .tier--featured { order: -1; }
 
   .season-card { padding: 32px 22px; }
   .season-amount { font-size: 44px; }
@@ -3331,6 +3871,8 @@ main, nav, footer { position: relative; z-index: 1; }
 }
 
 @media (max-width: 520px) {
+  /* Phone nav: brand + Open App only (Claim CTA lives in hero + pricing). */
+  .nav__cta { display: none; }
   .surfaces { grid-template-columns: 1fr; }
   .compare-style { display: none; }
   .hero__headline { font-size: 34px; }
@@ -3366,6 +3908,10 @@ main, nav, footer { position: relative; z-index: 1; }
       <a href="#pricing" class="nav__cta">
         <span class="chip__dot" style="color: var(--oo-gold);"></span>
         Claim Your Spot
+      </a>
+      <a href="https://app.overowned.io" target="_blank" rel="noopener" class="nav__app">
+        Open App
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
       </a>
     </div>
   </div>
@@ -3411,61 +3957,57 @@ main, nav, footer { position: relative; z-index: 1; }
           <!-- 3 KPI cards · matches dashboard structure -->
           <div class="preview__kpis">
             <div class="kpi">
-              <div class="kpi__label">Weather · Hamburg</div>
+              <div class="kpi__label">Weather · 's-Hertogenbosch</div>
               <div class="kpi__main">
                 <svg class="kpi__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19a4.5 4.5 0 1 0 -1.5 -8.75 6 6 0 0 0 -11.5 2.25 4 4 0 0 0 .5 7.5z"/></svg>
-                <span class="kpi__value">53<span class="kpi__value-unit">°F</span></span>
+                <span class="kpi__value">51<span class="kpi__value-unit">°F</span></span>
               </div>
-              <div class="kpi__caption">Wind 7 km/h · Humidity 76%</div>
+              <div class="kpi__caption">Wind 12 km/h · Humidity 88%</div>
             </div>
             <div class="kpi">
-              <div class="kpi__label">Court Pace · Hamburg</div>
+              <div class="kpi__label">Court Pace · Libema Open</div>
               <div class="kpi__main">
-                <span class="kpi__value kpi__value--text">26.8</span>
+                <span class="kpi__value kpi__value--text">40.5</span>
               </div>
               <div class="kpi__chips">
-                <span class="num-chip num-chip--orange" style="font-size: 9px; min-width: 0; padding: 2px 7px;">Medium Clay</span>
-                <span class="num-chip num-chip--blue" style="font-size: 9px; min-width: 0; padding: 2px 7px;">#54 of 58</span>
+                <span class="num-chip num-chip--green" style="font-size: 9px; min-width: 0; padding: 2px 7px;">Fast Grass</span>
+                <span class="num-chip num-chip--blue" style="font-size: 9px; min-width: 0; padding: 2px 7px;">#22 of 58</span>
               </div>
             </div>
             <div class="kpi">
               <div class="kpi__label">Latest Tree</div>
               <div class="kpi__main">
-                <span class="kpi__value">+1.03</span>
+                <span class="kpi__value">+0.28</span>
               </div>
-              <div class="kpi__caption">Model v3 · 31m ago</div>
+              <div class="kpi__caption">Zhang Zhizhen · grass</div>
             </div>
           </div>
 
-          <!-- mini matchups table · same chip-cell language as the dashboard -->
+          <!-- mini matchups board · real Libema slate, mirrors the Home tab -->
           <div class="preview__table">
             <div class="preview__table-head">
               <div>Player</div>
               <div>Opponent</div>
-              <div style="text-align: right;">Model</div>
               <div style="text-align: right;">Edge ↓</div>
-              <div style="text-align: center;">SQ</div>
+              <div style="text-align: center;">Kalshi</div>
             </div>
             <div class="preview__table-row">
-              <div class="preview__name"><span class="flag">🇺🇸</span>Schoenhaus</div>
-              <div style="color: var(--oo-muted);"><span class="flag">🇩🇪</span>Hanfmann</div>
-              <div class="preview__num"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">5.92</span></div>
-              <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+28.7</span></div>
-              <div style="text-align: center;"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">7.7</span></div>
+              <div class="preview__name"><span class="flag">🇫🇮</span>Virtanen</div>
+              <div style="color: var(--oo-muted);"><span class="flag">🇵🇱</span>Majchrzak</div>
+              <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+5.1</span></div>
+              <div style="text-align: center;"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">55%</span></div>
             </div>
             <div class="preview__table-row">
-              <div class="preview__name"><span class="flag">🇦🇺</span>Hijikata</div>
-              <div style="color: var(--oo-muted);"><span class="flag">🇮🇹</span>Cobolli</div>
-              <div class="preview__num"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">5.52</span></div>
-              <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+15.0</span></div>
-              <div style="text-align: center;"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">7.6</span></div>
+              <div class="preview__name"><span class="flag">🇩🇪</span>Hanfmann</div>
+              <div style="color: var(--oo-muted);"><span class="flag">🇮🇹</span>Bellucci</div>
+              <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+4.3</span></div>
+              <div style="text-align: center;"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">54%</span></div>
             </div>
             <div class="preview__table-row">
-              <div class="preview__name"><span class="flag">🇫🇷</span>Atmane</div>
-              <div style="color: var(--oo-muted);"><span class="flag">🇦🇷</span>Etcheverry</div>
-              <div class="preview__num"><span class="num-chip num-chip--ghost" style="font-size: 11px; min-width: 36px;">5.88</span></div>
-              <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+12.0</span></div>
-              <div style="text-align: center;"><span class="num-chip num-chip--blue" style="font-size: 11px; min-width: 36px;">8.1</span></div>
+              <div class="preview__name"><span class="flag">🇫🇷</span>Perricard</div>
+              <div style="color: var(--oo-muted);"><span class="flag">🇧🇪</span>Onclin</div>
+              <div class="preview__num"><span class="num-chip num-chip--green" style="font-size: 11px; min-width: 36px;">+1.0</span></div>
+              <div style="text-align: center;"><span class="num-chip num-chip--blue" style="font-size: 11px; min-width: 36px;">60%</span></div>
             </div>
           </div>
         </div>
@@ -3748,8 +4290,8 @@ main, nav, footer { position: relative; z-index: 1; }
   <div class="container">
     <div class="section__head reveal">
       <div class="section__eyebrow">Sports Coverage</div>
-      <h2 class="section__title">Tennis now. Golf and basketball next.</h2>
-      <p class="section__sub">Season 1 is built tennis-first — the sharpest market we know. Golf and basketball are on deck. Pass holders get first access.</p>
+      <h2 class="section__title">Tennis and WNBA live. Golf next.</h2>
+      <p class="section__sub">Season 1 launched tennis-first — the sharpest market we know — with WNBA now live and interactive. Golf is on deck; pass holders get first access.</p>
     </div>
     <div class="sports reveal-stagger">
       <!-- Tennis · LIVE -->
@@ -3762,6 +4304,24 @@ main, nav, footer { position: relative; z-index: 1; }
           </svg>
         </div>
         <div class="sport-card__name">Tennis</div>
+        <div class="sport-card__status sport-card__status--live">
+          <span class="chip__dot" style="color: var(--oo-gold);"></span>
+          Live · Interactive
+        </div>
+      </div>
+
+      <!-- WNBA · LIVE -->
+      <div class="sport-card sport-card--live">
+        <div class="sport-card__icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9.5"/>
+            <line x1="2.5" y1="12" x2="21.5" y2="12"/>
+            <line x1="12" y1="2.5" x2="12" y2="21.5"/>
+            <path d="M5 5 Q 12 12 5 19"/>
+            <path d="M19 5 Q 12 12 19 19"/>
+          </svg>
+        </div>
+        <div class="sport-card__name">WNBA</div>
         <div class="sport-card__status sport-card__status--live">
           <span class="chip__dot" style="color: var(--oo-gold);"></span>
           Live · Interactive
@@ -3781,22 +4341,6 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="sport-card__loader" aria-hidden="true"><span></span></div>
         <div class="sport-card__status sport-card__status--soon">Loading · Coming soon</div>
       </div>
-
-      <!-- Basketball · COMING SOON -->
-      <div class="sport-card sport-card--soon">
-        <div class="sport-card__icon">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9.5"/>
-            <line x1="2.5" y1="12" x2="21.5" y2="12"/>
-            <line x1="12" y1="2.5" x2="12" y2="21.5"/>
-            <path d="M5 5 Q 12 12 5 19"/>
-            <path d="M19 5 Q 12 12 19 19"/>
-          </svg>
-        </div>
-        <div class="sport-card__name">Basketball</div>
-        <div class="sport-card__loader" aria-hidden="true"><span></span></div>
-        <div class="sport-card__status sport-card__status--soon">Loading · Coming soon</div>
-      </div>
     </div>
   </div>
 </section>
@@ -3808,26 +4352,108 @@ main, nav, footer { position: relative; z-index: 1; }
   <div class="container">
     <div class="section__head reveal">
       <div class="section__eyebrow">Inside the Product</div>
-      <h2 class="section__title">Three views. One sharp model.<br><span class="section__title-accent">Same slate.</span></h2>
-      <p class="section__sub">Player tactics with full radar build, devigged PrizePicks projections, and the DK lineup builder — every angle of the slate in one place. Switch between them above.</p>
+      <h2 class="section__title">The whole app. One sharp model.<br><span class="section__title-accent">Same slate, every angle.</span></h2>
+      <button class="tour-launch reveal" id="tour-launch" type="button">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        Take the 60-second tour
+      </button>
     </div>
 
     <div class="product-tabs reveal" role="tablist" id="product-tabs">
-      <button class="product-tab is-active" role="tab" aria-selected="true" data-tab="profile">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
-        Player Profile
+      <button class="product-tab is-active" role="tab" aria-selected="true" data-tab="home">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-7H9v7H4.5A1.5 1.5 0 0 1 3 20z"/></svg>
+        Home
+      </button>
+      <button class="product-tab" role="tab" aria-selected="false" data-tab="profile">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><path d="M3 3v18h18"/><path d="M7 14l3.5-3.5L13 13l5-5"/><circle cx="18" cy="8" r="1.25" fill="currentColor" stroke="none"/></svg>
+        Tactics
       </button>
       <button class="product-tab" role="tab" aria-selected="false" data-tab="projections">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
-        PrizePicks
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><path d="M3 17 L9 11 L13 14 L20 6"/><path d="M14 6 H20 V12"/></svg>
+        Projections
       </button>
       <button class="product-tab" role="tab" aria-selected="false" data-tab="builder">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="3" width="8" height="8" rx="1"/><rect x="3" y="13" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><line x1="14" y1="18" x2="21" y2="18"/><line x1="14" y1="21" x2="18" y2="21"/></svg>
         Builder
+      </button>
+      <button class="product-tab" role="tab" aria-selected="false" data-tab="signals">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><path d="M2 12h3l2-6 3 12 3-9 2 5h3"/><circle cx="20" cy="12" r="1.25" fill="currentColor" stroke="none"/></svg>
+        Signals
+      </button>
+      <button class="product-tab" role="tab" aria-selected="false" data-tab="trends">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><rect x="4" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="16" y="6" width="4" height="14" rx="1"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+        Trends
       </button>
     </div>
 
-    <div class="tab-panel is-active" data-panel="profile">
+    <!-- ░░ HOME ░░ -->
+    <div class="tab-panel is-active" data-panel="home">
+      <div class="app-frame reveal">
+        <div class="home-metrics">
+          <div class="hm-card hm-card--blue">
+            <div class="hm-card__label">Weather · 's-Hertogenbosch</div>
+            <div class="hm-card__value">51°F · Clear</div>
+            <div class="hm-card__sub">Wind 12 km/h · Humidity 88%</div>
+          </div>
+          <div class="hm-card hm-card--gold">
+            <span class="hm-card__hint">Click ↗</span>
+            <div class="hm-card__label">Court Pace · Libema Open</div>
+            <div class="hm-card__value">40.5
+              <span class="hm-pill hm-pill--grass">FAST GRASS</span>
+              <span class="hm-pill hm-pill--rank">#22 of 58</span>
+            </div>
+            <div class="hm-card__sub">ATP &amp; Grand Slam tour-level events</div>
+          </div>
+          <div class="hm-card hm-card--green">
+            <div class="hm-card__label">Latest Tree</div>
+            <div class="hm-card__value">Zhang Zhizhen · +0.28</div>
+            <div class="hm-card__sub">7.43 actual vs 7.15 avg</div>
+          </div>
+        </div>
+
+        <div class="home-tabs">
+          <span class="home-tab is-active"><span class="flag">🇳🇱</span>ATP 250 · Libema Open</span>
+          <span class="home-tab"><span class="flag">🇩🇪</span>ATP 250 · BOSS Open</span>
+        </div>
+
+        <div class="home-board">
+          <div class="hb-head">
+            <span>Player</span><span>Opponent</span>
+            <span class="num hb-kalshi">Kalshi<i class="hb-live"></i></span><span class="num">Edge ↓</span>
+          </div>
+          <div class="hb-row hb-row--best">
+            <span class="hb-name"><span class="flag">🇫🇮</span>Otto Virtanen</span><span class="hb-opp">Kamil Majchrzak</span>
+            <span class="num hb-k">55%</span><span class="num hb-edge pos">+5.1</span>
+          </div>
+          <div class="hb-row">
+            <span class="hb-name"><span class="flag">🇩🇪</span>Yannick Hanfmann</span><span class="hb-opp">Mattia Bellucci</span>
+            <span class="num hb-k">54%</span><span class="num hb-edge pos">+4.3</span>
+          </div>
+          <div class="hb-row">
+            <span class="hb-name"><span class="flag">🇫🇷</span>G. Mpetshi Perricard</span><span class="hb-opp">Gauthier Onclin</span>
+            <span class="num hb-k">60%</span><span class="num hb-edge pos">+1.0</span>
+          </div>
+          <div class="hb-row">
+            <span class="hb-name"><span class="flag">🇦🇺</span>Alex de Minaur</span><span class="hb-opp">Martin Damm Jr</span>
+            <span class="num hb-k">75%</span><span class="num hb-edge pos">+0.3</span>
+          </div>
+          <div class="hb-row">
+            <span class="hb-name"><span class="flag">🇰🇿</span>Alexander Bublik</span><span class="hb-opp">Jan-Lennard Struff</span>
+            <span class="num hb-k">68%</span><span class="num hb-edge neg">−0.8</span>
+          </div>
+          <div class="hb-row">
+            <span class="hb-name"><span class="flag">🇧🇪</span>Zizou Bergs</span><span class="hb-opp">James McCabe</span>
+            <span class="num hb-k">66%</span><span class="num hb-edge neg">−2.2</span>
+          </div>
+          <div class="hb-row">
+            <span class="hb-name"><span class="flag">🇺🇸</span>Taylor Fritz</span><span class="hb-opp">Martin Landaluce</span>
+            <span class="num hb-k">68%</span><span class="num hb-edge neg">−2.5</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" data-panel="profile">
       <div class="profile-frame reveal">
 
         <!-- Header card -->
@@ -3860,34 +4486,34 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="profile-player__left">
               <span class="profile-player__label">Player</span>
               <div class="profile-player__search">
-                <span class="flag" aria-hidden="true">🇺🇸</span>
+                <span class="flag" aria-hidden="true">🇦🇺</span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-                <span class="profile-player__name">Frances Tiafoe</span>
+                <span class="profile-player__name">Alex de Minaur</span>
               </div>
             </div>
             <div class="profile-player__right">
-              <span>3 clay matches</span>
+              <span>11 clay matches</span>
               <span class="profile-player__chip"><span class="chip__dot"></span>Righty</span>
             </div>
           </div>
         </div>
 
-        <!-- 5 surface KPI cards · Tiafoe has data in all but GRASS -->
+        <!-- 5 surface KPI cards · de Minaur (real, from matches.csv) -->
         <div class="surfaces">
           <div class="surface">
             <div class="surface__label"><span class="surface__dot" style="background: var(--oo-green);"></span><span style="color: var(--oo-muted-2);">All</span></div>
-            <div class="surface__val">7.59</div>
+            <div class="surface__val">7.42</div>
             <div class="surface__caption">Avg PR · 20 matches</div>
           </div>
           <div class="surface">
             <div class="surface__label"><span class="surface__dot" style="background: var(--oo-blue);"></span><span style="color: var(--oo-muted-2);">Hard</span></div>
-            <div class="surface__val">7.66</div>
-            <div class="surface__caption">Avg PR · 15 matches</div>
+            <div class="surface__val">7.26</div>
+            <div class="surface__caption">Avg PR · 4 matches</div>
           </div>
           <div class="surface surface--active">
             <div class="surface__label"><span class="surface__dot" style="background: var(--oo-orange);"></span>Clay</div>
-            <div class="surface__val" style="color: var(--oo-orange);">7.40</div>
-            <div class="surface__caption">Avg PR · 3 matches</div>
+            <div class="surface__val" style="color: var(--oo-orange);">7.37</div>
+            <div class="surface__caption">Avg PR · 11 matches</div>
           </div>
           <div class="surface surface--na">
             <div class="surface__label"><span class="surface__dot" style="background: var(--oo-green);"></span><span style="color: var(--oo-muted-2);">Grass</span></div>
@@ -3896,8 +4522,8 @@ main, nav, footer { position: relative; z-index: 1; }
           </div>
           <div class="surface">
             <div class="surface__label"><span class="surface__dot" style="background: var(--oo-blue);"></span><span style="color: var(--oo-muted-2);">Indoor Hard</span></div>
-            <div class="surface__val">7.31</div>
-            <div class="surface__caption">Avg PR · 2 matches</div>
+            <div class="surface__val">7.64</div>
+            <div class="surface__caption">Avg PR · 5 matches</div>
           </div>
         </div>
 
@@ -3939,8 +4565,8 @@ main, nav, footer { position: relative; z-index: 1; }
                        stroke-width="1"
                        stroke-dasharray="3,3"/>
 
-              <!-- player polygon (Tiafoe — strong PR/FQ/BQ/RQ, weak OQ/SQ/ATT/STL) -->
-              <polygon points="180,61 199.8,160.2 236,180 254.2,254.2 180,299 86,274 117,180 155.3,155.3"
+              <!-- player polygon (de Minaur — real, field-relative; PR/OQ/RQ strong, SQ/ATT weak) -->
+              <polygon points="180.0,80.4 258.9,101.1 255.1,180.0 250.9,250.9 180.0,271.2 114.0,246.0 107.0,180.0 118.5,118.5"
                        fill="url(#radarFill)"
                        stroke="#ffd11a"
                        stroke-width="2"
@@ -3948,26 +4574,26 @@ main, nav, footer { position: relative; z-index: 1; }
 
               <!-- vertex dots -->
               <g fill="#ffd11a">
-                <circle cx="180" cy="61" r="3"/>
-                <circle cx="199.8" cy="160.2" r="3"/>
-                <circle cx="236" cy="180" r="3"/>
-                <circle cx="254.2" cy="254.2" r="3"/>
-                <circle cx="180" cy="299" r="3"/>
-                <circle cx="86" cy="274" r="3"/>
-                <circle cx="117" cy="180" r="3"/>
-                <circle cx="155.3" cy="155.3" r="3"/>
+                <circle cx="180.0" cy="80.4" r="3"/>
+                <circle cx="258.9" cy="101.1" r="3"/>
+                <circle cx="255.1" cy="180.0" r="3"/>
+                <circle cx="250.9" cy="250.9" r="3"/>
+                <circle cx="180.0" cy="271.2" r="3"/>
+                <circle cx="114.0" cy="246.0" r="3"/>
+                <circle cx="107.0" cy="180.0" r="3"/>
+                <circle cx="118.5" cy="118.5" r="3"/>
               </g>
 
-              <!-- axis labels (OQ + STL + ATT in muted/red for Tiafoe — those are weak dimensions) -->
+              <!-- axis labels (de Minaur — OQ is his standout strength) -->
               <g font-family="Inter, sans-serif" font-size="13" font-weight="700" text-anchor="middle">
-                <text x="180" y="25" fill="#ffd11a">PR</text>
-                <text x="305" y="63" fill="#ff5d4f">OQ</text>
-                <text x="343" y="185" fill="#ffd11a">SQ</text>
-                <text x="298" y="305" fill="#ffd11a">RQ</text>
-                <text x="180" y="350" fill="#ffd11a">FQ</text>
-                <text x="58" y="305" fill="#ffd11a">BQ</text>
+                <text x="180" y="25" fill="#f6f8fc">PR</text>
+                <text x="305" y="63" fill="#ffd11a">OQ</text>
+                <text x="343" y="185" fill="#8ea0bb">SQ</text>
+                <text x="298" y="305" fill="#f6f8fc">RQ</text>
+                <text x="180" y="350" fill="#f6f8fc">FQ</text>
+                <text x="58" y="305" fill="#f6f8fc">BQ</text>
                 <text x="20" y="185" fill="#8ea0bb">ATT</text>
-                <text x="60" y="63" fill="#8ea0bb">STL</text>
+                <text x="60" y="63" fill="#f6f8fc">STL</text>
               </g>
             </svg>
           </div>
@@ -3979,7 +4605,7 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="profile-card tactical-notes">
               <div class="tactical-notes__label">Tactical Notes</div>
               <div class="tactical-notes__callout tactical-notes__callout--red">
-                Struggles vs steal defenders — drops 1.44 PR vs P25→P75 opponents (n=3).
+                Low first-strike — wins on return + consistency, not attack (ATT 0.21, field-low).
               </div>
             </div>
 
@@ -3987,13 +4613,13 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="profile-card sw-card">
               <div>
                 <div class="sw-card__col-label sw-card__col-label--s">Strength</div>
-                <div class="sw-card__val sw-card__val--s">4.41</div>
-                <div class="sw-card__caption">Suppr. · 99th pct</div>
+                <div class="sw-card__val sw-card__val--s">7.53</div>
+                <div class="sw-card__caption">Opp Quality · field-high</div>
               </div>
               <div>
                 <div class="sw-card__col-label sw-card__col-label--w">Weakness</div>
-                <div class="sw-card__val sw-card__val--w">35%</div>
-                <div class="sw-card__caption">Steal · 54th pct</div>
+                <div class="sw-card__val sw-card__val--w">0.21</div>
+                <div class="sw-card__caption">Attack · field-low</div>
               </div>
             </div>
 
@@ -4010,7 +4636,7 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="profile-card profile-meta">
               <div>
                 <div class="profile-meta__label">Charting</div>
-                <div class="profile-meta__sub">Serve · Return · Rally — n=12 matches</div>
+                <div class="profile-meta__sub">Serve · Return · Rally — n=20 matches</div>
               </div>
               <button class="profile-meta__btn">View →</button>
             </div>
@@ -4023,21 +4649,21 @@ main, nav, footer { position: relative; z-index: 1; }
               </div>
               <div class="match-row match-row--l">
                 <span class="match-row__result">L</span>
-                <span class="match-row__date">2026-05-11</span>
-                <span class="match-row__opp"><span class="flag" aria-hidden="true">🇮🇹</span>vs Andrea Pellegrino</span>
-                <span class="match-row__score">6-7(8) 1-6</span>
+                <span class="match-row__date">2026-05-29</span>
+                <span class="match-row__opp"><span class="flag" aria-hidden="true">🇨🇿</span>vs Jakub Mensik</span>
+                <span class="match-row__score">13–18 games</span>
               </div>
               <div class="match-row match-row--w">
                 <span class="match-row__result">W</span>
-                <span class="match-row__date">2026-05-09</span>
-                <span class="match-row__opp"><span class="flag" aria-hidden="true">🇵🇪</span>vs Ignacio Buse</span>
-                <span class="match-row__score">6-7(5) 6-3 6-2</span>
+                <span class="match-row__date">2026-05-25</span>
+                <span class="match-row__opp"><span class="flag" aria-hidden="true">🇬🇧</span>vs Tristan Samuel</span>
+                <span class="match-row__score">18–10 games</span>
               </div>
-              <div class="match-row match-row--w">
-                <span class="match-row__result">W</span>
-                <span class="match-row__date">2026-05-07</span>
-                <span class="match-row__opp"><span class="flag" aria-hidden="true">🇩🇪</span>vs Diego Dedura</span>
-                <span class="match-row__score">6-4 6-4</span>
+              <div class="match-row match-row--l">
+                <span class="match-row__result">L</span>
+                <span class="match-row__date">2026-05-22</span>
+                <span class="match-row__opp"><span class="flag" aria-hidden="true">🇺🇸</span>vs Tommy Paul</span>
+                <span class="match-row__score">12–14 games</span>
               </div>
             </div>
 
@@ -4056,15 +4682,15 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="pp-stat">
               <div class="pp-stat__eyebrow">PrizePicks Tennis</div>
               <div class="pp-stat__value-row">
-                <span class="pp-stat__value">20 Fan Score lines</span>
+                <span class="pp-stat__value">23 Fan Score lines</span>
                 <span class="pp-stat__live"><span class="chip__dot"></span>LIVE</span>
               </div>
-              <div class="pp-stat__caption">20 players on the board total</div>
+              <div class="pp-stat__caption">23 players on the board total</div>
             </div>
             <div class="pp-stat">
               <div class="pp-stat__eyebrow">With Edge Calc</div>
               <div class="pp-stat__value-row">
-                <span class="pp-stat__value">20</span>
+                <span class="pp-stat__value">23</span>
               </div>
               <div class="pp-stat__caption">FS line + components both present</div>
             </div>
@@ -4092,28 +4718,26 @@ main, nav, footer { position: relative; z-index: 1; }
                 <tr>
                   <th>Player</th>
                   <th class="pp-col-hide-mobile">Opp</th>
-                  <th class="right">Fan Score</th>
-                  <th class="right pp-col-hide-mobile">Proj EV</th>
-                  <th class="right">P(Over) ↓</th>
+                  <th class="right">FS Line</th>
+                  <th class="right pp-col-hide-mobile">Proj</th>
+                  
                   <th class="right">Edge</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><td class="player-name">Anhelina Kalinina</td><td class="opp-name pp-col-hide-mobile">Simona Waltert</td><td class="right fan-score">17.0</td><td class="right proj-ev pp-col-hide-mobile">11.3</td><td class="right p-over">22%</td><td class="right edge-neg">−5.7</td></tr>
-                <tr><td class="player-name">Julia Grabher</td><td class="opp-name pp-col-hide-mobile">Jil Teichmann</td><td class="right fan-score">13.0</td><td class="right proj-ev pp-col-hide-mobile">7.7</td><td class="right p-over">22%</td><td class="right edge-neg">−5.3</td></tr>
-                <tr><td class="player-name">Panna Udvardy</td><td class="opp-name pp-col-hide-mobile">Hanne Vandewinkel</td><td class="right fan-score">14.0</td><td class="right proj-ev pp-col-hide-mobile">8.5</td><td class="right p-over">22%</td><td class="right edge-neg">−5.5</td></tr>
-                <tr><td class="player-name">Jakub Mensik</td><td class="opp-name pp-col-hide-mobile">Jan-Lennard Struff</td><td class="right fan-score">21.5</td><td class="right proj-ev pp-col-hide-mobile">16.7</td><td class="right p-over">23%</td><td class="right edge-neg">−4.8</td></tr>
-                <tr><td class="player-name">Tomas Martin Etcheverry</td><td class="opp-name pp-col-hide-mobile">Terence Atmane</td><td class="right fan-score">18.0</td><td class="right proj-ev pp-col-hide-mobile">13.1</td><td class="right p-over">24%</td><td class="right edge-neg">−4.9</td></tr>
-                <tr><td class="player-name">Katerina Siniakova</td><td class="opp-name pp-col-hide-mobile">Marie Bouzkova</td><td class="right fan-score">14.0</td><td class="right proj-ev pp-col-hide-mobile">9.8</td><td class="right p-over">29%</td><td class="right edge-neg">−4.2</td></tr>
-                <tr><td class="player-name">Anna Bondar</td><td class="opp-name pp-col-hide-mobile">Polona Hercog</td><td class="right fan-score">21.0</td><td class="right proj-ev pp-col-hide-mobile">17.1</td><td class="right p-over">29%</td><td class="right edge-neg">−3.9</td></tr>
-                <tr><td class="player-name">Moyuka Uchijima</td><td class="opp-name pp-col-hide-mobile">Alycia Parks</td><td class="right fan-score">15.5</td><td class="right proj-ev pp-col-hide-mobile">11.5</td><td class="right p-over">30%</td><td class="right edge-neg">−4.0</td></tr>
-                <tr><td class="player-name">Lorenzo Sonego</td><td class="opp-name pp-col-hide-mobile">Edas Butvilas</td><td class="right fan-score">16.5</td><td class="right proj-ev pp-col-hide-mobile">12.6</td><td class="right p-over">31%</td><td class="right edge-neg">−3.9</td></tr>
-                <tr><td class="player-name">Stefanos Tsitsipas</td><td class="opp-name pp-col-hide-mobile">Giovanni Mpetshi Perricard</td><td class="right fan-score">19.0</td><td class="right proj-ev pp-col-hide-mobile">15.5</td><td class="right p-over">31%</td><td class="right edge-neg">−3.5</td></tr>
-                <tr><td class="player-name">Daria Kasatkina</td><td class="opp-name pp-col-hide-mobile">Liudmila Samsonova</td><td class="right fan-score">12.0</td><td class="right proj-ev pp-col-hide-mobile">8.3</td><td class="right p-over">32%</td><td class="right edge-neg">−3.7</td></tr>
-                <tr><td class="player-name">Sebastian Baez</td><td class="opp-name pp-col-hide-mobile">Alex Michelsen</td><td class="right fan-score">15.5</td><td class="right proj-ev pp-col-hide-mobile">12.5</td><td class="right p-over">35%</td><td class="right edge-neg">−3.0</td></tr>
-                <tr><td class="player-name">McCartney Kessler</td><td class="opp-name pp-col-hide-mobile">Jaqueline Cristian</td><td class="right fan-score">12.0</td><td class="right proj-ev pp-col-hide-mobile">9.3</td><td class="right p-over">36%</td><td class="right edge-neg">−2.7</td></tr>
-                <tr><td class="player-name">Alexandra Eala</td><td class="opp-name pp-col-hide-mobile">Oleksandra Oliynykova</td><td class="right fan-score">11.0</td><td class="right proj-ev pp-col-hide-mobile">8.8</td><td class="right p-over">39%</td><td class="right edge-neg">−2.2</td></tr>
-                <tr><td class="player-name">Francisco Cerundolo</td><td class="opp-name pp-col-hide-mobile">Alex de Minaur</td><td class="right fan-score">15.5</td><td class="right proj-ev pp-col-hide-mobile">13.5</td><td class="right p-over">41%</td><td class="right edge-neg">−2.0</td></tr>
+                <tr><td class="player-name">Dalma Galfi</td><td class="opp-name pp-col-hide-mobile">Emerson Jones</td><td class="right fan-score">11.5</td><td class="right proj-ev pp-col-hide-mobile">17.9</td><td class="right edge-pos">+6.4</td></tr>
+                <tr><td class="player-name">Otto Virtanen</td><td class="opp-name pp-col-hide-mobile">Kamil Majchrzak</td><td class="right fan-score">15.5</td><td class="right proj-ev pp-col-hide-mobile">20.6</td><td class="right edge-pos">+5.1</td></tr>
+                <tr><td class="player-name">Yannick Hanfmann</td><td class="opp-name pp-col-hide-mobile">Mattia Bellucci</td><td class="right fan-score">15</td><td class="right proj-ev pp-col-hide-mobile">19.3</td><td class="right edge-pos">+4.3</td></tr>
+                <tr><td class="player-name">Katie Boulter</td><td class="opp-name pp-col-hide-mobile">Jaqueline Cristian</td><td class="right fan-score">14</td><td class="right proj-ev pp-col-hide-mobile">17.0</td><td class="right edge-pos">+3.0</td></tr>
+                <tr><td class="player-name">Sorana Cirstea</td><td class="opp-name pp-col-hide-mobile">Emma Raducanu</td><td class="right fan-score">14.5</td><td class="right proj-ev pp-col-hide-mobile">17.3</td><td class="right edge-warn">+2.8</td></tr>
+                <tr><td class="player-name">Kaitlin Quevedo</td><td class="opp-name pp-col-hide-mobile">Jeline Vandromme</td><td class="right fan-score">15.5</td><td class="right proj-ev pp-col-hide-mobile">18.0</td><td class="right edge-warn">+2.5</td></tr>
+                <tr><td class="player-name">Iva Jovic</td><td class="opp-name pp-col-hide-mobile">Alexandra Eala</td><td class="right fan-score">16</td><td class="right proj-ev pp-col-hide-mobile">18.5</td><td class="right edge-warn">+2.5</td></tr>
+                <tr><td class="player-name">Amanda Anisimova</td><td class="opp-name pp-col-hide-mobile">Laura Siegemund</td><td class="right fan-score">18</td><td class="right proj-ev pp-col-hide-mobile">20.3</td><td class="right edge-warn">+2.3</td></tr>
+                <tr><td class="player-name">Greet Minnen</td><td class="opp-name pp-col-hide-mobile">Robin Montgomery</td><td class="right fan-score">15</td><td class="right proj-ev pp-col-hide-mobile">16.9</td><td class="right edge-warn">+1.9</td></tr>
+                <tr><td class="player-name">Solana Sierra</td><td class="opp-name pp-col-hide-mobile">Lois Boisson</td><td class="right fan-score">16</td><td class="right proj-ev pp-col-hide-mobile">17.8</td><td class="right edge-warn">+1.8</td></tr>
+                <tr><td class="player-name">Giovanni Mpetshi Perricard</td><td class="opp-name pp-col-hide-mobile">Gauthier Onclin</td><td class="right fan-score">25</td><td class="right proj-ev pp-col-hide-mobile">26.0</td><td class="right edge-warn">+1.0</td></tr>
+                <tr><td class="player-name">Marie Bouzkova</td><td class="opp-name pp-col-hide-mobile">Donna Vekic</td><td class="right fan-score">16.5</td><td class="right proj-ev pp-col-hide-mobile">17.5</td><td class="right edge-warn">+1.0</td></tr>
+                <tr><td class="player-name">Victoria Mboko</td><td class="opp-name pp-col-hide-mobile">Karolina Pliskova</td><td class="right fan-score">17.5</td><td class="right proj-ev pp-col-hide-mobile">18.1</td><td class="right edge-neu">+0.6</td></tr>
               </tbody>
             </table>
           </div>
@@ -4124,100 +4748,115 @@ main, nav, footer { position: relative; z-index: 1; }
           <div class="pp-rail__head">
             <div class="pp-rail__title">
               <span class="chip__dot"></span>
-              PP Line Movement
-              <span class="pp-rail__watching">watching 20</span>
+              Line Movement
+              <span class="pp-rail__watching">23 watched</span>
             </div>
-            <div class="pp-rail__meta">0s ago</div>
+            <div class="pp-rail__meta">updated 2m ago</div>
           </div>
           <div class="pp-rail__list">
-            <div class="pp-mover">
-              <div class="pp-mover__badge">10.5</div>
+            <div class="pp-mover pp-mover--moved">
+              <div class="pp-mover__badge">11.5</div>
               <div class="pp-mover__body">
                 <div class="pp-mover__head">
-                  <div class="pp-mover__name">Magdalena Frech</div>
-                  <div class="pp-mover__time">tmrw 4:30a</div>
+                  <div class="pp-mover__name">Dalma Galfi</div>
+                  <div class="pp-mover__time">Wed · 9:30a</div>
                 </div>
                 <div class="pp-mover__chips">
-                  <span class="pp-mover__num">10.5</span>
+                  <span class="pp-mover__num">11.0 &rarr; 11.5</span>
                   <span class="pp-mover__tag">Fan Score</span>
-                  <span class="pp-mover__tag pp-mover__tag--watch">Watching</span>
+                  <span class="pp-mover__delta pp-mover__delta--up">&#9650; +0.5</span>
                 </div>
-                <div class="pp-mover__vs">vs Talia Gibson</div>
+                <div class="pp-mover__vs">vs Emerson Jones</div>
               </div>
             </div>
             <div class="pp-mover">
               <div class="pp-mover__badge">15.5</div>
               <div class="pp-mover__body">
                 <div class="pp-mover__head">
-                  <div class="pp-mover__name">Sebastian Baez</div>
-                  <div class="pp-mover__time">tmrw 4:30a</div>
+                  <div class="pp-mover__name">Otto Virtanen</div>
+                  <div class="pp-mover__time">Wed · 9:00a</div>
                 </div>
                 <div class="pp-mover__chips">
                   <span class="pp-mover__num">15.5</span>
                   <span class="pp-mover__tag">Fan Score</span>
-                  <span class="pp-mover__tag pp-mover__tag--watch">Watching</span>
+                  <span class="pp-mover__delta pp-mover__delta--flat">&bull; steady</span>
                 </div>
-                <div class="pp-mover__vs">vs Alex Michelsen</div>
+                <div class="pp-mover__vs">vs Kamil Majchrzak</div>
               </div>
             </div>
             <div class="pp-mover">
-              <div class="pp-mover__badge">12.0</div>
+              <div class="pp-mover__badge">15.0</div>
               <div class="pp-mover__body">
                 <div class="pp-mover__head">
-                  <div class="pp-mover__name">Daria Kasatkina</div>
-                  <div class="pp-mover__time">tmrw 4:30a</div>
+                  <div class="pp-mover__name">Yannick Hanfmann</div>
+                  <div class="pp-mover__time">Wed · 9:00a</div>
                 </div>
                 <div class="pp-mover__chips">
-                  <span class="pp-mover__num">12.0</span>
+                  <span class="pp-mover__num">15.0</span>
                   <span class="pp-mover__tag">Fan Score</span>
-                  <span class="pp-mover__tag pp-mover__tag--watch">Watching</span>
+                  <span class="pp-mover__delta pp-mover__delta--flat">&bull; steady</span>
                 </div>
-                <div class="pp-mover__vs">vs Liudmila Samsonova</div>
+                <div class="pp-mover__vs">vs Mattia Bellucci</div>
+              </div>
+            </div>
+            <div class="pp-mover">
+              <div class="pp-mover__badge">14.0</div>
+              <div class="pp-mover__body">
+                <div class="pp-mover__head">
+                  <div class="pp-mover__name">Katie Boulter</div>
+                  <div class="pp-mover__time">Wed · 9:00a</div>
+                </div>
+                <div class="pp-mover__chips">
+                  <span class="pp-mover__num">14.0</span>
+                  <span class="pp-mover__tag">Fan Score</span>
+                  <span class="pp-mover__delta pp-mover__delta--flat">&bull; steady</span>
+                </div>
+                <div class="pp-mover__vs">vs Jaqueline Cristian</div>
+              </div>
+            </div>
+            <div class="pp-mover">
+              <div class="pp-mover__badge">18.0</div>
+              <div class="pp-mover__body">
+                <div class="pp-mover__head">
+                  <div class="pp-mover__name">Amanda Anisimova</div>
+                  <div class="pp-mover__time">Wed · 9:00a</div>
+                </div>
+                <div class="pp-mover__chips">
+                  <span class="pp-mover__num">18.0</span>
+                  <span class="pp-mover__tag">Fan Score</span>
+                  <span class="pp-mover__delta pp-mover__delta--flat">&bull; steady</span>
+                </div>
+                <div class="pp-mover__vs">vs Laura Siegemund</div>
               </div>
             </div>
             <div class="pp-mover">
               <div class="pp-mover__badge">16.0</div>
               <div class="pp-mover__body">
                 <div class="pp-mover__head">
-                  <div class="pp-mover__name">Thiago Agustin Tira…</div>
-                  <div class="pp-mover__time">tmrw 5:40a</div>
+                  <div class="pp-mover__name">Iva Jovic</div>
+                  <div class="pp-mover__time">Wed · 9:00a</div>
                 </div>
                 <div class="pp-mover__chips">
                   <span class="pp-mover__num">16.0</span>
                   <span class="pp-mover__tag">Fan Score</span>
-                  <span class="pp-mover__tag pp-mover__tag--watch">Watching</span>
+                  <span class="pp-mover__delta pp-mover__delta--flat">&bull; steady</span>
                 </div>
-                <div class="pp-mover__vs">vs Arthur Rinderknech</div>
+                <div class="pp-mover__vs">vs Alexandra Eala</div>
               </div>
             </div>
             <div class="pp-mover">
-              <div class="pp-mover__badge">12.0</div>
+              <div class="pp-mover__badge">25.0</div>
               <div class="pp-mover__body">
                 <div class="pp-mover__head">
-                  <div class="pp-mover__name">McCartney Kessler</div>
-                  <div class="pp-mover__time">tmrw 5:40a</div>
+                  <div class="pp-mover__name">G. Mpetshi Perricard</div>
+                  <div class="pp-mover__time">Wed · 9:00a</div>
                 </div>
                 <div class="pp-mover__chips">
-                  <span class="pp-mover__num">12.0</span>
+                  <span class="pp-mover__num">25.0</span>
                   <span class="pp-mover__tag">Fan Score</span>
-                  <span class="pp-mover__tag pp-mover__tag--watch">Watching</span>
+                  <span class="pp-mover__delta pp-mover__delta--flat">&bull; steady</span>
                 </div>
-                <div class="pp-mover__vs">vs Jaqueline Cristian</div>
-              </div>
-            </div>
-            <div class="pp-mover">
-              <div class="pp-mover__badge">13.0</div>
-              <div class="pp-mover__body">
-                <div class="pp-mover__head">
-                  <div class="pp-mover__name">Julia Grabher</div>
-                  <div class="pp-mover__time">tmrw 6:00a</div>
-                </div>
-                <div class="pp-mover__chips">
-                  <span class="pp-mover__num">13.0</span>
-                  <span class="pp-mover__tag">Fan Score</span>
-                  <span class="pp-mover__tag pp-mover__tag--watch">Watching</span>
-                </div>
-                <div class="pp-mover__vs">vs Jil Teichmann</div>
+                <div class="pp-mover__vs">vs Gauthier Onclin</div>
               </div>
             </div>
           </div>
@@ -4248,19 +4887,19 @@ main, nav, footer { position: relative; z-index: 1; }
             </button>
             <span class="builder-date__center">
               <svg class="builder-date__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
-              May 9, 2026
+              Jun 10, 2026
             </span>
             <button class="builder-date__btn" aria-label="Next day">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
           </div>
           <span class="builder-slate">
-            US Open (Sep 1) · 0 players · 8:00 PM
+            Classic · 32 players · 9:00 AM
             <svg class="builder-slate__chevron" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
           </span>
-          <span class="builder-csv">
+          <span class="builder-csv builder-csv--live">
             <span class="chip__dot"></span>
-            CSV
+            LIVE
           </span>
         </div>
 
@@ -4295,19 +4934,24 @@ main, nav, footer { position: relative; z-index: 1; }
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--oo-muted-2);"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
             <span>Search pool by player or opponent…</span>
           </div>
-          <span class="builder-search__count">30 players</span>
+          <span class="builder-search__count">32 players</span>
         </div>
 
-        <!-- Projections header w/ Build button -->
+        <!-- Projections header w/ DK CSV buttons + Build button -->
         <div class="builder-projections-head">
           <div>
             <span class="builder-projections-head__label">Projections</span>
-            <span class="builder-projections-head__count">30 of 30 players</span>
+            <span class="builder-projections-head__count">32 of 32 players</span>
           </div>
-          <button class="build-btn">
-            <span class="build-btn__bolt">⚡</span>
-            Build 20 Lineups
-          </button>
+          <div class="builder-actions">
+            <a id="dk-getfrom" class="dk-pbtn dk-pbtn--ghost" href="#" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Get from DK</a>
+            <a class="dk-pbtn dk-pbtn--ghost" href="#" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload Entries</a>
+            <a class="dk-pbtn dk-pbtn--green" href="#" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>DK Upload CSV</a>
+            <button class="build-btn">
+              <span class="build-btn__bolt">⚡</span>
+              Build 20 Lineups
+            </button>
+          </div>
         </div>
 
         <!-- Player pool table -->
@@ -4324,206 +4968,557 @@ main, nav, footer { position: relative; z-index: 1; }
                 <th>Val</th>
                 <th>SW</th>
                 <th>Aces</th>
+                <th>DFs</th>
                 <th>Brks</th>
                 <th>Min%</th>
                 <th>Max%</th>
                 <th>Exp%</th>
+                <th>Lev%</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td class="left rk">1</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇮🇹</span><strong>Jannik Sinner</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Sebastian Ofner</td>
-                <td>$11,300</td>
-                <td><span class="own-link">26.6</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>61.2</span></td>
-                <td>5.42</td>
-                <td>1.60</td>
-                <td>4.8</td>
-                <td>3.16</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇷🇺</span><strong>Anastasia Potapova</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Suzan Lamens</td>
+                <td>$10,200</td>
+                <td><span class="own-link">32.0</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>65.8</span></td>
+                <td>6.45</td>
+                <td>1.6</td>
+                <td>3.5</td>
+                <td>4.5</td>
+                <td>5.0</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">2</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇧🇾</span><strong>Mirra Andreeva</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Viktorija Golubic</td>
-                <td>$11,000</td>
-                <td><span class="own-link">40.0</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>79.0</span></td>
-                <td>7.18</td>
-                <td><span class="num-chip num-chip--gold">1.92</span></td>
-                <td>3.1</td>
-                <td>2.86</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇨🇳</span><strong>Yibing Wu</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Thijs Boogaard</td>
+                <td>$10,300</td>
+                <td><span class="own-link">32.5</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>65.2</span></td>
+                <td>6.33</td>
+                <td>1.6</td>
+                <td>6.0</td>
+                <td>3.0</td>
+                <td>3.4</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">3</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇫🇷</span><strong>Arthur Fils</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Andrea Pellegrino</td>
-                <td>$10,600</td>
-                <td><span class="own-link">41.4</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>48.8</span></td>
-                <td>4.61</td>
-                <td>1.17</td>
-                <td>2.2</td>
-                <td>1.90</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇦🇺</span><strong>Alex de Minaur</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Martin Damm Jr</td>
+                <td>$9,800</td>
+                <td><span class="own-link">23.3</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>62.8</span></td>
+                <td>6.40</td>
+                <td>1.6</td>
+                <td>5.5</td>
+                <td>2.0</td>
+                <td>2.8</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">4</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇧🇾</span><strong>Aryna Sabalenka</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Sorana Cirstea</td>
-                <td>$10,000</td>
-                <td><span class="own-link">16.8</span></td>
-                <td><span class="num-chip num-chip--blue"><span class="proj-dot proj-dot--b" style="margin-right: 4px;"></span>67.6</span></td>
-                <td>6.76</td>
-                <td><span class="num-chip num-chip--blue">1.76</span></td>
-                <td>4.3</td>
-                <td>3.20</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇺🇸</span><strong>Amanda Anisimova</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Laura Siegemund</td>
+                <td>$9,100</td>
+                <td><span class="own-link">27.6</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>60.8</span></td>
+                <td>6.68</td>
+                <td>1.4</td>
+                <td>4.5</td>
+                <td>4.5</td>
+                <td>4.0</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">5</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇺🇸</span><strong>Ben Shelton</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Nikoloz Basilashvili</td>
-                <td>$9,600</td>
-                <td><span class="own-link">32.5</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>51.9</span></td>
-                <td>5.41</td>
-                <td>1.55</td>
-                <td><span class="num-chip num-chip--blue">8.8</span></td>
-                <td>1.32</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇺🇸</span><strong>Taylor Fritz</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Martin Landaluce</td>
+                <td>$9,400</td>
+                <td><span class="own-link">22.8</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>60.8</span></td>
+                <td>6.46</td>
+                <td>1.5</td>
+                <td>11.5</td>
+                <td>2.0</td>
+                <td>1.5</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">6</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇮🇹</span><strong>Flavio Cobolli</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Terence Atmane</td>
-                <td>$9,300</td>
-                <td><span class="own-link">15.2</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>45.5</span></td>
-                <td>4.89</td>
-                <td>1.11</td>
-                <td>3.0</td>
-                <td>1.95</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇺🇦</span><strong>Daria Snigur</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Panna Udvardy</td>
+                <td>$9,500</td>
+                <td><span class="own-link">27.2</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>60.7</span></td>
+                <td>6.39</td>
+                <td>1.4</td>
+                <td>2.5</td>
+                <td>4.0</td>
+                <td>4.5</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">7</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇨🇭</span><strong>Belinda Bencic</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Anna Kalinskaya</td>
-                <td>$9,200</td>
-                <td><span class="own-link">17.8</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>55.7</span></td>
-                <td>6.05</td>
-                <td>1.61</td>
-                <td>3.5</td>
-                <td>3.37</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇫🇷</span><strong>G. Mpetshi Perricard</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Gauthier Onclin</td>
+                <td>$8,500</td>
+                <td><span class="own-link">28.6</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>58.9</span></td>
+                <td>6.93</td>
+                <td>1.4</td>
+                <td>22.8</td>
+                <td>4.0</td>
+                <td>2.8</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">8</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇨🇿</span><strong>Jakub Mensik</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Alexei Popyrin</td>
-                <td>$9,000</td>
-                <td><span class="own-link">27.2</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>55.5</span></td>
-                <td>6.16</td>
-                <td>1.57</td>
-                <td><span class="num-chip num-chip--blue">9.3</span></td>
-                <td>1.50</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇰🇿</span><strong>Alexander Bublik</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Jan-Lennard Struff</td>
+                <td>$9,300</td>
+                <td><span class="own-link">22.2</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>58.2</span></td>
+                <td>6.26</td>
+                <td>1.5</td>
+                <td>15.8</td>
+                <td>5.0</td>
+                <td>1.5</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">9</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇨🇳</span><strong>Qinwen Zheng</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Jelena Ostapenko</td>
-                <td>$8,600</td>
-                <td><span class="own-link">19.7</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>52.3</span></td>
-                <td>6.08</td>
-                <td>1.48</td>
-                <td>6.3</td>
-                <td>3.42</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇧🇪</span><strong>Zizou Bergs</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">James McCabe</td>
+                <td>$9,000</td>
+                <td><span class="own-link">21.5</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>56.3</span></td>
+                <td>6.26</td>
+                <td>1.4</td>
+                <td>7.0</td>
+                <td>4.5</td>
+                <td>2.4</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">10</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇺🇸</span><strong>Brandon Nakashima</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Roberto Bautista Agut</td>
-                <td>$8,400</td>
-                <td><span class="own-link">31.0</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>53.2</span></td>
-                <td>6.33</td>
-                <td>1.16</td>
-                <td>4.6</td>
-                <td>2.28</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇺🇸</span><strong>Iva Jovic</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Alexandra Eala</td>
+                <td>$8,600</td>
+                <td><span class="own-link">25.5</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>56.2</span></td>
+                <td>6.54</td>
+                <td>1.3</td>
+                <td>4.5</td>
+                <td>3.0</td>
+                <td>4.0</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">11</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇧🇷</span><strong>Joao Fonseca</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Hamad Medjedovic</td>
-                <td>$8,300</td>
-                <td><span class="own-link">34.9</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>55.6</span></td>
-                <td>6.70</td>
-                <td>1.53</td>
-                <td>3.4</td>
-                <td>2.59</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇫🇷</span><strong>Ugo Humbert</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Benjamin Bonzi</td>
+                <td>$8,900</td>
+                <td><span class="own-link">21.1</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>56.1</span></td>
+                <td>6.31</td>
+                <td>1.4</td>
+                <td>6.5</td>
+                <td>3.5</td>
+                <td>2.2</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">12</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇵🇪</span><strong>Ignacio Buse</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Frances Tiafoe</td>
-                <td>$8,100</td>
-                <td><span class="own-link">35.9</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>50.9</span></td>
-                <td>6.29</td>
-                <td>1.10</td>
-                <td>2.6</td>
-                <td>3.34</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇨🇦</span><strong>Victoria Mboko</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Karolina Pliskova</td>
+                <td>$8,700</td>
+                <td><span class="own-link">24.1</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>54.3</span></td>
+                <td>6.24</td>
+                <td>1.3</td>
+                <td>6.0</td>
+                <td>5.5</td>
+                <td>3.5</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
               <tr>
                 <td class="left rk">13</td>
-                <td class="left"><div class="player-cell"><span class="flag">🇪🇸</span><strong>Alejandro Davidovich Fokina</strong></div></td>
-                <td class="left" style="color: var(--oo-muted);">Cristian Garin</td>
-                <td>$7,900</td>
-                <td><span class="own-link">32.1</span></td>
-                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>51.6</span></td>
-                <td>6.53</td>
-                <td>1.41</td>
-                <td>3.8</td>
-                <td><span class="num-chip num-chip--gold">3.51</span></td>
+                <td class="left"><div class="player-cell"><span class="flag">🇨🇿</span><strong>Marie Bouzkova</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Donna Vekic</td>
+                <td>$8,400</td>
+                <td><span class="own-link">23.9</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>54.2</span></td>
+                <td>6.45</td>
+                <td>1.3</td>
+                <td>4.0</td>
+                <td>3.0</td>
+                <td>3.5</td>
                 <td>0</td>
                 <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">14</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇧🇪</span><strong>Greet Minnen</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Robin Montgomery</td>
+                <td>$8,200</td>
+                <td><span class="own-link">22.4</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>52.4</span></td>
+                <td>6.39</td>
+                <td>1.3</td>
+                <td>4.5</td>
+                <td>3.0</td>
+                <td>3.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">15</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇫🇮</span><strong>Otto Virtanen</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Kamil Majchrzak</td>
+                <td>$8,100</td>
+                <td><span class="own-link">20.7</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>51.9</span></td>
+                <td>6.41</td>
+                <td>1.2</td>
+                <td>14.8</td>
+                <td>3.5</td>
+                <td>1.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">16</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇩🇪</span><strong>Yannick Hanfmann</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Mattia Bellucci</td>
+                <td>$8,000</td>
+                <td><span class="own-link">20.8</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>51.6</span></td>
+                <td>6.45</td>
+                <td>1.2</td>
+                <td>11.0</td>
+                <td>2.0</td>
+                <td>1.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">17</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇵🇱</span><strong>Kamil Majchrzak</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Otto Virtanen</td>
+                <td>$7,400</td>
+                <td><span class="own-link">19.0</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>43.1</span></td>
+                <td>5.83</td>
+                <td>1.1</td>
+                <td>7.0</td>
+                <td>2.0</td>
+                <td>1.7</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">18</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇮🇹</span><strong>Mattia Bellucci</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Yannick Hanfmann</td>
+                <td>$7,500</td>
+                <td><span class="own-link">19.1</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>43.0</span></td>
+                <td>5.73</td>
+                <td>1.1</td>
+                <td>12.0</td>
+                <td>4.0</td>
+                <td>1.0</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">19</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇧🇪</span><strong>Gauthier Onclin</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">G. Mpetshi Perricard</td>
+                <td>$6,900</td>
+                <td><span class="own-link">16.2</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>37.6</span></td>
+                <td>5.45</td>
+                <td>1.0</td>
+                <td>6.0</td>
+                <td>4.5</td>
+                <td>2.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">20</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇫🇷</span><strong>Benjamin Bonzi</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Ugo Humbert</td>
+                <td>$6,500</td>
+                <td><span class="own-link">15.7</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>36.8</span></td>
+                <td>5.66</td>
+                <td>0.9</td>
+                <td>5.5</td>
+                <td>1.5</td>
+                <td>2.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">21</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇺🇸</span><strong>Robin Montgomery</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Greet Minnen</td>
+                <td>$7,200</td>
+                <td><span class="own-link">16.5</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>36.6</span></td>
+                <td>5.08</td>
+                <td>1.1</td>
+                <td>7.0</td>
+                <td>7.0</td>
+                <td>3.0</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">22</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇵🇭</span><strong>Alexandra Eala</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Iva Jovic</td>
+                <td>$6,800</td>
+                <td><span class="own-link">14.4</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>35.6</span></td>
+                <td>5.23</td>
+                <td>1.0</td>
+                <td>3.0</td>
+                <td>3.0</td>
+                <td>3.0</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">23</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇭🇷</span><strong>Donna Vekic</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Marie Bouzkova</td>
+                <td>$7,000</td>
+                <td><span class="own-link">15.0</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>35.4</span></td>
+                <td>5.06</td>
+                <td>1.0</td>
+                <td>3.5</td>
+                <td>4.5</td>
+                <td>2.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">24</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇦🇺</span><strong>James McCabe</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Zizou Bergs</td>
+                <td>$6,400</td>
+                <td><span class="own-link">13.9</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>34.4</span></td>
+                <td>5.37</td>
+                <td>0.9</td>
+                <td>7.5</td>
+                <td>3.0</td>
+                <td>1.3</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">25</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇨🇿</span><strong>Karolina Pliskova</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Victoria Mboko</td>
+                <td>$6,700</td>
+                <td><span class="own-link">12.5</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>32.8</span></td>
+                <td>4.89</td>
+                <td>1.0</td>
+                <td>6.5</td>
+                <td>6.5</td>
+                <td>2.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">26</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇩🇪</span><strong>Jan-Lennard Struff</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Alexander Bublik</td>
+                <td>$6,100</td>
+                <td><span class="own-link">12.3</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>32.3</span></td>
+                <td>5.30</td>
+                <td>0.9</td>
+                <td>12.0</td>
+                <td>6.5</td>
+                <td>0.3</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">27</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇺🇸</span><strong>Martin Damm Jr</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Alex de Minaur</td>
+                <td>$5,500</td>
+                <td><span class="own-link">11.7</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>30.2</span></td>
+                <td>5.49</td>
+                <td>0.8</td>
+                <td>4.5</td>
+                <td>3.0</td>
+                <td>2.8</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">28</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇪🇸</span><strong>Martin Landaluce</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Taylor Fritz</td>
+                <td>$5,900</td>
+                <td><span class="own-link">9.4</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>28.9</span></td>
+                <td>4.90</td>
+                <td>0.8</td>
+                <td>6.0</td>
+                <td>6.5</td>
+                <td>0.5</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">29</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇩🇪</span><strong>Laura Siegemund</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Amanda Anisimova</td>
+                <td>$6,300</td>
+                <td><span class="own-link">8.5</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>28.1</span></td>
+                <td>4.45</td>
+                <td>0.9</td>
+                <td>1.5</td>
+                <td>4.0</td>
+                <td>3.0</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">30</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇭🇺</span><strong>Panna Udvardy</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Daria Snigur</td>
+                <td>$5,800</td>
+                <td><span class="own-link">7.5</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>27.9</span></td>
+                <td>4.82</td>
+                <td>0.9</td>
+                <td>6.5</td>
+                <td>5.5</td>
+                <td>2.0</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">31</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇳🇱</span><strong>Thijs Boogaard</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Yibing Wu</td>
+                <td>$5,000</td>
+                <td><span class="own-link">9.2</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>26.7</span></td>
+                <td>5.35</td>
+                <td>0.8</td>
+                <td>4.0</td>
+                <td>3.5</td>
+                <td>2.8</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+                <td style="color: var(--oo-muted-2);">—</td>
+              </tr>
+              <tr>
+                <td class="left rk">32</td>
+                <td class="left"><div class="player-cell"><span class="flag">🇳🇱</span><strong>Suzan Lamens</strong></div></td>
+                <td class="left" style="color: var(--oo-muted);">Anastasia Potapova</td>
+                <td>$5,100</td>
+                <td><span class="own-link">3.2</span></td>
+                <td><span class="proj-cell"><span class="proj-dot proj-dot--g"></span>21.7</span></td>
+                <td>4.25</td>
+                <td>0.8</td>
+                <td>1.5</td>
+                <td>5.0</td>
+                <td>1.9</td>
+                <td>0</td>
+                <td>100</td>
+                <td style="color: var(--oo-muted-2);">—</td>
                 <td style="color: var(--oo-muted-2);">—</td>
               </tr>
             </tbody>
@@ -4532,8 +5527,339 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
     </div><!-- /tab-panel builder -->
 
+    <!-- ░░ SIGNALS ░░ -->
+    <div class="tab-panel" data-panel="signals">
+      <div class="app-frame reveal">
+        <div class="ppf-head">
+          <span class="ppf-dot"></span>
+          <div class="ppf-head__txt"><div class="ppf-title">Signals</div><div class="ppf-sub">live · 16 matches</div></div>
+          <span class="ppf-ago">8s ago</span>
+        </div>
+        <div class="ppf-chips">
+          <span class="ppf-chip is-active">All <i>5</i></span>
+          <span class="ppf-chip">OverOwned <i>0</i></span>
+          <span class="ppf-chip ppf-chip--gv">Good Value <i>5</i></span>
+          <span class="ppf-chip">Stay Away <i>0</i></span>
+          <span class="ppf-chip">Bearish <i>0</i></span>
+          <span class="ppf-chip">Bullish <i>0</i></span>
+        </div>
+        <div class="ppf-stream">
+          <article class="ppsq ppsq--pp">
+            <div class="ppsq__top">
+              <span class="ppsq__chip">TENNIS</span><span class="ppsq__chip">PP</span>
+              <span class="ppsq__tag ppsq__tag--gv" title="Good Value — our projection vs the PP line ≥ 3 fantasy points. Play the model direction.">GV</span>
+              <span class="ppsq__matchup">D. Galfi vs E. Jones</span><span class="ppsq__time">Wed • 9:00am</span>
+            </div>
+            <div class="ppsq__main">
+              <span class="flag">🇭🇺</span>
+              <span class="ppsq__name">Dalma Galfi</span>
+              <div class="ppsq__card">
+                <div class="ppsq__line"><span class="ppsq__arrow ppsq__arrow--over">↑</span>11.5</div>
+                <div class="ppsq__stat">Fantasy Score</div>
+              </div>
+            </div>
+          </article>
+          <article class="ppsq ppsq--pp">
+            <div class="ppsq__top">
+              <span class="ppsq__chip">TENNIS</span><span class="ppsq__chip">PP</span>
+              <span class="ppsq__tag ppsq__tag--gv" title="Good Value — our projection vs the PP line ≥ 3 fantasy points. Play the model direction.">GV</span>
+              <span class="ppsq__matchup">O. Virtanen vs K. Majchrzak</span><span class="ppsq__time">Wed • 9:00am</span>
+            </div>
+            <div class="ppsq__main">
+              <span class="flag">🇫🇮</span>
+              <span class="ppsq__name">Otto Virtanen</span>
+              <div class="ppsq__card">
+                <div class="ppsq__line"><span class="ppsq__arrow ppsq__arrow--over">↑</span>15.5</div>
+                <div class="ppsq__stat">Fantasy Score</div>
+              </div>
+            </div>
+          </article>
+          <article class="ppsq ppsq--pp">
+            <div class="ppsq__top">
+              <span class="ppsq__chip">TENNIS</span><span class="ppsq__chip">PP</span>
+              <span class="ppsq__tag ppsq__tag--gv" title="Good Value — our projection vs the PP line ≥ 3 fantasy points. Play the model direction.">GV</span>
+              <span class="ppsq__matchup">Y. Hanfmann vs M. Bellucci</span><span class="ppsq__time">Wed • 11:00am</span>
+            </div>
+            <div class="ppsq__main">
+              <span class="flag">🇩🇪</span>
+              <span class="ppsq__name">Yannick Hanfmann</span>
+              <div class="ppsq__card">
+                <div class="ppsq__line"><span class="ppsq__arrow ppsq__arrow--over">↑</span>15</div>
+                <div class="ppsq__stat">Fantasy Score</div>
+              </div>
+            </div>
+          </article>
+          <article class="ppsq ppsq--pp">
+            <div class="ppsq__top">
+              <span class="ppsq__chip">TENNIS</span><span class="ppsq__chip">PP</span>
+              <span class="ppsq__tag ppsq__tag--gv" title="Good Value — our projection vs the PP line ≥ 3 fantasy points. Play the model direction.">GV</span>
+              <span class="ppsq__matchup">K. Boulter vs J. Cristian</span><span class="ppsq__time">Wed • 1:00pm</span>
+            </div>
+            <div class="ppsq__main">
+              <span class="flag">🇬🇧</span>
+              <span class="ppsq__name">Katie Boulter</span>
+              <div class="ppsq__card">
+                <div class="ppsq__line"><span class="ppsq__arrow ppsq__arrow--over">↑</span>14</div>
+                <div class="ppsq__stat">Fantasy Score</div>
+              </div>
+            </div>
+          </article>
+          <article class="ppsq ppsq--pp">
+            <div class="ppsq__top">
+              <span class="ppsq__chip">TENNIS</span><span class="ppsq__chip">PP</span>
+              <span class="ppsq__tag ppsq__tag--gv" title="Good Value — our projection vs the PP line ≥ 3 fantasy points. Play the model direction.">GV</span>
+              <span class="ppsq__matchup">A. Tomljanovic vs J. Bouzas</span><span class="ppsq__time">Wed • 11:30am</span>
+            </div>
+            <div class="ppsq__main">
+              <span class="flag">🇦🇺</span>
+              <span class="ppsq__name">Ajla Tomljanovic</span>
+              <div class="ppsq__card">
+                <div class="ppsq__line"><span class="ppsq__arrow ppsq__arrow--under">↓</span>10.5</div>
+                <div class="ppsq__stat">Fantasy Score</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      
+      </div>
+    </div>
+
+    <!-- ░░ TRENDS ░░ -->
+    <div class="tab-panel" data-panel="trends">
+      <div class="app-frame reveal">
+        <div class="tr-grid">
+          <div class="tr-donut">
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#FCA5A5" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="47.4" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#FCA5A5">78%</text></svg>
+            <div class="tr-donut__label">Bearish TRAP</div>
+            <div class="tr-donut__sub">beat prior + Δvalue ≥ 0.3 → fade</div>
+            <div class="tr-donut__n">14 / 18 graded</div>
+          </div>
+          <div class="tr-donut">
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#6EE7B7" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="47.4" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#6EE7B7">78%</text></svg>
+            <div class="tr-donut__label">Bullish LEVERAGE</div>
+            <div class="tr-donut__sub">missed prior + Δvalue ≤ −0.3 → play</div>
+            <div class="tr-donut__n">7 / 9 graded</div>
+          </div>
+          <div class="tr-donut">
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#FCA5A5" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#FCA5A5">100%</text></svg>
+            <div class="tr-donut__label">OverOwned Signal</div>
+            <div class="tr-donut__sub">fade chalk → not in optimal 6 (baseline 62.5%)</div>
+            <div class="tr-donut__n">2 / 2 graded</div>
+          </div>
+          <div class="tr-donut">
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#FFD84A" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="40.6" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#FFD84A">81%</text></svg>
+            <div class="tr-donut__label">GOOD VALUE</div>
+            <div class="tr-donut__sub">play model direction · ≥3pt edge</div>
+            <div class="tr-donut__n">17 / 21 graded</div>
+          </div>
+          <div class="tr-donut">
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#93C5FD" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#93C5FD">100%</text></svg>
+            <div class="tr-donut__label">STAY AWAY</div>
+            <div class="tr-donut__sub">both sides Bearish → bet match OVER games</div>
+            <div class="tr-donut__n">6 / 6 graded</div>
+          </div>
+        </div>
+        <div class="tr-feed oo-pc-only">
+          <div class="tr-feed__head"><span class="tr-feed__title"><span class="tr-feed__dot"></span>Live grades</span><span class="tr-feed__count">55 graded · refresh hourly</span></div>
+          <div class="tr-feed__rows">
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-09</span>
+            <div class="trf-pl"><div class="trf-name">Jenson Brooksby <em>vs Zhizhen Zhang</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">4.5</div><div class="trf-base">vs 13</div></div>
+            <span class="trf-delta trf-delta--neg">−8.5</span>
+            <span class="trf-hit trf-hit--miss">MISS</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-09</span>
+            <div class="trf-pl"><div class="trf-name">Dayana Yastremska <em>vs Sara Bejlek</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">23.5</div><div class="trf-base">vs 15.5</div></div>
+            <span class="trf-delta trf-delta--pos">+8</span>
+            <span class="trf-hit trf-hit--hit">HIT</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FCA5A5;background:rgba(252,165,165,0.05)">
+            <span class="trf-date">06-09</span>
+            <div class="trf-pl"><div class="trf-name">Rinky Hijikata <em>vs Tom Gentzsch</em></div><div class="trf-verd" style="color:#FCA5A5">Bearish TRAP</div></div>
+            <div class="trf-score"><div class="trf-act">58.25</div><div class="trf-base">vs 65.27</div></div>
+            <span class="trf-delta trf-delta--neg">−7.02</span>
+            <span class="trf-hit trf-hit--hit">HIT</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-09</span>
+            <div class="trf-pl"><div class="trf-name">Jaume Munar <em>vs Martin Damm Jr</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">3</div><div class="trf-base">vs 12</div></div>
+            <span class="trf-delta trf-delta--neg">−9</span>
+            <span class="trf-hit trf-hit--hit">HIT</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-09</span>
+            <div class="trf-pl"><div class="trf-name">Corentin Moutet <em>vs Nick Kyrgios</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">0.5</div><div class="trf-base">vs 16</div></div>
+            <span class="trf-delta trf-delta--neg">−15.5</span>
+            <span class="trf-hit trf-hit--miss">MISS</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-08</span>
+            <div class="trf-pl"><div class="trf-name">McCartney Kessler <em>vs Karolina Pliskova</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">2</div><div class="trf-base">vs 11</div></div>
+            <span class="trf-delta trf-delta--neg">−9</span>
+            <span class="trf-hit trf-hit--hit">HIT</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-08</span>
+            <div class="trf-pl"><div class="trf-name">Paula Badosa <em>vs Daria Snigur</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">-2.5</div><div class="trf-base">vs 14</div></div>
+            <span class="trf-delta trf-delta--neg">−16.5</span>
+            <span class="trf-hit trf-hit--hit">HIT</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-08</span>
+            <div class="trf-pl"><div class="trf-name">Denis Shapovalov <em>vs Marin Cilic</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">4.5</div><div class="trf-base">vs 11</div></div>
+            <span class="trf-delta trf-delta--neg">−6.5</span>
+            <span class="trf-hit trf-hit--hit">HIT</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#6EE7B7;background:rgba(110,231,183,0.05)">
+            <span class="trf-date">06-08</span>
+            <div class="trf-pl"><div class="trf-name">Francesca Jones <em>vs Laura Siegemund</em></div><div class="trf-verd" style="color:#6EE7B7">Bullish LEVERAGE</div></div>
+            <div class="trf-score"><div class="trf-act">8.5</div><div class="trf-base">vs 27.25</div></div>
+            <span class="trf-delta trf-delta--neg">−18.75</span>
+            <span class="trf-hit trf-hit--miss">MISS</span>
+          </div>
+          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
+            <span class="trf-date">06-08</span>
+            <div class="trf-pl"><div class="trf-name">Katie Boulter <em>vs Leylah Fernandez</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
+            <div class="trf-score"><div class="trf-act">10</div><div class="trf-base">vs 10.5</div></div>
+            <span class="trf-delta trf-delta--neg">−0.5</span>
+            <span class="trf-hit trf-hit--miss">MISS</span>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile-only: the real app's bottom nav (add-to-home-screen PWA look) -->
+    <nav class="oo-mnav" aria-label="App preview navigation">
+      <button class="oo-mnav-btn is-active" data-mnav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-7H9v7H4.5A1.5 1.5 0 0 1 3 20z"/></svg><span class="oo-mnav-lbl">Home</span></button>
+      <button class="oo-mnav-btn" data-mnav="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3.5-3.5L13 13l5-5"/><circle cx="18" cy="8" r="1.25" fill="currentColor" stroke="none"/></svg><span class="oo-mnav-lbl">Tactics</span></button>
+      <button class="oo-mnav-btn" data-mnav="projections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L9 11 L13 14 L20 6"/><path d="M14 6 H20 V12"/></svg><span class="oo-mnav-lbl">Props</span></button>
+      <button class="oo-mnav-btn" data-mnav="builder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><line x1="14" y1="18" x2="21" y2="18"/></svg><span class="oo-mnav-lbl">Builder</span></button>
+      <button class="oo-mnav-btn" data-mnav="signals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2-6 3 12 3-9 2 5h3"/><circle cx="20" cy="12" r="1.25" fill="currentColor" stroke="none"/></svg><span class="oo-mnav-lbl">Signals</span></button>
+      <button class="oo-mnav-btn" data-mnav="trends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="16" y="6" width="4" height="14" rx="1"/><line x1="3" y1="20" x2="21" y2="20"/></svg><span class="oo-mnav-lbl">Trends</span></button>
+    </nav>
+
   </div>
 </section>
+
+<!-- Guided-tour caption card (fixed; shown only while the tour runs) -->
+<div class="tour-pop" id="tour-pop" hidden role="dialog" aria-live="polite" aria-label="Product tour">
+  <button class="tour-pop__close" id="tour-close" type="button" aria-label="Close tour">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <div class="tour-pop__eyebrow"><span id="tour-view">Player Profile</span> · <span id="tour-step-n">1</span> of <span id="tour-step-total">6</span></div>
+  <div class="tour-pop__title" id="tour-title"></div>
+  <div class="tour-pop__body" id="tour-body"></div>
+  <div class="tour-pop__nav">
+    <button class="tour-btn" id="tour-prev" type="button">Back</button>
+    <div class="tour-dots" id="tour-dots" aria-hidden="true"></div>
+    <button class="tour-btn tour-btn--primary" id="tour-next" type="button">Next</button>
+  </div>
+</div>
+
+<!-- ── App pop-ups (static replicas; opened by board clicks + the tour) ── -->
+<div class="oo-modal" id="mc-modal" hidden>
+  <div class="oo-modal__overlay" data-close></div>
+  <div class="oo-modal__card oo-modal__card--mc" role="dialog" aria-label="Matchup compare">
+    <button class="oo-modal__close" data-close aria-label="Close">×</button>
+    <div class="mc-head">
+      <div class="mc-side mc-side--fav">
+        <div class="mc-flag">🇦🇺 AUS</div>
+        <div class="mc-first">Alex</div>
+        <div class="mc-last mc-last--gold">de&nbsp;Minaur</div>
+        <div class="mc-hand"><span class="mc-dot mc-dot--gold"></span>Righty</div>
+      </div>
+      <div class="mc-vs"><div class="mc-vs__line"></div><span>VS</span></div>
+      <div class="mc-side mc-side--und">
+        <div class="mc-flag">🇺🇸 USA</div>
+        <div class="mc-first">Martin</div>
+        <div class="mc-last mc-last--blue">Damm&nbsp;Jr</div>
+        <div class="mc-hand"><span class="mc-dot mc-dot--blue"></span>Righty</div>
+      </div>
+    </div>
+    <div class="mc-chyron">'s-Hertogenbosch · Grass · Jun 10</div>
+    <div class="mc-body">
+      <div class="mc-prob"><span class="mc-pv mc-pv--gold">75.0%</span><span class="mc-plab">Win Prob</span><span class="mc-pv mc-pv--blue">25.0%</span></div>
+      <div class="mc-bar"><span class="mc-fill mc-fill--gold" style="width:75%"></span></div>
+      <div class="mc-prob mc-prob--sm"><span class="mc-pv mc-pv--mut">71%</span><span class="mc-plab mc-plab--mut">Kalshi</span><span class="mc-pv mc-pv--mut">29%</span></div>
+      <div class="mc-bar mc-bar--sm"><span class="mc-fill mc-fill--mut" style="width:71%"></span></div>
+      <div class="mc-edge"><span class="mc-pos">+4.0 pp ▲</span><span class="mc-elab">Edge vs Kalshi</span><span></span></div>
+      <div class="mc-skills">
+        <div class="mc-skill"><span class="mc-sv mc-sv--w">7.4</span><span class="mc-sbar"><i class="mc-sf mc-sf--gold" style="width:71%"></i><i class="mc-sf mc-sf--mut" style="width:45%"></i></span><span class="mc-slab">Performance</span><span class="mc-sv">5.5</span></div>
+        <div class="mc-skill"><span class="mc-sv mc-sv--w">7.4</span><span class="mc-sbar"><i class="mc-sf mc-sf--gold" style="width:54%"></i><i class="mc-sf mc-sf--mut" style="width:40%"></i></span><span class="mc-slab">Serve</span><span class="mc-sv">5.4</span></div>
+        <div class="mc-skill"><span class="mc-sv mc-sv--w">6.8</span><span class="mc-sbar"><i class="mc-sf mc-sf--gold" style="width:72%"></i><i class="mc-sf mc-sf--mut" style="width:44%"></i></span><span class="mc-slab">Return</span><span class="mc-sv">5.0</span></div>
+        <div class="mc-skill"><span class="mc-sv mc-sv--w">7.4</span><span class="mc-sbar"><i class="mc-sf mc-sf--gold" style="width:65%"></i><i class="mc-sf mc-sf--mut" style="width:48%"></i></span><span class="mc-slab">Forehand</span><span class="mc-sv">5.8</span></div>
+        <div class="mc-skill"><span class="mc-sv mc-sv--w">34%</span><span class="mc-sbar"><i class="mc-sf mc-sf--gold" style="width:62%"></i><i class="mc-sf mc-sf--mut" style="width:44%"></i></span><span class="mc-slab">Steal Score</span><span class="mc-sv">24%</span></div>
+      </div>
+      <div class="mc-insight"><span class="mc-idot mc-idot--g"></span><span>Suppresses opponents below their level — OQ field-high</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="oo-modal" id="ppm-modal" hidden>
+  <div class="oo-modal__overlay" data-close></div>
+  <div class="oo-modal__card oo-modal__card--ppm" role="dialog" aria-label="Projection math">
+    <button class="oo-modal__close" data-close aria-label="Close">×</button>
+    <div class="ppm-head">
+      <div class="ppm-eyebrow">Aces · Fan Score</div>
+      <div class="ppm-title"><span class="ppm-grad">Dalma Galfi</span> <em>vs</em> Emerson Jones</div>
+    </div>
+    <div class="ppm-hero">
+      <div class="ppm-tile"><div class="ppm-tlab">PP Line</div><div class="ppm-tval">11.5</div><div class="ppm-tsub">Fan Score posted</div></div>
+      <div class="ppm-arr">→</div>
+      <div class="ppm-tile"><div class="ppm-tlab">Our Projection (EV)</div><div class="ppm-tval ppm-grad">17.9</div><div class="ppm-tsub ppm-pos">+6.4 edge</div></div>
+      <div class="ppm-arr">→</div>
+      <div class="ppm-tile"><div class="ppm-tlab">Chance to Hit Over</div><div class="ppm-tval" style="color:#4ADE80">84%</div><div class="ppm-tsub"><span class="ppm-pill">STRONG OVER</span></div></div>
+    </div>
+    <div class="ppm-sec">
+      <div class="ppm-sec__title">Fan Score Components</div>
+      <div class="ppm-row"><span>Match played</span><span class="ppm-calc">base</span><span class="ppm-v ppm-pos">+10.0</span></div>
+      <div class="ppm-row"><span>Games net (Bovada spread)</span><span class="ppm-calc">spread +2.0</span><span class="ppm-v ppm-pos">+2.0</span></div>
+      <div class="ppm-row"><span>Sets bonus (EV)</span><span class="ppm-calc">sets-net</span><span class="ppm-v ppm-pos">+0.68</span></div>
+      <div class="ppm-row"><span>Aces</span><span class="ppm-calc">6.5 × 0.5</span><span class="ppm-v ppm-pos">+3.25</span></div>
+      <div class="ppm-row"><span>Double Faults</span><span class="ppm-calc">3.5 × −0.5</span><span class="ppm-v ppm-neg">−1.75</span></div>
+      <div class="ppm-row ppm-row--sum"><span>Outcome EV</span><span class="ppm-calc"></span><span class="ppm-v ppm-grad">14.18</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- WTA Player Intel popup (opens from a WTA player name on the Projections board) -->
+<div class="oo-modal" id="wta-modal" hidden>
+  <div class="oo-modal__overlay" data-close></div>
+  <div class="oo-modal__card oo-modal__card--wta" role="dialog" aria-label="Player intel">
+    <button class="oo-modal__close" data-close aria-label="Close">×</button>
+    <div class="wta-head">
+      <span class="wta-flag">🇬🇧</span>
+      <div>
+        <div class="wta-head__name">Katie Boulter</div>
+        <div class="wta-head__sub">Grass profile · WTA #73 · 2 titles</div>
+      </div>
+    </div>
+    <div class="wta-elos">
+      <div class="wta-elo"><div class="wta-elo__lab">Grass Elo</div><div class="wta-elo__val">1732</div><div class="wta-elo__rank">#29</div></div>
+      <div class="wta-elo"><div class="wta-elo__lab">Overall Elo</div><div class="wta-elo__val">1813</div><div class="wta-elo__rank">#52</div></div>
+      <div class="wta-elo"><div class="wta-elo__lab">Grass Win%</div><div class="wta-elo__val">63.5%</div><div class="wta-elo__rank">52 matches</div></div>
+    </div>
+    <div class="wta-sec__title">Surface Profile · vs Field</div>
+    <div class="wta-stats">
+      <div class="wta-stat"><span class="wta-stat__lab">Hold rate</span><span class="wta-stat__bar"><span class="wta-stat__fill" style="width:73%"></span></span><span class="wta-stat__r"><span class="wta-stat__val">72.8%</span> <span class="wta-stat__pct">73rd</span></span></div>
+      <div class="wta-stat"><span class="wta-stat__lab">Ace rate</span><span class="wta-stat__bar"><span class="wta-stat__fill" style="width:84%"></span></span><span class="wta-stat__r"><span class="wta-stat__val">5.5%</span> <span class="wta-stat__pct">84th</span></span></div>
+      <div class="wta-stat"><span class="wta-stat__lab">1st serve won</span><span class="wta-stat__bar"><span class="wta-stat__fill" style="width:80%"></span></span><span class="wta-stat__r"><span class="wta-stat__val">68.6%</span> <span class="wta-stat__pct">80th</span></span></div>
+      <div class="wta-stat"><span class="wta-stat__lab">Return pts won</span><span class="wta-stat__bar"><span class="wta-stat__fill" style="width:52%"></span></span><span class="wta-stat__r"><span class="wta-stat__val">41.5%</span> <span class="wta-stat__pct">52nd</span></span></div>
+      <div class="wta-stat"><span class="wta-stat__lab">Break rate</span><span class="wta-stat__bar"><span class="wta-stat__fill" style="width:45%"></span></span><span class="wta-stat__r"><span class="wta-stat__val">30.4%</span> <span class="wta-stat__pct">45th</span></span></div>
+      <div class="wta-stat"><span class="wta-stat__lab">BP saved</span><span class="wta-stat__bar"><span class="wta-stat__fill" style="width:35%"></span></span><span class="wta-stat__r"><span class="wta-stat__val">53.8%</span> <span class="wta-stat__pct">35th</span></span></div>
+    </div>
+    <div class="wta-tend"><span class="wta-tend__dot"></span><span>Converts break chances — 93rd percentile · 53% of break points won</span></div>
+  </div>
+</div>
 
 <!-- ═══════════════════════════════════════════════════════════
      SEASON 1 PASS
@@ -4541,89 +5867,68 @@ main, nav, footer { position: relative; z-index: 1; }
 <section class="section section--alt" id="pricing">
   <div class="container">
     <div class="section__head reveal">
-      <div class="section__eyebrow">Season 1 Pass</div>
-      <h2 class="section__title">Limited drop. Real edge.</h2>
+      <div class="section__eyebrow">Pricing</div>
+      <h2 class="section__title">Pick your edge.</h2>
     </div>
 
-    <div class="season-wrap reveal">
-      <div class="spots-banner">
-        <div class="spots-banner__row">
-          <span class="spots-dot"></span>
-          <span><span id="season-remaining" class="num-tab">25</span> of <span id="season-total" class="num-tab">25</span> spots remaining</span>
-        </div>
-        <span class="spots-banner__note">Season 1 closes July 12, 2026 · One-time payment · No auto-renewal</span>
+    <div class="tiers reveal-stagger">
+
+      <!-- TIER 1 · SIGNALS (Discord — DubClub, launching soon) -->
+      <div class="tier">
+        <div class="tier__name">Signals</div>
+        <div class="tier__who">Just the edge — every call, via Discord</div>
+        <div class="tier__price">$10<small> / week</small></div>
+        <div class="tier__sub-price">All signals delivered in Discord</div>
+        <button class="tier__cta tier__cta--ghost" disabled>Coming Soon</button>
+        <ul class="tier__feats">
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Good Value &amp; OverOwned plays</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Bullish / Bearish model reads</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Fade, Tail, Book-Trap &amp; Stay-Away calls</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Posted live to our Discord</li>
+          <li class="tier__feat tier__feat--off"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>No software / projections access</li>
+        </ul>
       </div>
 
-      <div class="season-card">
-        <div class="season-badge">SEASON 1</div>
-        <div class="season-tier">Full Access Until July 12</div>
-        <div class="season-amount">$200<small> one-time</small></div>
-        <div class="season-note">Full Season 1 access — through the end of Wimbledon</div>
-        <button id="season-buy-btn" class="season-btn">Claim Your Spot</button>
-        <div class="season-urgency">Season 1 closes <strong>July 12, 2026</strong> — no extensions.</div>
-        <div class="season-feats">
-          <div class="season-feats__item">
-            <span class="season-feats__icon">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            All projections, all slates
-          </div>
-          <div class="season-feats__item">
-            <span class="season-feats__icon">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            Trap detection &amp; live leverage
-          </div>
-          <div class="season-feats__item">
-            <span class="season-feats__icon">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            Lineup optimizer + DK CSV export
-          </div>
-          <div class="season-feats__item">
-            <span class="season-feats__icon">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            PrizePicks line analysis
-          </div>
-          <div class="season-feats__item">
-            <span class="season-feats__icon">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            First access to Season 2 (priority pricing)
-          </div>
-        </div>
+      <!-- TIER 2 · SOFTWARE WEEKLY -->
+      <div class="tier">
+        <div class="tier__name">Software · Weekly</div>
+        <div class="tier__who">The full app, week to week</div>
+        <div class="tier__price">$7<small> first week</small></div>
+        <div class="tier__sub-price">then $70/week · cancel anytime</div>
+        <a href="https://buy.stripe.com/9B6dR9bUndnH0nv3GU6Zy00?prefilled_promo_code=WEEK" class="tier__cta tier__cta--ghost tier__cta--flow">Start the week for $7<span class="tier__cta-arrow">→</span></a>
+        <ul class="tier__feats">
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All projections, all slates, all sports</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Trap detection + live leverage</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Lineup optimizer + DK CSV export</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>PrizePicks line analysis</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Cancel in one click, anytime</li>
+        </ul>
       </div>
 
-      <div class="disclaimer">
-        OverOwned provides analytical software tools for research and entertainment purposes only.
-        We do not facilitate wagers, accept bets, guarantee outcomes, or provide gambling advice.
-        Use at your own discretion. Not affiliated with DraftKings, PrizePicks, or Kalshi.
-        By purchasing, you agree to our <a href="/terms.html">Terms of Service</a>
-        and <a href="/refund.html">Refund Policy</a>.
+      <!-- TIER 3 · SEASON 1 PASS (featured) -->
+      <div class="tier tier--featured">
+        <div class="tier__badge">BEST VALUE</div>
+        <div class="tier__name">Season 1 Pass</div>
+        <div class="tier__who">Everything, locked through July 12</div>
+        <div class="tier__price">$200<small> one-time</small></div>
+        <div class="tier__sub-price"><span id="season-remaining" class="num-tab">25</span> of <span id="season-total" class="num-tab">25</span> spots left · no auto-renew</div>
+        <button id="season-buy-btn" class="tier__cta tier__cta--primary">Claim Your Spot</button>
+        <ul class="tier__feats">
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Software — all sports</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Locked through Wimbledon — no weekly billing</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>One payment — best $/day on the slate</li>
+          <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>First access to Season 2 (priority pricing)</li>
+        </ul>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ═══════════════════════════════════════════════════════════
-     DAY PASS
-     ═══════════════════════════════════════════════════════════ -->
-<section class="section" id="daypass">
-  <div class="container">
-    <div class="section__head reveal">
-      <div class="section__eyebrow">Weekly Access</div>
-      <h2 class="section__title">$7 for 1st Week</h2>
     </div>
 
-    <div class="daypass-wrap reveal">
-      <div class="daypass-card">
-        <div class="daypass-headline">Then <span class="accent">$70/week</span></div>
-        <a href="https://buy.stripe.com/9B6dR9bUndnH0nv3GU6Zy00?prefilled_promo_code=WEEK" class="daypass-btn daypass-btn--cta">Claim Deal</a>
-        <div class="daypass-fineprint">
-          Auto-renews weekly. Cancel anytime in one click from your Stripe portal.
-        </div>
-      </div>
+    <div class="disclaimer reveal">
+      OverOwned provides analytical software tools for research and entertainment purposes only.
+      We do not facilitate wagers, accept bets, guarantee outcomes, or provide gambling advice.
+      Use at your own discretion. Not affiliated with DraftKings, PrizePicks, or Kalshi.
+      By purchasing, you agree to our <a href="/terms.html">Terms of Service</a>
+      and <a href="/refund.html">Refund Policy</a>.
     </div>
   </div>
 </section>
@@ -4729,9 +6034,21 @@ main, nav, footer { position: relative; z-index: 1; }
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
 
-  // ── Scroll progress bar + hero glow parallax ─────────────
+  // ── Scroll progress bar + Apple-style scroll motion ──────
   const progressBar = document.getElementById('scroll-progress');
   const heroBg = document.querySelector('.hero__bg');
+  const heroGrid = document.querySelector('.hero__grid');
+  const heroPreview = document.getElementById('hero-preview');
+  // Scroll-linked parallax layers: each drifts at its own rate as it travels
+  // through the viewport, giving the page depth instead of one flat scroll.
+  // Speed > 0 → element lags the scroll (sits "deep"); we keep it subtle.
+  const parallaxLayers = [];
+  if (!reduceMotion) {
+    document.querySelectorAll('.feat__demo').forEach((el) => parallaxLayers.push({ el, speed: 0.06 }));
+    document.querySelectorAll('.step__visual').forEach((el) => parallaxLayers.push({ el, speed: 0.05 }));
+    document.querySelectorAll('.sport-card__icon').forEach((el) => parallaxLayers.push({ el, speed: 0.05 }));
+  }
+  const vh = () => window.innerHeight || document.documentElement.clientHeight;
   let scrollTicking = false;
   function onScroll() {
     if (scrollTicking) return;
@@ -4741,15 +6058,34 @@ main, nav, footer { position: relative; z-index: 1; }
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
       progressBar.style.width = progress + '%';
-      // Subtle parallax: hero glow drifts down ~15% of scroll while you scroll
-      // past the hero (only while hero is in viewport, ~first 900px of scroll)
-      if (heroBg && !reduceMotion && scrollTop < 1000) {
-        heroBg.style.transform = `translate3d(0, ${scrollTop * 0.18}px, 0)`;
+      if (!reduceMotion) {
+        // Hero glow drifts as you scroll past it
+        if (heroBg && scrollTop < 1000) heroBg.style.transform = `translate3d(0, ${scrollTop * 0.18}px, 0)`;
+        // Hero recedes — scales down, lifts and fades as the next section rises
+        // over it, so leaving the hero feels like a page handing off (Apple Sports).
+        if (heroGrid && scrollTop < vh() * 1.1) {
+          const p = Math.min(1, scrollTop / (vh() * 0.85));
+          heroGrid.style.transform = `translate3d(0, ${p * 46}px, 0) scale(${1 - p * 0.05})`;
+          heroGrid.style.opacity = String(1 - p * 0.6);
+          if (heroPreview) heroPreview.style.marginTop = `${-p * 14}px`;
+        }
+        // Depth parallax on mid-page layers, only while near the viewport
+        const mid = vh() / 2;
+        for (let i = 0; i < parallaxLayers.length; i++) {
+          const { el, speed } = parallaxLayers[i];
+          const r = el.getBoundingClientRect();
+          if (r.bottom < -200 || r.top > vh() + 200) continue;
+          const delta = (r.top + r.height / 2) - mid;
+          // Clamp so inner content drifts for depth but never escapes its card
+          const y = Math.max(-9, Math.min(9, -delta * speed));
+          el.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        }
       }
       scrollTicking = false;
     });
   }
   window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   // ── Hero cursor glow + subtle 3D tilt ────────────────────
   const hero = document.querySelector('.hero');
@@ -4918,6 +6254,152 @@ main, nav, footer { position: relative; z-index: 1; }
       history.replaceState({}, '', window.location.pathname + '#pricing');
     }
   })();
+})();
+</script>
+
+<!-- ── Guided product tour ─────────────────────────────────── -->
+<script>
+(function () {
+  'use strict';
+  var launch = document.getElementById('tour-launch');
+  var pop = document.getElementById('tour-pop');
+  if (!launch || !pop) return;
+  var titleEl = document.getElementById('tour-title');
+  var bodyEl = document.getElementById('tour-body');
+  var viewEl = document.getElementById('tour-view');
+  var stepNEl = document.getElementById('tour-step-n');
+  var totalEl = document.getElementById('tour-step-total');
+  var dotsEl = document.getElementById('tour-dots');
+  var prevBtn = document.getElementById('tour-prev');
+  var nextBtn = document.getElementById('tour-next');
+  var closeBtn = document.getElementById('tour-close');
+
+  var STEPS = [
+    { tab: 'home', view: 'Home', anchor: '[data-panel="home"] .home-metrics',
+      title: 'Home Tab',
+      body: 'Live CPI for every ATP tournament — real weather adjusts how the court is playing. The Latest Tree highlights yesterday’s top performer relative to their season average. View the live Kalshi line on each match and compare it against our model, built strictly on stats from that surface.' },
+    { tab: 'home', view: 'Home', anchor: '[data-panel="home"] .home-board',
+      title: 'Model vs market vs edge',
+      body: 'Every match, ranked by edge: our projection, the live Kalshi market win-%, and the gap between them. Virtanen and Hanfmann lead this board at +5.1 and +4.3.' },
+    { tab: 'home', view: 'Matchup compare', modal: 'mc-modal',
+      title: 'Click any match → head-to-head',
+      body: 'Tapping a matchup opens the flag-coloured compare: our win-prob vs Kalshi, the edge, and eight skill bars (serve, return, steal score…) so you see exactly where the match is won.' },
+    { tab: 'profile', view: 'Tactics', anchor: '[data-panel="profile"] .surfaces',
+      title: 'Form that actually translates',
+      body: 'Player Tactics splits every player by surface — hard, clay, grass, indoor — with average Performance Rating and match count, so you know if their form fits today’s court.' },
+    { tab: 'profile', view: 'Tactics', anchor: '[data-panel="profile"] .profile-radar',
+      title: 'The build radar vs the field',
+      body: 'Eight axes — PR, OQ, SQ, RQ, FQ, BQ, ATT, STL — map a player’s game against the field, so you see their strengths and the holes an opponent can exploit.' },
+    { tab: 'projections', view: 'PrizePicks', anchor: '[data-panel="projections"] .pp-table, [data-panel="projections"]',
+      title: 'Devigged PrizePicks projections',
+      body: 'We strip the vig from PrizePicks’ Fan Score lines to get the true number, then show our Proj and the Edge over the line — for every prop on the board.' },
+    { tab: 'projections', view: 'Projection math', modal: 'ppm-modal',
+      title: 'Click a projection → the full math',
+      body: 'Every projection is transparent: PP line → our EV → chance to hit over, built up from the fan-score components (games, sets, aces, double faults). Galfi grades +6.4 over her line here.' },
+    { tab: 'projections', view: 'Player Intel', modal: 'wta-modal',
+      title: 'Tap a WTA player → surface intel',
+      body: 'A surface-by-surface read on how she actually plays — our Elo model against the Kalshi line, hold and serve percentiles versus the field, and the tendencies that move a projection. Everything you need to know the player before you take the line.' },
+    { tab: 'builder', view: 'Builder', anchor: '[data-panel="builder"] .builder-toggle, [data-panel="builder"] .builder-toggle__lbl',
+      title: 'OverOwned mode',
+      body: 'One gold toggle builds GPP lineups that leverage low-owned studs and fade the field’s chalk — the entire OverOwned edge, applied automatically.' },
+    { tab: 'builder', view: 'Builder', anchor: '#dk-getfrom, [data-panel="builder"] .builder-actions',
+      title: 'Grab, edit, update in 3 clicks',
+      body: 'Our in-house file generator pulls your lineups straight from DraftKings, lets you edit and re-optimize, and pushes a contest-ready CSV back — grab, edit, update in three clicks, no spreadsheets.' },
+    { tab: 'signals', view: 'Signals', anchor: '[data-panel="signals"] .sig-stream',
+      title: 'Live, curated signals',
+      body: 'A live feed of the calls that matter — Good Value, Style, OverOwned, Book Trap, Stay Away — each with the exact bet and the reason. Galfi +6.4 OVER and Virtanen +5.1 OVER are today’s top value.' },
+    { tab: 'trends', view: 'Trends', anchor: '[data-panel="trends"] .tr-grid',
+      title: 'Every signal, graded',
+      body: 'Proof, not promises. Each signal is graded against real results — Bearish TRAP 14/18, Bullish LEVERAGE 7/9, Good Value 17/21, Stay Away 6/6 — so you can trust the edge before you bet it.' },
+    { tab: 'home', view: 'Home', anchor: '[data-panel="home"] .home-board',
+      title: 'That’s the whole edge',
+      body: 'Six views, one sharp model: read the board, study the matchup, price the props, build the lineups, follow the signals, and check the receipts. Claim your spot below.' }
+  ];
+
+  // ── Modal control (used by the tour AND by clicking the boards) ──
+  function closeModals() { ['mc-modal', 'ppm-modal', 'wta-modal'].forEach(function (id) { var m = document.getElementById(id); if (m) m.hidden = true; }); }
+  function openModal(id) { closeModals(); var m = document.getElementById(id); if (m) m.hidden = false; }
+  document.querySelectorAll('.oo-modal [data-close]').forEach(function (b) { b.addEventListener('click', closeModals); });
+  document.querySelectorAll('[data-panel="home"] .hb-row').forEach(function (r) { r.style.cursor = 'pointer'; r.addEventListener('click', function () { openModal('mc-modal'); }); });
+  document.querySelectorAll('[data-panel="projections"] .proj-ev, [data-panel="projections"] .fan-score').forEach(function (r) { var tr = r.closest('tr') || r; tr.style.cursor = 'pointer'; tr.addEventListener('click', function () { openModal('ppm-modal'); }); });
+  // Clicking a player NAME opens the surface-intel popup (the score cells open the PP-math popup)
+  document.querySelectorAll('[data-panel="projections"] .player-name').forEach(function (n) { n.style.cursor = 'pointer'; n.addEventListener('click', function (e) { e.stopPropagation(); openModal('wta-modal'); }); });
+
+  var i = 0;
+  totalEl.textContent = STEPS.length;
+  STEPS.forEach(function () { dotsEl.appendChild(document.createElement('span')); });
+  var dots = dotsEl.children;
+
+  function setTab(name) {
+    document.querySelectorAll('.product-tab').forEach(function (b) {
+      var on = b.getAttribute('data-tab') === name;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('.tab-panel').forEach(function (p) {
+      p.classList.toggle('is-active', p.getAttribute('data-panel') === name);
+    });
+  }
+  function clearHi() {
+    document.querySelectorAll('.tour-highlight').forEach(function (e) { e.classList.remove('tour-highlight'); });
+  }
+  function show(n) {
+    i = (n + STEPS.length) % STEPS.length;
+    var s = STEPS[i];
+    closeModals();
+    setTab(s.tab);
+    clearHi();
+    titleEl.textContent = s.title;
+    bodyEl.textContent = s.body;
+    viewEl.textContent = s.view;
+    stepNEl.textContent = i + 1;
+    for (var k = 0; k < dots.length; k++) dots[k].classList.toggle('is-on', k === i);
+    prevBtn.disabled = i === 0;
+    nextBtn.textContent = i === STEPS.length - 1 ? 'Finish' : 'Next';
+    if (s.modal) { requestAnimationFrame(function () { openModal(s.modal); }); return; }
+    requestAnimationFrame(function () {
+      var el = null, sels = s.anchor.split(',');
+      for (var j = 0; j < sels.length && !el; j++) el = document.querySelector(sels[j].trim());
+      if (el) {
+        el.classList.add('tour-highlight');
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+  function start() { pop.hidden = false; show(0); }
+  function end() { pop.hidden = true; clearHi(); closeModals(); }
+
+  launch.addEventListener('click', function () {
+    document.getElementById('inside').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(start, 380);
+  });
+  nextBtn.addEventListener('click', function () { if (i === STEPS.length - 1) end(); else show(i + 1); });
+  prevBtn.addEventListener('click', function () { show(i - 1); });
+  closeBtn.addEventListener('click', end);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closeModals(); if (!pop.hidden) end(); return; }
+    if (pop.hidden) return;
+    if (e.key === 'ArrowRight' && i < STEPS.length - 1) show(i + 1);
+    else if (e.key === 'ArrowLeft' && i > 0) show(i - 1);
+  });
+})();
+</script>
+
+<!-- ── Mobile bottom-nav: switch the app-preview views ─────── -->
+<script>
+(function () {
+  var btns = document.querySelectorAll('.oo-mnav-btn');
+  if (!btns.length) return;
+  btns.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var name = b.getAttribute('data-mnav');
+      document.querySelectorAll('.product-tab').forEach(function (t) { t.classList.toggle('is-active', t.getAttribute('data-tab') === name); });
+      document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.toggle('is-active', p.getAttribute('data-panel') === name); });
+      btns.forEach(function (x) { x.classList.toggle('is-active', x === b); });
+      var sec = document.getElementById('inside');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
 })();
 </script>
 
