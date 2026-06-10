@@ -3040,6 +3040,11 @@ main, nav, footer { position: relative; z-index: 1; }
 .tier__cta--flow { gap: 8px; }
 .tier__cta-arrow { display: inline-block; margin-left: 8px; transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1); }
 .tier__cta--flow:hover .tier__cta-arrow { transform: translateX(5px); }
+/* Arrow-only CTA — subtle, no wording; gold-glides on hover so it reads as clickable */
+.tier__cta--arrowonly { background: transparent; border-color: var(--oo-border); }
+.tier__cta--arrowonly .tier__cta-arrow { margin-left: 0; font-size: 18px; line-height: 1; color: var(--oo-muted); transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1), color 180ms ease; }
+.tier__cta--arrowonly:hover { background: rgba(138, 170, 210, 0.05); border-color: var(--oo-gold); color: var(--oo-gold); box-shadow: none; }
+.tier__cta--arrowonly:hover .tier__cta-arrow { transform: translateX(5px); color: var(--oo-gold); }
 .tier__cta--primary {
   background: linear-gradient(135deg, rgba(255, 209, 26, 0.18), rgba(255, 209, 26, 0.08));
   color: var(--oo-gold);
@@ -5895,7 +5900,7 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="tier__who">The full app, week to week</div>
         <div class="tier__price">$7<small> first week</small></div>
         <div class="tier__sub-price">then $70/week · cancel anytime</div>
-        <a href="https://buy.stripe.com/9B6dR9bUndnH0nv3GU6Zy00?prefilled_promo_code=WEEK" class="tier__cta tier__cta--ghost tier__cta--flow">Start the week for $7<span class="tier__cta-arrow">→</span></a>
+        <a href="https://buy.stripe.com/9B6dR9bUndnH0nv3GU6Zy00?prefilled_promo_code=WEEK" class="tier__cta tier__cta--ghost tier__cta--arrowonly" aria-label="Start the week for $7"><span class="tier__cta-arrow">→</span></a>
         <ul class="tier__feats">
           <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All projections, all slates, all sports</li>
           <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Trap detection + live leverage</li>
