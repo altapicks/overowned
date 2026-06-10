@@ -6704,5 +6704,32 @@ main, nav, footer { position: relative; z-index: 1; }
 })();
 </script>
 
+<!-- ── Builder: abbreviate player + opponent names on mobile to save space ── -->
+<script>
+(function () {
+  var cells = [];
+  document.querySelectorAll('[data-panel="builder"] .builder-table tbody tr').forEach(function (tr) {
+    var name = tr.querySelector('.player-cell strong');      // player
+    var opp = tr.querySelector('td.left[style]');             // muted opponent cell only
+    if (name) cells.push(name);
+    if (opp && !opp.querySelector('.player-cell')) cells.push(opp);
+  });
+  if (!cells.length) return;
+  function abbr(s) {
+    var p = s.trim().split(/\s+/);
+    return p.length < 2 ? s : p[0].charAt(0) + '. ' + p.slice(1).join(' ');
+  }
+  function apply() {
+    var mobile = window.matchMedia('(max-width: 768px)').matches;
+    cells.forEach(function (el) {
+      if (!el.dataset.full) el.dataset.full = el.textContent.trim();
+      el.textContent = mobile ? abbr(el.dataset.full) : el.dataset.full;
+    });
+  }
+  apply();
+  var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(apply, 120); });
+})();
+</script>
+
 </body>
 </html>
