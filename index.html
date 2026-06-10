@@ -3897,6 +3897,66 @@ main, nav, footer { position: relative; z-index: 1; }
   .footer__inner { flex-direction: column; text-align: center; }
 }
 
+/* ════════════════════════════════════════════════════════════════════
+   MOBILE APP IDENTITY — Inside-the-Product mirrors the real app's phone
+   UI. Breakpoint 768px to match the app (globals.css). Each tab is a
+   single full app screen: one column, app card sizing, internal scroll,
+   bottom nav. Secondary panels (Movement rail) are hidden, like the app.
+   ════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* App breakpoint: PC tab bar hidden, bottom nav drives the views */
+  .product-tabs { display: none !important; }
+
+  /* Compact section header so the app screen gets the viewport */
+  #inside.section { padding: 24px 0 0; }
+  #inside .section__head { margin-bottom: 13px; }
+  #inside .section__eyebrow { font-size: 10px; margin-bottom: 6px; }
+  #inside .section__title { font-size: 21px; line-height: 1.14; letter-spacing: -0.4px; }
+  #inside .section__title br { display: none; }
+  #inside .tour-launch { margin-top: 12px; padding: 10px 16px; font-size: 12px; }
+
+  /* Each tab = one full app screen, scrolls internally (app uses 100dvh) */
+  .tab-panel.is-active {
+    height: calc(100vh - 210px);
+    height: calc(100dvh - 210px);
+    overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-panel.is-active::-webkit-scrollbar { display: none; }
+
+  /* App spacing scale — single column, tight gaps (4/6/8/10/12/14) */
+  .app-frame, .builder-frame, .profile-frame, .pp-layout { gap: 10px; }
+
+  /* HOME — metric cards stack single-column; app value size 16-18px */
+  .home-metrics { grid-template-columns: 1fr; gap: 8px; }
+  .hm-card { padding: 12px 14px; border-radius: 12px; }
+  .hm-card__value { font-size: 18px; }
+  .home-board { border-radius: 12px; }
+  .hb-head, .hb-row { font-size: 11px; padding: 9px 12px; min-width: 360px; }
+
+  /* PROJECTIONS — app shows ONE column on phone; hide the secondary
+     Movement rail; the FS board is the screen, compressed to app sizing */
+  .pp-rail { display: none !important; }
+  .pp-layout { grid-template-columns: 1fr; }
+  .pp-stats { grid-template-columns: 1fr; gap: 12px; }
+  .pp-table thead th, .pp-table tbody td { font-size: 11.5px; padding: 9px 10px; }
+
+  /* SIGNALS — full-width cards; clip child backgrounds to the rounded
+     corners (was overflow:visible → square corners bled past the radius) */
+  .ppsq { overflow: hidden; border-radius: 12px; }
+
+  /* TACTICS — surface cards clip to their radius + app-tight spacing */
+  .surface { overflow: hidden; }
+  .surfaces { gap: 7px; }
+
+  /* TRENDS donuts box clips cleanly too */
+  .tr-donut, .tr-box { overflow: hidden; }
+
+  /* Bottom nav already mirrors the app's .oo-mobilenav (gold active tab) */
+  .oo-mnav { margin-top: 10px; }
+}
+
 @media (max-width: 520px) {
   /* Phone nav: brand + Open App only (Claim CTA lives in hero + pricing). */
   .nav__cta { display: none; }
@@ -6333,6 +6393,7 @@ main, nav, footer { position: relative; z-index: 1; }
         panels.forEach((p) => {
           p.classList.toggle('is-active', p.getAttribute('data-panel') === target);
         });
+        document.querySelectorAll('.tab-panel.is-active .reveal, .tab-panel.is-active .reveal-stagger').forEach(function (e) { e.classList.add('is-in'); });
       });
     });
   }
@@ -6600,6 +6661,7 @@ main, nav, footer { position: relative; z-index: 1; }
       var name = b.getAttribute('data-mnav');
       document.querySelectorAll('.product-tab').forEach(function (t) { t.classList.toggle('is-active', t.getAttribute('data-tab') === name); });
       document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.toggle('is-active', p.getAttribute('data-panel') === name); });
+      document.querySelectorAll('.tab-panel.is-active .reveal, .tab-panel.is-active .reveal-stagger').forEach(function (e) { e.classList.add('is-in'); });
       btns.forEach(function (x) { x.classList.toggle('is-active', x === b); });
       var sec = document.getElementById('inside');
       if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
