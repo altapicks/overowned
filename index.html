@@ -3907,6 +3907,14 @@ main, nav, footer { position: relative; z-index: 1; }
   /* App breakpoint: PC tab bar hidden, bottom nav drives the views */
   .product-tabs { display: none !important; }
 
+  /* "Featured by" lockup — sized for phone (was running large/cramped) */
+  .featured--in-hero { padding: 14px 0 16px; }
+  .featured__label { font-size: 9px; letter-spacing: 1.8px; margin-bottom: 11px; }
+  .featured__logos { gap: 22px; }
+  .featured__lockup { gap: 8px; }
+  .featured__lockup img { width: 26px; height: 26px; }
+  .featured__lockup span { font-size: 15px; }
+
   /* Compact section header so the app screen gets the viewport */
   #inside.section { padding: 24px 0 0; }
   #inside .section__head { margin-bottom: 13px; }
@@ -3955,12 +3963,38 @@ main, nav, footer { position: relative; z-index: 1; }
 
   /* Bottom nav already mirrors the app's .oo-mobilenav (gold active tab) */
   .oo-mnav { margin-top: 10px; }
+
+  /* ── DESIGN-FIRST: on phones each screen is a clean app snapshot, not the
+        full data grid. Cap dense tables to a tidy count + drop verbose chrome
+        (the app's own mobile build curates the same way). ── */
+  /* Projections — lead stat only + 6 rows; drop the component-only toggle */
+  .pp-stats .pp-stat:nth-child(n+2) { display: none; }
+  .pp-stats { border-radius: 12px; }
+  .pp-table tbody tr:nth-child(n+7) { display: none; }
+  .pp-search__btn { display: none; }
+  /* Home board — 5 clean matchups (head + 5 rows) */
+  .home-board > div:nth-child(n+7) { display: none; }
+  /* Builder — controls + a 5-row pool snapshot, not all 32 */
+  .builder-table tbody tr:nth-child(n+6) { display: none; }
+  /* Signals — 4 clean cards */
+  .ppf-stream .ppsq:nth-child(n+5) { display: none; }
+  /* Tactics — surfaces + radar are the screen; drop the long last-3 list and
+     the strength/weakness meta blocks so it reads as a clean profile, not a dossier */
+  [data-panel="profile"] .match-list,
+  [data-panel="profile"] .profile-meta { display: none; }
+  [data-panel="profile"] .surfaces { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+  [data-panel="profile"] .surface__caption { font-size: 9px; }
+  /* Builder — controls + the 5-row pool snapshot already curate the screen;
+     drop the long favorites/export note row for cleanliness */
+  /* Trends — clean 2-up donut grid instead of a tall single column */
+  .tr-grid { grid-template-columns: repeat(2, 1fr); gap: 9px; }
+  .tr-box { min-height: 0; }
 }
 
 @media (max-width: 520px) {
   /* Phone nav: brand + Open App only (Claim CTA lives in hero + pricing). */
   .nav__cta { display: none; }
-  .surfaces { grid-template-columns: 1fr; }
+  .surfaces { grid-template-columns: repeat(2, 1fr); }
   .compare-style { display: none; }
   .hero__headline { font-size: 34px; }
   .matchups .col-hide-sm { display: none; }
