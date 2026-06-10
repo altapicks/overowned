@@ -10,8 +10,8 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta property="og:title" content="OverOwned — Beat the field in Tennis DFS" />
 <meta property="og:description" content="Sharp-market-calibrated projections, trap detection, and live leverage — built for PrizePicks and DraftKings players who strive for an edge." />
-<meta property="og:image" content="https://overowned.io/og-image.png" />
-<meta property="og:image:secure_url" content="https://overowned.io/og-image.png" />
+<meta property="og:image" content="https://overowned.io/og-image.png?v=2026061001" />
+<meta property="og:image:secure_url" content="https://overowned.io/og-image.png?v=2026061001" />
 <meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -24,7 +24,7 @@
 <meta name="twitter:creator" content="@OverOwnedDFS" />
 <meta name="twitter:title" content="OverOwned — Beat the field in Tennis DFS" />
 <meta name="twitter:description" content="Sharp-market-calibrated projections, trap detection, and live leverage — built for PrizePicks and DraftKings players who strive for an edge." />
-<meta name="twitter:image" content="https://overowned.io/og-image.png" />
+<meta name="twitter:image" content="https://overowned.io/og-image.png?v=2026061001" />
 <meta name="twitter:image:alt" content="OverOwned — Sharp-market DFS edge for DraftKings and PrizePicks" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -3925,6 +3925,27 @@ main, nav, footer { position: relative; z-index: 1; }
   /* Movement box — full-width below the board on phones; keep rows comfortable */
   .pp-rail { max-height: 360px; }
   .pp-mover { grid-template-columns: 46px 1fr; gap: 10px; }
+  /* ── Inside-the-Product = a phone app: compact header, each tab fills one
+        screen and scrolls INSIDE so no panel runs past the viewport ── */
+  #inside.section { padding: 22px 0 0; }
+  #inside .section__head { margin-bottom: 12px; }
+  #inside .section__eyebrow { font-size: 9.5px; margin-bottom: 5px; }
+  #inside .section__title { font-size: 19px; line-height: 1.16; letter-spacing: -0.4px; }
+  #inside .section__title br { display: none; }
+  #inside .tour-launch { margin-top: 11px; padding: 9px 15px; font-size: 11.5px; }
+  .tab-panel.is-active {
+    height: calc(100vh - 208px);
+    height: calc(100dvh - 208px);
+    overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tab-panel.is-active::-webkit-scrollbar { display: none; }
+  .oo-mnav { margin-top: 10px; }
+  /* tighten inner spacing so more of each app screen is visible at once */
+  .app-frame, .builder-frame, .profile-frame { gap: 9px; }
+  .builder-toolbar { gap: 8px; }
+  .surfaces { gap: 7px; }
   /* Court Pace leaderboard — tighten the header/hero so it fits a phone width */
   .oo-modal__card--cpi { max-height: 88vh; }
   .cpi-head { padding: 13px 14px 10px; }
