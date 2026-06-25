@@ -3269,6 +3269,20 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-soccer { display: grid; grid-template-columns: minmax(0,0.64fr) minmax(0,0.36fr); gap: 16px; align-items: stretch; }
 .lp-peek-row { display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 22px; align-items: start; }
 @media (max-width: 900px) { .lp-soccer, .lp-peek-row { grid-template-columns: 1fr; gap: 16px; } }
+/* iPhone-framed multi-sport intel popups */
+.lp-phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.lp-switch { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 2px; padding: 3px; background: rgba(255,255,255,0.04); border: 1px solid var(--oo-border); border-radius: 999px; }
+.lp-switch__btn { border: none; background: transparent; color: var(--oo-muted); font-family: inherit; font-size: 12px; font-weight: 700; letter-spacing: 0.2px; padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s; }
+.lp-switch__btn:hover { color: var(--oo-text); }
+.lp-switch__btn.is-active { background: var(--oo-gold); color: #0a1426; }
+.lp-phone { position: relative; width: 300px; max-width: 86vw; aspect-ratio: 300 / 624; background: #05060a; border-radius: 46px; padding: 11px; box-shadow: 0 34px 70px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.07), 0 0 0 1px rgba(0,0,0,0.8); }
+.lp-phone__island { position: absolute; top: 21px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; background: #000; border-radius: 999px; z-index: 6; }
+.lp-phone__screen { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: linear-gradient(180deg, #0E1B33 0%, #0A1628 100%); }
+.lp-ipop { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; }
+.lp-ipop[hidden] { display: none; }
+.lp-ipop .lp-pop__head { padding-top: 50px; background: radial-gradient(ellipse 60% 90% at 0% 0%, rgba(255,209,26,0.12), transparent 70%), rgba(255,255,255,0.015); }
+.lp-ipop .lp-pop__body { padding: 14px 16px 22px; }
+@media (max-width: 420px) { .lp-phone { width: 270px; } .lp-switch__btn { padding: 6px 10px; font-size: 11px; } }
 /* Win-Intel glass popup */
 .lp-pop { background: linear-gradient(180deg,#0e1b33 0%,#0a1628 100%); border: 1px solid rgba(255,209,26,0.20); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 30px rgba(255,209,26,0.10); overflow: hidden; }
 .lp-pop__head { padding: 15px 18px 13px; background: radial-gradient(ellipse 60% 90% at 0% 0%, rgba(255,209,26,0.12), transparent 70%), rgba(255,255,255,0.015); border-bottom: 1px solid rgba(255,209,26,0.18); display: flex; justify-content: space-between; align-items: flex-start; }
@@ -4277,7 +4291,7 @@ main, nav, footer { position: relative; z-index: 1; }
           Five sports live · 95% on graded PP glitches
         </div>
         <div class="hero__cta reveal">
-          <a href="#pricing" class="btn btn--primary">Claim 75% Off</a>
+          <a href="#pricing" class="btn btn--primary">Claim Your Spot</a>
           <a href="#inside" class="btn btn--ghost">Take the Tour</a>
         </div>
         <a href="#pricing" class="wb-count reveal" id="wb-count" aria-label="Wimbledon countdown">
@@ -4868,26 +4882,109 @@ main, nav, footer { position: relative; z-index: 1; }
 
       <div class="lp-peek-row">
 
-      <!-- Win Intel glass popup -->
-      <div class="lp-pop">
-        <div class="lp-pop__head">
-          <div>
-            <div class="lp-pop__eyebrow">Win Intel · Grass</div>
-            <h3 class="lp-pop__title"><span class="lp-pop__name">Iga Świątek</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Coco Gauff</span></h3>
-          </div>
-          <span class="lp-pop__x" aria-hidden="true">×</span>
+      <!-- iPhone-framed multi-sport intel popups -->
+      <div class="lp-phone-wrap">
+        <div class="lp-switch" role="tablist" aria-label="Sport intel">
+          <button type="button" class="lp-switch__btn is-active" data-sport="tennis">Tennis</button>
+          <button type="button" class="lp-switch__btn" data-sport="golf">Golf</button>
+          <button type="button" class="lp-switch__btn" data-sport="wnba">WNBA</button>
+          <button type="button" class="lp-switch__btn" data-sport="soccer">Soccer</button>
+          <button type="button" class="lp-switch__btn" data-sport="ufc">UFC</button>
         </div>
-        <div class="lp-pop__body">
-          <div class="lp-hero">
-            <div class="lp-tile"><span class="lp-tile__label">Win Prob</span><span class="lp-tile__value gold">61%</span><span class="lp-tile__sub">model</span></div>
-            <div class="lp-tile"><span class="lp-tile__label">Proj FS</span><span class="lp-tile__value">42.8</span><span class="lp-tile__sub"><span class="pos">+5.1 edge</span></span></div>
-            <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">37.5</span><span class="lp-tile__sub">fade under</span></div>
-          </div>
-          <div class="lp-why">
-            <div class="lp-why__title">Why we lean over</div>
-            <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Serve hold edge</span><span class="lp-chip__detail">+8% vs field</span></div>
-            <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Return points won</span><span class="lp-chip__detail">top-5 on grass</span></div>
-            <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Opponent break threat</span><span class="lp-chip__detail">manageable</span></div>
+        <div class="lp-phone">
+          <div class="lp-phone__island"></div>
+          <div class="lp-phone__screen">
+
+            <!-- TENNIS -->
+            <div class="lp-ipop" data-sport="tennis">
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Win Intel · Grass</div><h3 class="lp-pop__title"><span class="lp-pop__name">Iga Świątek</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Coco Gauff</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__body">
+                <div class="lp-hero">
+                  <div class="lp-tile"><span class="lp-tile__label">Win Prob</span><span class="lp-tile__value gold">61%</span><span class="lp-tile__sub">model</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Proj FS</span><span class="lp-tile__value">42.8</span><span class="lp-tile__sub"><span class="pos">+5.1 edge</span></span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">37.5</span><span class="lp-tile__sub">take over</span></div>
+                </div>
+                <div class="lp-why">
+                  <div class="lp-why__title">Why we lean over</div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Serve hold edge</span><span class="lp-chip__detail">+8% vs field</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Return points won</span><span class="lp-chip__detail">top-5 on grass</span></div>
+                  <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Break threat</span><span class="lp-chip__detail">manageable</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- GOLF -->
+            <div class="lp-ipop" data-sport="golf" hidden>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Strokes Intel · The Open</div><h3 class="lp-pop__title"><span class="lp-pop__name">Scottie Scheffler</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">The Field</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__body">
+                <div class="lp-hero">
+                  <div class="lp-tile"><span class="lp-tile__label">Top 10</span><span class="lp-tile__value gold">34%</span><span class="lp-tile__sub">model</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Proj R1</span><span class="lp-tile__value">68.7</span><span class="lp-tile__sub"><span class="pos">−1.8 vs line</span></span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Kalshi</span><span class="lp-tile__value">70.5</span><span class="lp-tile__sub">take under</span></div>
+                </div>
+                <div class="lp-why">
+                  <div class="lp-why__title">Why we lean under</div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">SG: approach</span><span class="lp-chip__detail">+1.4 elite</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Course fit</span><span class="lp-chip__detail">links-style A+</span></div>
+                  <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Wind exposure</span><span class="lp-chip__detail">PM wave</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- WNBA -->
+            <div class="lp-ipop" data-sport="wnba" hidden>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Fan Score Intel</div><h3 class="lp-pop__title"><span class="lp-pop__name">A'ja Wilson</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Sky</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__body">
+                <div class="lp-hero">
+                  <div class="lp-tile"><span class="lp-tile__label">Proj FS</span><span class="lp-tile__value gold">49.6</span><span class="lp-tile__sub">model</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">44.5</span><span class="lp-tile__sub"><span class="pos">+5.1 edge</span></span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Matchup</span><span class="lp-tile__value">#2</span><span class="lp-tile__sub">soft D</span></div>
+                </div>
+                <div class="lp-why">
+                  <div class="lp-why__title">Why we lean over</div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">On-ball usage</span><span class="lp-chip__detail">31% · top-3</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Opp interior D</span><span class="lp-chip__detail">bottom-5</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Pace</span><span class="lp-chip__detail">+4 vs avg</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- SOCCER -->
+            <div class="lp-ipop" data-sport="soccer" hidden>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Player Intel · World Cup</div><h3 class="lp-pop__title"><span class="lp-pop__name">Vinícius Jr</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Croatia</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__body">
+                <div class="lp-hero">
+                  <div class="lp-tile"><span class="lp-tile__label">Proj Shots</span><span class="lp-tile__value gold">3.6</span><span class="lp-tile__sub">model</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">2.5</span><span class="lp-tile__sub"><span class="pos">+1.1 edge</span></span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Lean</span><span class="lp-tile__value">OVER</span><span class="lp-tile__sub">shots</span></div>
+                </div>
+                <div class="lp-why">
+                  <div class="lp-why__title">Why we lean over</div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Brazil control</span><span class="lp-chip__detail">62% poss</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Attacks the block</span><span class="lp-chip__detail">vs back-5</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Left-flank gap</span><span class="lp-chip__detail">opp RB out</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- UFC -->
+            <div class="lp-ipop" data-sport="ufc" hidden>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Matchup Intel · UFC 310</div><h3 class="lp-pop__title"><span class="lp-pop__name">Ilia Topuria</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">C. Oliveira</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__body">
+                <div class="lp-hero">
+                  <div class="lp-tile"><span class="lp-tile__label">Win Prob</span><span class="lp-tile__value gold">64%</span><span class="lp-tile__sub">model</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Strikes/min</span><span class="lp-tile__value">6.8</span><span class="lp-tile__sub"><span class="pos">+2.1 edge</span></span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Method</span><span class="lp-tile__value">KO</span><span class="lp-tile__sub">/ TKO</span></div>
+                </div>
+                <div class="lp-why">
+                  <div class="lp-why__title">Why Topuria</div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Striking volume</span><span class="lp-chip__detail">+2.1 /min</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Takedown defense</span><span class="lp-chip__detail">88%</span></div>
+                  <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Reach</span><span class="lp-chip__detail">−2&quot;</span></div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -6583,7 +6680,7 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="tier__who">Everything, locked through Wimbledon</div>
         <div class="tier__price"><span style="-webkit-text-fill-color:var(--oo-muted);color:var(--oo-muted);text-decoration:line-through;font-weight:600;font-size:0.62em;">$200</span> $50<small> one-time</small></div>
         <div class="tier__sub-price"><strong style="color:var(--oo-gold);">75% off with WIMBY</strong> · <span id="season-remaining" class="num-tab">25</span> of <span id="season-total" class="num-tab">25</span> spots left</div>
-        <button id="season-buy-btn" class="tier__cta tier__cta--primary">Claim 75% Off — $50</button>
+        <button id="season-buy-btn" class="tier__cta tier__cta--primary">Claim Your Spot — $50</button>
         <ul class="tier__feats">
           <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Software — all sports</li>
           <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Locked through Wimbledon — no weekly billing</li>
@@ -7107,6 +7204,22 @@ main, nav, footer { position: relative; z-index: 1; }
       btns.forEach(function (x) { x.classList.toggle('is-active', x === b); });
       var sec = document.getElementById('inside');
       if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+})();
+</script>
+
+<script>
+/* "A Look Inside" — per-sport intel popup switcher inside the iPhone frame */
+(function () {
+  var sw = document.querySelectorAll('.lp-switch__btn');
+  var pops = document.querySelectorAll('.lp-ipop');
+  if (!sw.length || !pops.length) return;
+  sw.forEach(function (b) {
+    b.addEventListener('click', function () {
+      var sport = b.getAttribute('data-sport');
+      sw.forEach(function (x) { x.classList.toggle('is-active', x === b); });
+      pops.forEach(function (p) { p.hidden = p.getAttribute('data-sport') !== sport; });
     });
   });
 })();
