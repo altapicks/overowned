@@ -40,7 +40,14 @@ export const handler = async () => {
     const dayTotal    = dayRow?.available    ?? DAY_PASS_TOTAL;
     const seasonTotal = seasonRow?.available ?? SEASON_1_TOTAL;
     const daySold     = dayRow?.sold    ?? 0;
-    const seasonSold  = seasonRow?.sold ?? 0;
+    // Season sold = authoritative live count of issued season keys. The
+    // hand-incremented license_stock.sold drifted (frozen since May), so we
+    // count the real keys to self-heal the displayed spots-remaining.
+    const { count: seasonKeyCount } = await supabase
+      .from('license_keys')
+      .select('id', { count: 'exact', head: true })
+      .eq('plan', 'season').eq('status', 'active');
+    const seasonSold  = Math.max(seasonKeyCount ?? 0, seasonRow?.sold ?? 0);
 
     return {
       statusCode: 200,

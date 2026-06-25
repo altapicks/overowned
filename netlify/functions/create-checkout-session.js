@@ -31,10 +31,10 @@ export const handler = async (event) => {
   try {
     // ── 1. Inventory check ───────────────────────────────────────────────
     const { count } = await supabase
-      .from('season_passes')
+      .from('license_keys')
       .select('id', { count: 'exact', head: true })
-      .eq('season', 1)
-      .in('status', ['active', 'pending']);
+      .eq('plan', 'season')
+      .eq('status', 'active');
 
     const used = count ?? 0;
     if (used >= SEASON_1_TOTAL) {
