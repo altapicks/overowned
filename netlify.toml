@@ -5,6 +5,13 @@
   publish = "."
   functions = "netlify/functions"
 
+[build.environment]
+  # The Supabase PROJECT URL is public (used client-side everywhere) and is NOT a
+  # secret — it legitimately appears in index.html via our self-hosted player-photo
+  # URLs. Exclude it from Netlify's secret scanner. The real secret
+  # (SUPABASE_SERVICE_ROLE_KEY) never appears in client output.
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL"
+
 [functions]
   # Node 18 supports the modern Stripe / Supabase / Resend SDKs.
   node_bundler = "esbuild"
