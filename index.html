@@ -4145,7 +4145,7 @@ main, nav, footer { position: relative; z-index: 1; }
   /* App preview on mobile = the real PWA: bottom nav, no top tabs. */
   .product-tabs { display: none !important; }
   .oo-mnav {
-    display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px;
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px;
     margin-top: 14px; padding: 10px 4px;
     background: linear-gradient(180deg, rgba(10,20,38,0.92), rgba(8,16,30,1));
     -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%);
@@ -6538,14 +6538,15 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
     </div>
 
-    <!-- Mobile-only: the real app's bottom nav (add-to-home-screen PWA look) -->
+    <!-- Mobile-only: the real app's bottom nav (add-to-home-screen PWA look).
+         Mirrors the app's current 5-category mobile nav (Live · Research ·
+         Props · DFS · Profile) from src/components/MobileNav.tsx. -->
     <nav class="oo-mnav" aria-label="App preview navigation">
-      <button class="oo-mnav-btn is-active" data-mnav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-7H9v7H4.5A1.5 1.5 0 0 1 3 20z"/></svg><span class="oo-mnav-lbl">Home</span></button>
-      <button class="oo-mnav-btn" data-mnav="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3.5-3.5L13 13l5-5"/><circle cx="18" cy="8" r="1.25" fill="currentColor" stroke="none"/></svg><span class="oo-mnav-lbl">Tactics</span></button>
+      <button class="oo-mnav-btn is-active" data-mnav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-7H9v7H4.5A1.5 1.5 0 0 1 3 20z"/></svg><span class="oo-mnav-lbl">Live</span></button>
+      <button class="oo-mnav-btn" data-mnav="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3.5-3.5L13 13l5-5"/><circle cx="18" cy="8" r="1.25" fill="currentColor" stroke="none"/></svg><span class="oo-mnav-lbl">Research</span></button>
       <button class="oo-mnav-btn" data-mnav="projections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L9 11 L13 14 L20 6"/><path d="M14 6 H20 V12"/></svg><span class="oo-mnav-lbl">Props</span></button>
-      <button class="oo-mnav-btn" data-mnav="builder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><line x1="14" y1="18" x2="21" y2="18"/></svg><span class="oo-mnav-lbl">Builder</span></button>
-      <button class="oo-mnav-btn" data-mnav="signals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2-6 3 12 3-9 2 5h3"/><circle cx="20" cy="12" r="1.25" fill="currentColor" stroke="none"/></svg><span class="oo-mnav-lbl">Signals</span></button>
-      <button class="oo-mnav-btn" data-mnav="trends"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="16" y="6" width="4" height="14" rx="1"/><line x1="3" y1="20" x2="21" y2="20"/></svg><span class="oo-mnav-lbl">Trends</span></button>
+      <button class="oo-mnav-btn" data-mnav="builder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><line x1="14" y1="18" x2="21" y2="18"/></svg><span class="oo-mnav-lbl">DFS</span></button>
+      <button class="oo-mnav-btn" data-mnav="signals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 3.09 14H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="oo-mnav-lbl">Profile</span></button>
     </nav>
 
   </div>
