@@ -1348,6 +1348,23 @@ main, nav, footer { position: relative; z-index: 1; }
 .tab-panel.is-active { display: block; min-height: 560px; }
 @media (max-width: 920px) { .tab-panel.is-active { min-height: 0; } }
 
+/* ── Inside-the-Product + tour: fit ONE viewport on tablet/desktop too
+   (phones are handled at ≤768px). Each app-screen replica is height-capped to
+   the screen so the #inside section never runs taller than one page; a dense
+   replica (Builder / Projections) scrolls INSIDE its frame, exactly like the
+   real app. Fixed height keeps tab-switching from jumping the page. Additive +
+   scoped to #inside / .tour-pop only. */
+@media (min-width: 769px) {
+  #inside .tab-panel.is-active {
+    height: min(600px, calc(100dvh - 230px));
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+/* Guided-tour caption can never exceed the viewport on a short window. */
+.tour-pop { max-height: calc(100dvh - 32px); overflow-y: auto; }
+
 /* ── PrizePicks Projections view ─────────────────────────── */
 .pp-layout {
   display: grid;
