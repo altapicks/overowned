@@ -47,6 +47,19 @@ export const handler = async (event) => {
 
     // ── 2. Build the Checkout session ───────────────────────────────────
     const origin = event.headers.origin || 'https://overowned.io';
+
+    // Wimbledon launch promo: auto-apply the "Wimby" 75%-off code so the
+    // discounted price is locked in without the customer typing anything.
+    // Stripe forbids `discounts` + `allow_promotion_codes` together, so we
+    // resolve the promo code to its id and pass it as a discount; if it can't
+    // be resolved we fall back to manual promo entry. (Body may pass {promo}.)
+    let promoField = { allow_promotion_codes: true };
+    try {
+      const wanted = (() => { try { return JSON.parse(event.body || '{}').promo; } catch { return null; } })() || 'Wimby';
+      const found = await stripe.promotionCodes.list({ code: wanted, active: true, limit: 1 });
+      if (found.data.length) promoField = { discounts: [{ promotion_code: found.data[0].id }] };
+    } catch (_) { /* keep manual-entry fallback */ }
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
@@ -72,10 +85,9 @@ export const handler = async (event) => {
       },
       // Metadata flows through to the webhook so we know which season this is.
       metadata: { season: '1' },
-      // Promo codes — customers can enter a code (e.g. LAUNCH25) at checkout.
-      // Create + manage codes in Stripe Dashboard → Products → Coupons.
-      // See: https://dashboard.stripe.com/coupons
-      allow_promotion_codes: true,
+      // Promo: auto-applies "Wimby" (75% off) as a discount when resolvable,
+      // else allows manual entry. See promoField above.
+      ...promoField,
       // Tax — let Stripe Tax handle if enabled in your dashboard.
       automatic_tax: { enabled: false },
     });

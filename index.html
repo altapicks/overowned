@@ -3227,7 +3227,16 @@ main, nav, footer { position: relative; z-index: 1; }
 .tr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
 .tr-donut { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 5px; padding: 18px 14px; background: rgba(13,29,48,0.45); border: 1px solid var(--oo-border); border-radius: 14px; }
 .tr-ring { width: 92px; height: 92px; }
-.tr-ring__pct { text-anchor: middle; dominant-baseline: central; font-size: 19px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.tr-ring__pct { text-anchor: middle; dominant-baseline: central; font-size: 15px; font-weight: 900; font-variant-numeric: tabular-nums; }
+
+/* App-consistent GOLD SCROLLBAR (exact match to the in-app scrollbar so the
+   landing's scroll surfaces — incl. the Inside-the-Product panels — read the
+   same as the product). Alta 2026-06-25. */
+* { scrollbar-width: thin; scrollbar-color: rgba(245,197,24,0.28) transparent; }
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-thumb { background: rgba(245,197,24,0.28); border-radius: 4px; }
+*::-webkit-scrollbar-thumb:hover { background: rgba(245,197,24,0.45); }
+*::-webkit-scrollbar-track { background: transparent; }
 .tr-donut__label { margin-top: 4px; font-size: 12.5px; font-weight: 800; color: var(--oo-text); letter-spacing: 0.2px; }
 .tr-donut__sub { font-size: 10.5px; color: var(--oo-muted); line-height: 1.35; }
 .tr-donut__n { font-size: 10px; color: var(--oo-muted-2); font-variant-numeric: tabular-nums; }
@@ -4120,21 +4129,21 @@ main, nav, footer { position: relative; z-index: 1; }
       <div class="hero__copy">
         <div class="hero__badge reveal">
           <span class="hero__badge-dot"></span>
-          Season 1 is open · Limited spots
+          Wimbledon Special · 75% off with code WIMBY
         </div>
         <h1 class="hero__headline reveal">
           Beat the field in<br>
           <span class="hero__accent">every sport you play.</span>
         </h1>
         <p class="hero__sub reveal">
-          Real projections, custom trap formulas, graded signals and lineup builders across Tennis, Golf, WNBA, Soccer and UFC — built for PrizePicks and DraftKings players who strive for an edge.
+          Sharp projections and graded signals for PrizePicks &amp; DraftKings. Five sports, one edge.
         </p>
         <div class="hero__proof reveal">
           <span class="chip__dot"></span>
-          5 sports live · Real-time projections
+          Five sports live · 95% on graded PP glitches
         </div>
         <div class="hero__cta reveal">
-          <a href="#pricing" class="btn btn--primary">Claim Your Spot</a>
+          <a href="#pricing" class="btn btn--primary">Claim 75% Off</a>
           <a href="#how-it-works" class="btn btn--ghost">See How It Works</a>
         </div>
       </div>
@@ -4236,7 +4245,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
               <circle cx="36" cy="36" r="30" fill="none" stroke="var(--oo-green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="9.4" transform="rotate(-90 36 36)"/>
             </svg>
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--oo-green);font-variant-numeric:tabular-nums;">95%</div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--oo-green);font-variant-numeric:tabular-nums;">95%</div>
           </div>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--oo-green);font-variant-numeric:tabular-nums;">18 W · 1 L</div>
@@ -4254,7 +4263,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
               <circle cx="36" cy="36" r="30" fill="none" stroke="var(--oo-green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="0" transform="rotate(-90 36 36)"/>
             </svg>
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--oo-green);font-variant-numeric:tabular-nums;">100%</div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--oo-green);font-variant-numeric:tabular-nums;">100%</div>
           </div>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--oo-green);font-variant-numeric:tabular-nums;">3 W · 0 L</div>
@@ -4272,7 +4281,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
               <circle cx="36" cy="36" r="30" fill="none" stroke="var(--oo-green)" stroke-width="6" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="0" transform="rotate(-90 36 36)"/>
             </svg>
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:var(--oo-green);font-variant-numeric:tabular-nums;">100%</div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--oo-green);font-variant-numeric:tabular-nums;">100%</div>
           </div>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--oo-green);font-variant-numeric:tabular-nums;">3 W · 0 L</div>
@@ -4289,7 +4298,7 @@ main, nav, footer { position: relative; z-index: 1; }
             <svg width="72" height="72" viewBox="0 0 72 72">
               <circle cx="36" cy="36" r="30" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/>
             </svg>
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--oo-muted-2);">—</div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--oo-muted-2);">—</div>
           </div>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--oo-muted);">Building</div>
@@ -5968,34 +5977,34 @@ main, nav, footer { position: relative; z-index: 1; }
       <div class="app-frame reveal">
         <div class="tr-grid">
           <div class="tr-donut">
-            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#FCA5A5" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="47.4" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#FCA5A5">78%</text></svg>
-            <div class="tr-donut__label">Bearish TRAP</div>
-            <div class="tr-donut__sub">beat prior + Δvalue ≥ 0.3 → fade</div>
-            <div class="tr-donut__n">14 / 18 graded</div>
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#6EE7B7" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="10.7" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#6EE7B7">95%</text></svg>
+            <div class="tr-donut__label">PP Glitch Lines</div>
+            <div class="tr-donut__sub">mispriced PrizePicks line → fade</div>
+            <div class="tr-donut__n">18 / 19 graded</div>
           </div>
           <div class="tr-donut">
-            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#6EE7B7" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="47.4" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#6EE7B7">78%</text></svg>
-            <div class="tr-donut__label">Bullish LEVERAGE</div>
-            <div class="tr-donut__sub">missed prior + Δvalue ≤ −0.3 → play</div>
-            <div class="tr-donut__n">7 / 9 graded</div>
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#6EE7B7" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#6EE7B7">100%</text></svg>
+            <div class="tr-donut__label">Tennis Trends</div>
+            <div class="tr-donut__sub">every graded tennis signal</div>
+            <div class="tr-donut__n">3 / 3 graded</div>
           </div>
           <div class="tr-donut">
-            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#FCA5A5" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#FCA5A5">100%</text></svg>
-            <div class="tr-donut__label">OverOwned Signal</div>
-            <div class="tr-donut__sub">fade chalk → not in optimal 6 (baseline 62.5%)</div>
-            <div class="tr-donut__n">2 / 2 graded</div>
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#6EE7B7" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#6EE7B7">100%</text></svg>
+            <div class="tr-donut__label">WNBA Trends</div>
+            <div class="tr-donut__sub">post-spike + soft-matchup signals</div>
+            <div class="tr-donut__n">3 / 3 graded</div>
           </div>
           <div class="tr-donut">
-            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#FFD84A" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="40.6" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#FFD84A">81%</text></svg>
-            <div class="tr-donut__label">GOOD VALUE</div>
-            <div class="tr-donut__sub">play model direction · ≥3pt edge</div>
-            <div class="tr-donut__n">17 / 21 graded</div>
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><text x="40" y="40" class="tr-ring__pct" fill="#60718c" style="font-size:24px;">—</text></svg>
+            <div class="tr-donut__label">Soccer Trends</div>
+            <div class="tr-donut__sub">graded sample accruing</div>
+            <div class="tr-donut__n">live now</div>
           </div>
           <div class="tr-donut">
-            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#93C5FD" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="0" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#93C5FD">100%</text></svg>
-            <div class="tr-donut__label">STAY AWAY</div>
-            <div class="tr-donut__sub">both sides Bearish → bet match OVER games</div>
-            <div class="tr-donut__n">6 / 6 graded</div>
+            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><text x="40" y="40" class="tr-ring__pct" fill="#60718c" style="font-size:24px;">—</text></svg>
+            <div class="tr-donut__label">Golf Trends</div>
+            <div class="tr-donut__sub">round-1 gated · accruing</div>
+            <div class="tr-donut__n">live now</div>
           </div>
         </div>
         <div class="tr-feed oo-pc-only">
@@ -6366,10 +6375,10 @@ main, nav, footer { position: relative; z-index: 1; }
       <div class="tier tier--featured">
         <div class="tier__badge">BEST VALUE</div>
         <div class="tier__name">Season 1 Pass</div>
-        <div class="tier__who">Everything, locked through July 12</div>
-        <div class="tier__price">$200<small> one-time</small></div>
-        <div class="tier__sub-price"><span id="season-remaining" class="num-tab">25</span> of <span id="season-total" class="num-tab">25</span> spots left · no auto-renew</div>
-        <button id="season-buy-btn" class="tier__cta tier__cta--primary">Claim Your Spot</button>
+        <div class="tier__who">Everything, locked through Wimbledon</div>
+        <div class="tier__price"><span style="-webkit-text-fill-color:var(--oo-muted);color:var(--oo-muted);text-decoration:line-through;font-weight:600;font-size:0.62em;">$200</span> $50<small> one-time</small></div>
+        <div class="tier__sub-price"><strong style="color:var(--oo-gold);">75% off with WIMBY</strong> · <span id="season-remaining" class="num-tab">25</span> of <span id="season-total" class="num-tab">25</span> spots left</div>
+        <button id="season-buy-btn" class="tier__cta tier__cta--primary">Claim 75% Off — $50</button>
         <ul class="tier__feats">
           <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Everything in Software — all sports</li>
           <li class="tier__feat tier__feat--on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Locked through Wimbledon — no weekly billing</li>
@@ -6771,7 +6780,7 @@ main, nav, footer { position: relative; z-index: 1; }
       body: 'A live feed of the calls that matter — Good Value, Style, OverOwned, Book Trap, Stay Away — each with the exact bet and the reason. Galfi +6.4 OVER and Virtanen +5.1 OVER are today’s top value.' },
     { tab: 'trends', view: 'Trends', anchor: '[data-panel="trends"] .tr-grid',
       title: 'Every signal, graded',
-      body: 'Proof, not promises. Each signal is graded against real results — Bearish TRAP 14/18, Bullish LEVERAGE 7/9, Good Value 17/21, Stay Away 6/6 — so you can trust the edge before you bet it.' },
+      body: 'Proof, not promises. Every signal is frozen at lock and graded against real results — PP Glitches 18/19, Tennis 3/3, WNBA 3/3, with Soccer & Golf building — so you can trust the edge before you bet it.' },
     { tab: 'home', view: 'Home', anchor: '[data-panel="home"] .home-board',
       title: 'That’s the whole edge',
       body: 'Six views, one sharp model: read the board, study the matchup, price the props, build the lineups, follow the signals, and check the receipts. Claim your spot below.' }
