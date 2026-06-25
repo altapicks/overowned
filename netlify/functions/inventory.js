@@ -45,7 +45,7 @@ export const handler = async () => {
     // count the real keys to self-heal the displayed spots-remaining.
     const { count: seasonKeyCount } = await supabase
       .from('license_keys')
-      .select('id', { count: 'exact', head: true })
+      .select('*', { count: 'exact', head: true })
       .eq('plan', 'season').eq('status', 'active');
     const seasonSold  = Math.max(seasonKeyCount ?? 0, seasonRow?.sold ?? 0);
 

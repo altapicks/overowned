@@ -32,7 +32,7 @@ export const handler = async (event) => {
     // ── 1. Inventory check ───────────────────────────────────────────────
     const { count } = await supabase
       .from('license_keys')
-      .select('id', { count: 'exact', head: true })
+      .select('*', { count: 'exact', head: true })
       .eq('plan', 'season')
       .eq('status', 'active');
 
