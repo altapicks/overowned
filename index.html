@@ -3334,6 +3334,34 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-chip__dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
 .lp-chip.pos .lp-chip__dot { background: #34D399; } .lp-chip.neg .lp-chip__dot { background: #f59e0b; }
 .lp-chip__label { font-weight: 700; color: var(--oo-text); } .lp-chip__detail { color: var(--oo-muted); margin-left: auto; font-size: 11.5px; }
+/* ── faithful per-sport intel popup internals (mirror the app modal cards) ── */
+.lp-card { margin-top: 11px; background: rgba(255,255,255,0.018); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px 13px; }
+.lp-card__title { font-size: 10.5px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; color: var(--oo-gold); margin: 0 0 9px; }
+.lp-mm { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px; }
+.lp-mm__donut { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+.lp-mm__ring { position: relative; width: 62px; height: 62px; }
+.lp-mm__pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--oo-mono); font-size: 15px; font-weight: 800; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+.lp-mm__lbl { font-size: 8px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase; color: var(--oo-muted-2); text-align: center; }
+.lp-mm__cap { font-size: 8.5px; font-weight: 600; color: var(--oo-muted); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 86px; }
+.lp-mm__mid { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.lp-mm__edge { font-size: 16px; font-weight: 900; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; line-height: 1; color: #4ADE80; }
+.lp-mm__edge small { font-size: 9px; font-weight: 700; opacity: 0.7; margin-left: 1px; }
+.lp-mm__edgecap { font-size: 7.5px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; color: var(--oo-muted-2); }
+.lp-bars { display: flex; flex-direction: column; gap: 9px; }
+.lp-bar { display: grid; grid-template-columns: 86px 1fr 42px; align-items: center; gap: 8px; }
+.lp-bar__label { font-size: 11px; font-weight: 600; color: var(--oo-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-bar__track { height: 7px; border-radius: 4px; background: rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+.lp-bar__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: #34D399; }
+.lp-bar__fill.red { background: #F87171; } .lp-bar__fill.gold { background: linear-gradient(90deg, rgba(245,197,24,0.7), #FFD84A); } .lp-bar__fill.blue { background: #6BB6FF; }
+.lp-bar__val { font-family: var(--oo-mono); font-size: 11.5px; font-weight: 700; color: var(--oo-text); text-align: right; font-variant-numeric: tabular-nums; }
+.lp-ptiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lp-tbl { width: 100%; border-collapse: collapse; font-size: 11px; }
+.lp-tbl th { font-size: 8px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase; color: var(--oo-muted-2); text-align: right; padding: 0 0 6px; }
+.lp-tbl th:first-child { text-align: left; }
+.lp-tbl td { padding: 5px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: right; font-family: var(--oo-mono); color: var(--oo-muted); font-variant-numeric: tabular-nums; }
+.lp-tbl td:first-child { text-align: left; font-family: inherit; color: var(--oo-text); font-weight: 600; }
+.lp-tbl tfoot td { font-weight: 800; color: var(--oo-text); border-top: 1px solid rgba(255,209,26,0.22); }
+.lp-tbl tfoot td.gold { color: var(--oo-gold); }
 /* Draws */
 .lp-draws { display: flex; flex-direction: column; gap: 12px; }
 .lp-draws__hdr { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--oo-muted-2); }
@@ -4921,71 +4949,128 @@ main, nav, footer { position: relative; z-index: 1; }
           <div class="lp-phone__island"></div>
           <div class="lp-phone__screen">
 
-            <!-- TENNIS -->
+            <!-- TENNIS — clones WtaIntelModal: Model vs Market · Surface Profile · Service & Return -->
             <div class="lp-ipop" data-sport="tennis">
-              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Win Intel · Grass</div><h3 class="lp-pop__title"><span class="lp-pop__name">Iga Świątek</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Coco Gauff</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">WTA · Player Intel · Grass</div><h3 class="lp-pop__title"><span class="lp-pop__name">Iga Świątek</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Coco Gauff</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
               <div class="lp-pop__body">
-                <div class="lp-hero">
-                  <div class="lp-tile"><span class="lp-tile__label">Win Prob</span><span class="lp-tile__value gold">61%</span><span class="lp-tile__sub">model</span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">Proj FS</span><span class="lp-tile__value">42.8</span><span class="lp-tile__sub"><span class="pos">+5.1 edge</span></span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">37.5</span><span class="lp-tile__sub">take over</span></div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Model vs Market</div>
+                  <div class="lp-mm">
+                    <div class="lp-mm__donut">
+                      <div class="lp-mm__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="27" fill="none" stroke="var(--oo-gold)" stroke-width="6" stroke-linecap="round" stroke-dasharray="103.5 169.6" transform="rotate(-90 31 31)"/></svg><div class="lp-mm__pct" style="color:var(--oo-gold)">61%</div></div>
+                      <div class="lp-mm__lbl">OverOwned</div><div class="lp-mm__cap">Świątek to win</div>
+                    </div>
+                    <div class="lp-mm__mid"><div class="lp-mm__edge">+7<small>pp</small></div><div class="lp-mm__edgecap">model favors</div></div>
+                    <div class="lp-mm__donut">
+                      <div class="lp-mm__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="27" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="91.6 169.6" transform="rotate(-90 31 31)"/></svg><div class="lp-mm__pct" style="color:#6BB6FF">54%</div></div>
+                      <div class="lp-mm__lbl">Kalshi Market</div><div class="lp-mm__cap">Świątek to win</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="lp-why">
-                  <div class="lp-why__title">Why we lean over</div>
-                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Serve hold edge</span><span class="lp-chip__detail">+8% vs field</span></div>
-                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Return points won</span><span class="lp-chip__detail">top-5 on grass</span></div>
-                  <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Break threat</span><span class="lp-chip__detail">manageable</span></div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Surface Profile</div>
+                  <div class="lp-ptiles">
+                    <div class="lp-tile"><span class="lp-tile__label">Surface Rating</span><span class="lp-tile__value gold">3rd</span><span class="lp-tile__sub">2118</span></div>
+                    <div class="lp-tile"><span class="lp-tile__label">WTA Rank</span><span class="lp-tile__value">1st</span><span class="lp-tile__sub">live</span></div>
+                    <div class="lp-tile"><span class="lp-tile__label">Titles · Finals</span><span class="lp-tile__value">24</span><span class="lp-tile__sub">8 finals</span></div>
+                    <div class="lp-tile"><span class="lp-tile__label">Win %</span><span class="lp-tile__value">88%</span><span class="lp-tile__sub">210 matches</span></div>
+                  </div>
+                </div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Service &amp; Return Profile</div>
+                  <div class="lp-bars">
+                    <div class="lp-bar"><span class="lp-bar__label">1st serve in</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:62%"></span></span><span class="lp-bar__val">64%</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">1st-serve won</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:81%"></span></span><span class="lp-bar__val">74%</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">2nd-serve won</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:68%"></span></span><span class="lp-bar__val">55%</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">Return won</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:73%"></span></span><span class="lp-bar__val">48%</span></div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- GOLF -->
+            <!-- GOLF — clones GolfIntelModal: Projection & Market · Strokes-Gained · Course Fit -->
             <div class="lp-ipop" data-sport="golf" hidden>
-              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Strokes Intel · The Open</div><h3 class="lp-pop__title"><span class="lp-pop__name">Scottie Scheffler</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">The Field</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Golf · Player Intel · The Open</div><h3 class="lp-pop__title"><span class="lp-pop__name">Scottie Scheffler</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">The Field</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
               <div class="lp-pop__body">
-                <div class="lp-hero">
-                  <div class="lp-tile"><span class="lp-tile__label">Top 10</span><span class="lp-tile__value gold">34%</span><span class="lp-tile__sub">model</span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">Proj R1</span><span class="lp-tile__value">68.7</span><span class="lp-tile__sub"><span class="pos">−1.8 vs line</span></span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">Kalshi</span><span class="lp-tile__value">70.5</span><span class="lp-tile__sub">take under</span></div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Projection &amp; Market</div>
+                  <div class="lp-hero">
+                    <div class="lp-tile"><span class="lp-tile__label">Proj R1</span><span class="lp-tile__value gold">68.7</span><span class="lp-tile__sub">model</span></div>
+                    <div class="lp-tile"><span class="lp-tile__label">Kalshi Line</span><span class="lp-tile__value">70.5</span><span class="lp-tile__sub"><span class="pos">−1.8 edge</span></span></div>
+                    <div class="lp-tile"><span class="lp-tile__label">Lean</span><span class="lp-tile__value">UNDER</span><span class="lp-tile__sub">strokes</span></div>
+                  </div>
                 </div>
-                <div class="lp-why">
-                  <div class="lp-why__title">Why we lean under</div>
-                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">SG: approach</span><span class="lp-chip__detail">+1.4 elite</span></div>
-                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Course fit</span><span class="lp-chip__detail">links-style A+</span></div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Strokes-Gained Profile</div>
+                  <div class="lp-bars">
+                    <div class="lp-bar"><span class="lp-bar__label">SG: Off Tee</span><span class="lp-bar__track"><span class="lp-bar__fill gold" style="width:58%"></span></span><span class="lp-bar__val">+0.8</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">SG: Approach</span><span class="lp-bar__track"><span class="lp-bar__fill gold" style="width:92%"></span></span><span class="lp-bar__val">+1.4</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">SG: Around Grn</span><span class="lp-bar__track"><span class="lp-bar__fill gold" style="width:44%"></span></span><span class="lp-bar__val">+0.4</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">SG: Putting</span><span class="lp-bar__track"><span class="lp-bar__fill gold" style="width:38%"></span></span><span class="lp-bar__val">+0.3</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">SG: Total</span><span class="lp-bar__track"><span class="lp-bar__fill gold" style="width:96%"></span></span><span class="lp-bar__val">+2.9</span></div>
+                  </div>
+                </div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Course Fit &amp; Finish</div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Top 10 odds</span><span class="lp-chip__detail">34% · 2nd</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Links-style fit</span><span class="lp-chip__detail">A+ history</span></div>
                   <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Wind exposure</span><span class="lp-chip__detail">PM wave</span></div>
                 </div>
               </div>
             </div>
 
-            <!-- WNBA -->
+            <!-- WNBA — clones WnbaPpProjectionPopup: PP FS hero · True Line Composition · Matchup -->
             <div class="lp-ipop" data-sport="wnba" hidden>
-              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Fan Score Intel</div><h3 class="lp-pop__title"><span class="lp-pop__name">A'ja Wilson</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Sky</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">6 Lines · Fan Score</div><h3 class="lp-pop__title"><span class="lp-pop__name">A'ja Wilson</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Sky</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
               <div class="lp-pop__body">
                 <div class="lp-hero">
-                  <div class="lp-tile"><span class="lp-tile__label">Proj FS</span><span class="lp-tile__value gold">49.6</span><span class="lp-tile__sub">model</span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">44.5</span><span class="lp-tile__sub"><span class="pos">+5.1 edge</span></span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">Matchup</span><span class="lp-tile__value">#2</span><span class="lp-tile__sub">soft D</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">PP FS Line</span><span class="lp-tile__value">44.5</span><span class="lp-tile__sub">posted</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Our True Line</span><span class="lp-tile__value gold">49.6</span><span class="lp-tile__sub">devig'd</span></div>
+                  <div class="lp-tile"><span class="lp-tile__label">Edge Read</span><span class="lp-tile__value">+5.1</span><span class="lp-tile__sub"><span class="pos">lean over</span></span></div>
                 </div>
-                <div class="lp-why">
-                  <div class="lp-why__title">Why we lean over</div>
+                <div class="lp-card">
+                  <div class="lp-card__title">True Line Composition</div>
+                  <table class="lp-tbl">
+                    <thead><tr><th>Stat</th><th>PP</th><th>Ours</th></tr></thead>
+                    <tbody>
+                      <tr><td>Points</td><td>21.8</td><td>22.5</td></tr>
+                      <tr><td>Rebounds</td><td>8.9</td><td>9.8</td></tr>
+                      <tr><td>Assists</td><td>2.6</td><td>3.0</td></tr>
+                      <tr><td>Steals</td><td>1.4</td><td>1.6</td></tr>
+                      <tr><td>Blocks</td><td>1.8</td><td>2.1</td></tr>
+                    </tbody>
+                    <tfoot><tr><td>FS composite</td><td>44.5</td><td class="gold">49.6</td></tr></tfoot>
+                  </table>
+                </div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Matchup · Sky Defense</div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Interior defense</span><span class="lp-chip__detail">bottom-5</span></div>
                   <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">On-ball usage</span><span class="lp-chip__detail">31% · top-3</span></div>
-                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Opp interior D</span><span class="lp-chip__detail">bottom-5</span></div>
                   <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Pace</span><span class="lp-chip__detail">+4 vs avg</span></div>
                 </div>
               </div>
             </div>
 
-            <!-- SOCCER -->
+            <!-- SOCCER — clones SoccerStatIntelModal: Shots Matchup · Numbers · Matchup Read -->
             <div class="lp-ipop" data-sport="soccer" hidden>
-              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Player Intel · World Cup</div><h3 class="lp-pop__title"><span class="lp-pop__name">Vinícius Jr</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Croatia</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">World Cup · Stat Intel · Shots</div><h3 class="lp-pop__title"><span class="lp-pop__name">Vinícius Jr</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Croatia</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
               <div class="lp-pop__body">
                 <div class="lp-hero">
                   <div class="lp-tile"><span class="lp-tile__label">Proj Shots</span><span class="lp-tile__value gold">3.6</span><span class="lp-tile__sub">model</span></div>
                   <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">2.5</span><span class="lp-tile__sub"><span class="pos">+1.1 edge</span></span></div>
                   <div class="lp-tile"><span class="lp-tile__label">Lean</span><span class="lp-tile__value">OVER</span><span class="lp-tile__sub">shots</span></div>
                 </div>
-                <div class="lp-why">
-                  <div class="lp-why__title">Why we lean over</div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Numbers · per 90</div>
+                  <div class="lp-bars">
+                    <div class="lp-bar"><span class="lp-bar__label">Shots / 90</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:84%"></span></span><span class="lp-bar__val">3.1</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">On target / 90</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:76%"></span></span><span class="lp-bar__val">1.3</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">xG / 90</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:80%"></span></span><span class="lp-bar__val">0.46</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">Box touches</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:90%"></span></span><span class="lp-bar__val">7.4</span></div>
+                  </div>
+                </div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Matchup Read</div>
                   <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Brazil control</span><span class="lp-chip__detail">62% poss</span></div>
                   <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Attacks the block</span><span class="lp-chip__detail">vs back-5</span></div>
                   <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Left-flank gap</span><span class="lp-chip__detail">opp RB out</span></div>
@@ -4993,20 +5078,38 @@ main, nav, footer { position: relative; z-index: 1; }
               </div>
             </div>
 
-            <!-- UFC -->
+            <!-- UFC — clones UfcIntelModal: Model vs Kalshi · Offense vs Field · Style Matchup -->
             <div class="lp-ipop" data-sport="ufc" hidden>
-              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">Matchup Intel · UFC 310</div><h3 class="lp-pop__title"><span class="lp-pop__name">Ilia Topuria</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">C. Oliveira</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
+              <div class="lp-pop__head"><div><div class="lp-pop__eyebrow">UFC · Fighter Intel · UFC 310</div><h3 class="lp-pop__title"><span class="lp-pop__name">Ilia Topuria</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">C. Oliveira</span></h3></div><span class="lp-pop__x" aria-hidden="true">×</span></div>
               <div class="lp-pop__body">
-                <div class="lp-hero">
-                  <div class="lp-tile"><span class="lp-tile__label">Win Prob</span><span class="lp-tile__value gold">64%</span><span class="lp-tile__sub">model</span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">Strikes/min</span><span class="lp-tile__value">6.8</span><span class="lp-tile__sub"><span class="pos">+2.1 edge</span></span></div>
-                  <div class="lp-tile"><span class="lp-tile__label">Method</span><span class="lp-tile__value">KO</span><span class="lp-tile__sub">/ TKO</span></div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Model vs Kalshi</div>
+                  <div class="lp-mm">
+                    <div class="lp-mm__donut">
+                      <div class="lp-mm__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="27" fill="none" stroke="var(--oo-gold)" stroke-width="6" stroke-linecap="round" stroke-dasharray="108.5 169.6" transform="rotate(-90 31 31)"/></svg><div class="lp-mm__pct" style="color:var(--oo-gold)">64%</div></div>
+                      <div class="lp-mm__lbl">OverOwned</div><div class="lp-mm__cap">Topuria to win</div>
+                    </div>
+                    <div class="lp-mm__mid"><div class="lp-mm__edge">+6<small>pp</small></div><div class="lp-mm__edgecap">model favors</div></div>
+                    <div class="lp-mm__donut">
+                      <div class="lp-mm__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="27" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="27" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="98.4 169.6" transform="rotate(-90 31 31)"/></svg><div class="lp-mm__pct" style="color:#6BB6FF">58%</div></div>
+                      <div class="lp-mm__lbl">Kalshi Market</div><div class="lp-mm__cap">Topuria to win</div>
+                    </div>
+                  </div>
                 </div>
-                <div class="lp-why">
-                  <div class="lp-why__title">Why Topuria</div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Offense vs Field</div>
+                  <div class="lp-bars">
+                    <div class="lp-bar"><span class="lp-bar__label">Sig strikes/min</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:88%"></span></span><span class="lp-bar__val">6.8</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">Striking acc</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:79%"></span></span><span class="lp-bar__val">56%</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">Knockdown rate</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:84%"></span></span><span class="lp-bar__val">top-5</span></div>
+                    <div class="lp-bar"><span class="lp-bar__label">TD defense</span><span class="lp-bar__track"><span class="lp-bar__fill" style="width:88%"></span></span><span class="lp-bar__val">88%</span></div>
+                  </div>
+                </div>
+                <div class="lp-card">
+                  <div class="lp-card__title">Style Matchup</div>
                   <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Striking volume</span><span class="lp-chip__detail">+2.1 /min</span></div>
-                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Takedown defense</span><span class="lp-chip__detail">88%</span></div>
-                  <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Reach</span><span class="lp-chip__detail">−2&quot;</span></div>
+                  <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Power · method</span><span class="lp-chip__detail">KO / TKO lean</span></div>
+                  <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Reach</span><span class="lp-chip__detail">−2&quot; deficit</span></div>
                 </div>
               </div>
             </div>
