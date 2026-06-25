@@ -3676,6 +3676,28 @@ main, nav, footer { position: relative; z-index: 1; }
 .oo-throw__res.hit { color: var(--oo-green); }
 .oo-throw__res.miss { color: var(--oo-red); }
 
+/* Trends history popup — mirrors the app's HistoryModal (oo-pp-math-modal):
+   grip handle, eyebrow + W/L·hit summary header, scrollable graded-play list. */
+.oo-modal__card--thist { max-width: 560px; max-height: 86vh; display: flex; flex-direction: column; overflow: hidden; }
+.oo-thist__grip { display: none; }
+.oo-thist__mhead { padding: 18px 20px 13px; border-bottom: 1px solid rgba(245,197,24,0.18);
+  background: radial-gradient(ellipse 60% 80% at 0% 0%, rgba(245,197,24,0.08), transparent 70%); flex: 0 0 auto; }
+.oo-thist__mhead .oo-thist__eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #FFD84A; }
+.oo-thist__mhead .oo-thist__summary { font-size: 12px; font-weight: 700; margin-top: 5px; color: #d7e0ee; }
+.oo-thist__scroll { overflow-y: auto; overflow-x: hidden; padding: 4px 18px 16px; min-height: 0; -webkit-overflow-scrolling: touch; }
+.oo-modal__card--thist .oo-thist__list { padding-top: 2px; }
+.oo-modal__card--thist .oo-modal__close { top: 13px; right: 13px; }
+@media (max-width: 560px) {
+  /* Bottom-sheet treatment on phones, like the app's mobile HistoryModal. */
+  .oo-modal:has(.oo-modal__card--thist) { align-items: flex-end; padding: 0; }
+  .oo-modal__card--thist { max-width: 100%; max-height: 82vh; border-radius: 18px 18px 0 0;
+    border-bottom: 0; animation: oo-sheet-up 0.26s cubic-bezier(0.16,1,0.3,1); }
+  .oo-thist__grip { display: flex; justify-content: center; padding: 9px 0 2px; flex: 0 0 auto; }
+  .oo-thist__grip span { width: 38px; height: 4px; border-radius: 999px; background: rgba(255,255,255,0.22); display: block; }
+  .oo-modal__card--thist .oo-modal__close { top: 10px; right: 12px; }
+}
+@keyframes oo-sheet-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
 /* ════════════════════════════════════════════════════════════════════
    MOBILE TOUR — phone mockups (≤768px only). Each tour panel renders the
    app's actual MOBILE screen inside a phone frame; the wide PC replica is
@@ -6988,13 +7010,13 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="oo-tscreen">
               <div class="oo-tscreen__h1">Trends</div>
               <div class="oo-tscreen__sub">Every graded signal, by actual result</div>
-              <div class="oo-tcard" style="cursor:default">
+              <div class="oo-tcard is-empty" style="cursor:default">
                 <div class="oo-tcard__head"><span class="oo-tcard__label">Tennis Trends</span><span class="oo-tcard__tag">Graded</span></div>
                 <div class="oo-tcard__row"><span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">&mdash;</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl oo-tcard__wl--dim">Tracking &mdash; building sample</span><span class="oo-tcard__n">New rule set</span></span></div>
               </div>
-              <div class="oo-tcard" style="cursor:default">
+              <div class="oo-tcard" data-trend="glitch">
                 <div class="oo-tcard__head"><span class="oo-tcard__label">PP Glitch Lines</span><span class="oo-tcard__tag">Graded</span></div>
-                <div class="oo-tcard__row"><span class="oo-tdonut" style="--p:0.95;--c:#19D27F"><span class="oo-tdonut__pct" style="color:#19D27F">95%</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl"><b style="color:var(--oo-green)">19W</b> &#183; <b style="color:var(--oo-red)">1L</b></span><span class="oo-tcard__n">20 graded</span><span class="oo-tcard__badge" style="--bc:#6EE7B7">EDGE</span></span></div>
+                <div class="oo-tcard__row"><span class="oo-tdonut" style="--p:0.95;--c:#19D27F"><span class="oo-tdonut__pct" style="color:#19D27F">95%</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl"><b style="color:var(--oo-green)">19W</b> &#183; <b style="color:var(--oo-red)">1L</b></span><span class="oo-tcard__n">20 graded &#183; tap for history</span><span class="oo-tcard__badge" style="--bc:#6EE7B7">EDGE</span></span></div>
               </div>
             </div>
           </div>
@@ -7061,21 +7083,6 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="oo-tcard__head"><span class="oo-tcard__label">UFC Trends</span><span class="oo-tcard__tag">Signals Graded</span></div>
             <div class="oo-tcard__row"><span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">—</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl oo-tcard__wl--dim">No graded sample yet</span><span class="oo-tcard__note">Tracking — graded sample is still building.</span></span></div>
           </button>
-        </div>
-        <!-- Graded-history drill-down — opens when a donut card is clicked.
-             Clone of the in-app HistoryModal (oo-pp-math-modal): header with the
-             W/L/hit summary, then every graded play as a row with date · player
-             + side/line · vs opponent · HIT/MISS. Hidden until a donut is tapped. -->
-        <div class="oo-thist" id="oo-thist" hidden>
-          <button type="button" class="oo-thist__back" id="oo-thist-back">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
-            Back to donuts
-          </button>
-          <div class="oo-thist__head">
-            <div class="oo-thist__eyebrow" id="oo-thist-eyebrow">TENNIS TRENDS</div>
-            <div class="oo-thist__summary" id="oo-thist-summary"></div>
-          </div>
-          <ul class="oo-thist__list" id="oo-thist-list"></ul>
         </div>
       </div>
     </div>
@@ -7166,6 +7173,27 @@ main, nav, footer { position: relative; z-index: 1; }
       <div class="ppm-row"><span>Aces</span><span class="ppm-calc">6.5 × 0.5</span><span class="ppm-v ppm-pos">+3.25</span></div>
       <div class="ppm-row"><span>Double Faults</span><span class="ppm-calc">3.5 × −0.5</span><span class="ppm-v ppm-neg">−1.75</span></div>
       <div class="ppm-row ppm-row--sum"><span>Outcome EV</span><span class="ppm-calc"></span><span class="ppm-v ppm-grad">14.18</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Trends graded-history popup — clone of the in-app HistoryModal
+     (src/components/SportTrends.tsx → oo-pp-math-modal / oo-wintel-modal):
+     a glass dialog with a grip handle, an eyebrow + W/L·hit summary header, a
+     close X, and a scrollable list of every graded play (date · player + side ·
+     line · vs opponent · HIT/MISS · actual). Opens when a graded donut card is
+     tapped. Reuses the landing's .oo-modal system (gold --ppm glass). -->
+<div class="oo-modal" id="thist-modal" hidden>
+  <div class="oo-modal__overlay" data-close></div>
+  <div class="oo-modal__card oo-modal__card--ppm oo-modal__card--thist" role="dialog" aria-label="Trends graded history">
+    <div class="oo-thist__grip" aria-hidden="true"><span></span></div>
+    <button class="oo-modal__close" data-close aria-label="Close">×</button>
+    <header class="oo-thist__mhead">
+      <div class="oo-thist__eyebrow" id="thist-eyebrow">PP GLITCH LINES</div>
+      <div class="oo-thist__summary" id="thist-summary"></div>
+    </header>
+    <div class="oo-thist__scroll">
+      <ul class="oo-thist__list" id="thist-list"></ul>
     </div>
   </div>
 </div>
@@ -7667,59 +7695,61 @@ main, nav, footer { position: relative; z-index: 1; }
     });
   }
 
-  // ── Trends donut → graded-history drill-down ─────────────
-  // Mirrors the in-app HistoryModal: click a live donut card → swap the donut
-  // grid for that signal's graded play list. "Back to donuts" returns.
+  // ── Trends donut → graded-history popup ──────────────────
+  // Mirrors the in-app HistoryModal (src/components/SportTrends.tsx →
+  // oo-pp-math-modal): click a graded donut card → open a glass dialog with the
+  // eyebrow + W/L·hit summary header and the full graded-play list. Same
+  // openModal/closeModals plumbing as the rest of the landing's popups.
   (function () {
-    var grid = document.querySelector('[data-panel="trends"] .oo-trends-grid');
-    var hist = document.getElementById('oo-thist');
-    if (!grid || !hist) return;
-    var listEl = document.getElementById('oo-thist-list');
-    var eyebrowEl = document.getElementById('oo-thist-eyebrow');
-    var summaryEl = document.getElementById('oo-thist-summary');
-    var backBtn = document.getElementById('oo-thist-back');
+    var listEl = document.getElementById('thist-list');
+    var eyebrowEl = document.getElementById('thist-eyebrow');
+    var summaryEl = document.getElementById('thist-summary');
+    if (!listEl || !eyebrowEl || !summaryEl || typeof openModal !== 'function') return;
 
-    // Sample graded plays per signal (representative of the real graded feed).
-    var DATA = {
-      tennis: {
-        eyebrow: 'TENNIS TRENDS', summary: 'Tracking — graded sample still building under the new rule set',
-        plays: [
-          ['06-09','Yastremska','spr','+15.5','vs Bejlek','hit'],
-          ['06-09','Hijikata','o','58.3','vs Gentzsch','hit'],
-          ['06-09','Munar','spr','+3','vs Damm Jr','hit'],
-          ['06-09','Brooksby','spr','+4.5','vs Z. Zhang','miss'],
-          ['06-08','Kessler','spr','+2','vs Pliskova','hit'],
-          ['06-08','Badosa','spr','-2.5','vs Snigur','hit'],
-          ['06-08','Shapovalov','spr','+4.5','vs Cilic','hit'],
-          ['06-08','Jones','u','27.3','vs Siegemund','miss'],
-          ['06-08','Boulter','spr','+10','vs Fernandez','miss']
-        ]
-      },
-      glitch: {
-        eyebrow: 'PP GLITCH LINES', summary: '19W · 1L · 95% hit · 20 graded',
-        plays: [
-          ['06-25','Diallo','o','7.5','Aces · actual 10','hit'],
-          ['06-24','Kopriva','o','2.5','Double Faults · actual 5','hit'],
-          ['06-24','Quinn','o','5.5','Aces · actual 18','hit'],
-          ['06-24','Swiatek','o','3.5','Aces · actual 6','hit'],
-          ['06-23','Svitolina','o','2.5','Double Faults · actual 3','hit'],
-          ['06-22','Tauson','o','4.5','Aces · actual 6','hit'],
-          ['06-19','Zverev','o','9.5','Aces · actual 14','hit'],
-          ['06-18','Shelton','o','10.5','Aces · actual 16','miss']
-        ]
-      }
+    // PP Glitch Lines — the REAL graded plays (pp_goblin_snapshots, graded
+    // vs the actual ace/DF count). 19W · 1L · 95% over 20 graded. Each row:
+    // [date, player, side(o/u), standard, statSubtitle, result, actual].
+    // statSubtitle mirrors the app: "goblin X > std Y" when the captured
+    // goblin sat above the standard, else just the stat. NOT fabricated —
+    // these are the live graded rows. Newest first.
+    var GLITCH = {
+      eyebrow: 'PP GLITCH LINES', summary: '19W · 1L · 95% hit · 20 graded',
+      plays: [
+        ['06-25','Gabriel Diallo','o','7.5','Aces · goblin 10.5 > std 7.5','hit','10'],
+        ['06-24','Tatjana Maria','o','6.5','Aces · goblin 7.5 > std 6.5','hit','7'],
+        ['06-24','Vit Kopriva','o','2.5','Double Faults · goblin 3.5 > std 2.5','hit','5'],
+        ['06-24','Ethan Quinn','o','5.5','Aces · goblin 7.5 > std 5.5','hit','18'],
+        ['06-24','Iga Swiatek','o','3.5','Aces · goblin 5.5 > std 3.5','hit','6'],
+        ['06-23','Elina Svitolina','o','2.5','Double Faults · goblin 3.5 > std 2.5','hit','3'],
+        ['06-22','Clara Tauson','o','4.5','Aces · goblin 5.5 > std 4.5','hit','6'],
+        ['06-20','Francisco Cerundolo','o','3.5','Aces','hit','9'],
+        ['06-20','Jessica Pegula','u','3.5','Aces','hit','5'],
+        ['06-20','Taylor Fritz','o','14.5','Aces','hit',''],
+        ['06-20','Linda Noskova','u','9','Aces','hit','9'],
+        ['06-20','Aryna Sabalenka','o','6.5','Aces · goblin 7.5 > std 6.5','hit','9'],
+        ['06-19','Alexander Zverev','o','9.5','Aces · goblin 10.5 > std 9.5','hit','14'],
+        ['06-18','Ben Shelton','o','10.5','Aces · goblin 11.5 > std 10.5','miss','16'],
+        ['06-18','Karolina Pliskova','o','3.5','Aces · goblin 7.5 > std 3.5','hit','3'],
+        ['06-18','Corentin Moutet','o','4','Aces · goblin 5.5 > std 4','hit','1'],
+        ['06-18','Taylor Fritz','o','11.5','Aces · goblin 13.5 > std 11.5','hit','16'],
+        ['06-18','Ethan Quinn','o','6.5','Aces · goblin 7.5 > std 6.5','hit','8'],
+        ['06-18','Hannah Klugman','o','4.5','Aces · goblin 6.5 > std 4.5','hit','4'],
+        ['06-18','Alexander Zverev','o','13.5','Aces · goblin 14.5 > std 13.5','hit','9']
+      ]
     };
+    var DATA = { glitch: GLITCH };
 
     function rowHtml(p) {
-      var date = p[0], name = p[1], sideKind = p[2], line = p[3], detail = p[4], res = p[5];
+      var date = p[0], name = p[1], sideKind = p[2], line = p[3], detail = p[4], res = p[5], actual = p[6];
       var sideHtml = sideKind === 'spr'
         ? '<span class="oo-throw__side spr">' + line + '</span>'
         : '<span class="oo-throw__side ' + sideKind + '">' + (sideKind === 'o' ? 'O' : 'U') + '</span> <span style="font-weight:800;font-size:12px">' + line + '</span>';
+      var resTxt = (res === 'hit' ? 'HIT' : 'MISS') + (actual ? ' · ' + actual : '');
       return '<li class="oo-throw">' +
         '<span class="oo-throw__date">' + date + '</span>' +
         '<span class="oo-throw__body"><span class="oo-throw__name">' + name + ' ' + sideHtml + '</span>' +
         '<span class="oo-throw__detail">' + detail + '</span></span>' +
-        '<span class="oo-throw__res ' + res + '">' + (res === 'hit' ? 'HIT' : 'MISS') + '</span></li>';
+        '<span class="oo-throw__res ' + res + '">' + resTxt + '</span></li>';
     }
 
     function openHist(key) {
@@ -7728,22 +7758,15 @@ main, nav, footer { position: relative; z-index: 1; }
       eyebrowEl.textContent = d.eyebrow;
       summaryEl.textContent = d.summary;
       listEl.innerHTML = d.plays.map(rowHtml).join('');
-      grid.style.display = 'none';
-      hist.hidden = false;
-    }
-    function closeHist() {
-      hist.hidden = true;
-      grid.style.display = '';
+      openModal('thist-modal');
     }
 
-    grid.querySelectorAll('.oo-tcard').forEach(function (card) {
+    document.querySelectorAll('[data-panel="trends"] .oo-tcard, [data-panel="trends"] .oo-tmobile .oo-tcard').forEach(function (card) {
       if (card.classList.contains('is-empty')) return;
-      card.addEventListener('click', function () { openHist(card.getAttribute('data-trend')); });
-    });
-    if (backBtn) backBtn.addEventListener('click', closeHist);
-    // Reset to the grid whenever the Trends tab is (re)entered.
-    document.querySelectorAll('.product-tab[data-tab="trends"]').forEach(function (t) {
-      t.addEventListener('click', closeHist);
+      var key = card.getAttribute('data-trend') || 'glitch';
+      if (!DATA[key]) return;
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function () { openHist(key); });
     });
   })();
 
@@ -7923,7 +7946,7 @@ main, nav, footer { position: relative; z-index: 1; }
   ];
 
   // ── Modal control (used by the tour AND by clicking the boards) ──
-  function closeModals() { ['mc-modal', 'ppm-modal', 'wta-modal', 'cpi-modal'].forEach(function (id) { var m = document.getElementById(id); if (m) m.hidden = true; }); }
+  function closeModals() { ['mc-modal', 'ppm-modal', 'wta-modal', 'cpi-modal', 'thist-modal'].forEach(function (id) { var m = document.getElementById(id); if (m) m.hidden = true; }); }
   function openModal(id) { closeModals(); var m = document.getElementById(id); if (m) m.hidden = false; }
   document.querySelectorAll('.oo-modal [data-close]').forEach(function (b) { b.addEventListener('click', closeModals); });
   document.querySelectorAll('[data-panel="home"] .hb-row').forEach(function (r) { r.style.cursor = 'pointer'; r.addEventListener('click', function () { openModal('mc-modal'); }); });
