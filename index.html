@@ -2686,7 +2686,7 @@ main, nav, footer { position: relative; z-index: 1; }
   margin-right: 4px;
   border-radius: 1.5px;
   box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.25);
-  background: #18213a;
+  background: transparent;
   object-fit: cover;
 }
 .flag .flag-img { margin-right: 2px; }
@@ -3472,19 +3472,17 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-rf__o { font-weight:600; color:#e8ecf4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .lp-rf__a { font-weight:800; min-width:30px; text-align:right; font-variant-numeric:tabular-nums; }
 .lp-rf__b { font-weight:700; color:rgba(203,213,225,0.55); min-width:26px; text-align:right; font-variant-numeric:tabular-nums; }
-/* soccer Stat-Intel — two side-by-side phones (desktop), full-width native sheet (mobile) */
+/* soccer Stat-Intel — two side-by-side phones (desktop); on mobile they keep the
+   SAME iPhone phone-frame mockup as every other sport popup (stacked vertically),
+   for visual consistency across the gallery. */
 .lp-scc-phones { display:flex; gap:16px; align-items:flex-start; justify-content:center; }
 .lp-gphone--soc { width:262px; aspect-ratio:262/610; }
 .lp-gphone--soc .lp-prof__body { overflow-y:auto; overflow-x:hidden; scrollbar-width:none; }
 .lp-gphone--soc .lp-prof__body::-webkit-scrollbar { width:0; height:0; }
 @media (max-width:640px){
-  .lp-scc-phones { flex-direction:column; gap:16px; width:100%; align-items:stretch; }
-  .lp-gphone--soc { width:100%; aspect-ratio:auto; background:none; border-radius:0; padding:0; box-shadow:none; }
-  .lp-gphone--soc .lp-gphone__island { display:none; }
-  .lp-gphone--soc .lp-gphone__screen { height:auto; border-radius:18px; overflow:visible; border:1px solid rgba(255,255,255,0.08); background:#070d18; }
-  .lp-gphone--soc .lp-prof { position:relative; inset:auto; }
-  .lp-gphone--soc .lp-prof__body { overflow:visible; padding:2px 14px 16px; gap:11px; }
-  .lp-gphone--soc .lp-prof__bar { padding:14px 14px 4px; }
+  /* stack the two framed soccer phones; keep the frame, just shrink to fit 360/390 */
+  .lp-scc-phones { flex-direction:column; gap:22px; width:100%; align-items:center; }
+  .lp-gphone--soc { width:min(82vw,262px); aspect-ratio:262/610; }
 }
 
 .lp-line { position: relative; z-index: 1; display: flex; justify-content: space-evenly; align-items: center; gap: 4px; }
@@ -4139,10 +4137,6 @@ main, nav, footer { position: relative; z-index: 1; }
   .section__head { margin-bottom: 36px; }
 
   .features-grid { grid-template-columns: 1fr; }
-  /* Mobile: simplify the feature stack — lead with the key feature (Live Leverage),
-     hide the two most secondary ones (Trap Detection, DK Salary Tracker) to cut clutter. */
-  .features-grid .feat--lead { order: -1; }
-  .features-grid .feat--m-hide { display: none; }
   /* .steps now uses auto-fit grid + per-card max-width — handled fluidly above. */
   .steps::before { display: none; }
   .sports { grid-template-columns: 1fr; }
@@ -4407,7 +4401,16 @@ main, nav, footer { position: relative; z-index: 1; }
   .hero { padding: 42px 0 52px; }
   .hero__grid { gap: 30px; }
   .hero__headline { font-size: 33px; }
-  .sport-card { padding: 20px 16px; }
+  /* Sport cards: 2-up grid + much smaller cards so the whole Coverage section
+     fits in ~one scroll on mobile (was ~2 full scrolls). Desktop unchanged. */
+  .sports { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sport-card { padding: 14px 10px; min-height: 124px; gap: 7px; border-radius: var(--oo-radius-md); }
+  .sport-card__icon { width: 34px; height: 34px; border-radius: 9px; }
+  .sport-card__icon svg { width: 18px; height: 18px; }
+  .sport-card__name { font-size: 14px; }
+  .sport-card__status { padding: 3px 9px; font-size: 9.5px; letter-spacing: 0.4px; }
+  .sport-card__loader { width: 78px; }
+  .sport-card__caption { font-size: 11px; }
   .tier { padding: 22px 18px; }
   .season-card { padding: 26px 18px; }
   .season-amount { font-size: 38px; }
@@ -4665,63 +4668,7 @@ main, nav, footer { position: relative; z-index: 1; }
     </div>
     <div class="features-grid reveal-stagger">
 
-      <!-- (1) Real Projections -->
-      <div class="feat">
-        <div class="feat__head">
-          <div class="feat__title">Real Projections</div>
-          <div class="feat__icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-6"/></svg>
-          </div>
-        </div>
-        <div class="feat__demo">
-          <div class="demo-proj">
-            <div class="demo-proj__row">
-              <div class="demo-proj__name">Cirstea</div>
-              <div class="demo-proj__bar" data-pct="78"><span></span></div>
-              <div class="demo-proj__num">69.6</div>
-            </div>
-            <div class="demo-proj__row">
-              <div class="demo-proj__name">Kostyuk</div>
-              <div class="demo-proj__bar" data-pct="64"><span></span></div>
-              <div class="demo-proj__num">70.7</div>
-            </div>
-            <div class="demo-proj__row">
-              <div class="demo-proj__name">Shelton</div>
-              <div class="demo-proj__bar" data-pct="52"><span></span></div>
-              <div class="demo-proj__num">53.8</div>
-            </div>
-          </div>
-        </div>
-        <div class="feat__desc">Sharp-market-calibrated, sport-specific scoring with scenario simulation — across Tennis, Golf, WNBA, Soccer and UFC.</div>
-      </div>
-
-      <!-- (2) Trap Detection -->
-      <div class="feat feat--m-hide">
-        <div class="feat__head">
-          <div class="feat__title">Trap Detection</div>
-          <div class="feat__icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>
-          </div>
-        </div>
-        <div class="feat__demo">
-          <div class="demo-trap">
-            <div class="demo-trap__row">
-              <div class="demo-trap__name"><span class="flag" aria-hidden="true">🇸🇰</span>Molcan</div>
-              <div class="demo-trap__chip">
-                <span class="chip chip--green demo-trap__face demo-trap__face--lock"><span class="chip__dot"></span>Public Lock</span>
-                <span class="chip chip--red demo-trap__face demo-trap__face--trap"><span class="chip__dot"></span>TRAP · 38%</span>
-              </div>
-            </div>
-            <div class="demo-trap__meta">
-              <div class="demo-trap__bar"><span></span></div>
-              <div class="demo-trap__bar-label">38% public ownership</div>
-            </div>
-          </div>
-        </div>
-        <div class="feat__desc">Custom formulas plus graded signals — trap lines, glitch overs, post-spike fades — flag high-owned bust risks so you fade with confidence.</div>
-      </div>
-
-      <!-- (3) Lineup Optimizer -->
+      <!-- (1) Lineup Optimizer -->
       <div class="feat">
         <div class="feat__head">
           <div class="feat__title">Lineup Optimizer</div>
@@ -4745,33 +4692,10 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
         </div>
-        <div class="feat__desc">OverOwned builders for every sport — exposure caps, stacking, leverage and game-script correlation — unique lineups in seconds.</div>
+        <div class="feat__desc">Instead of one highest-projected lineup, we simulate thousands of slate outcomes and build the portfolio of lineups most likely to actually win the tournament — each player at their optimal exposure, across every sport.</div>
       </div>
 
-      <!-- (4) Live Leverage -->
-      <div class="feat feat--lead">
-        <div class="feat__head">
-          <div class="feat__title">Live Leverage</div>
-          <div class="feat__icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 L9 6 L13 10 L21 4"/><path d="M21 4 L21 10"/><path d="M21 4 L15 4"/></svg>
-          </div>
-        </div>
-        <div class="feat__demo">
-          <div class="demo-donut">
-            <svg class="demo-donut__svg" viewBox="0 0 72 72">
-              <circle class="demo-donut__track" cx="36" cy="36" r="30" fill="none" stroke-width="8"/>
-              <circle class="demo-donut__fill" cx="36" cy="36" r="30" fill="none" stroke-width="8" stroke-linecap="round" transform="rotate(-90 36 36)"/>
-            </svg>
-            <div class="demo-donut__txt">
-              <span class="demo-donut__pct">+22%</span>
-              vs. field exposure
-            </div>
-          </div>
-        </div>
-        <div class="feat__desc">Post-lock contest ownership vs your exposure, plus every signal graded in Trends — know who you're overweight, who the field missed, and exactly what's hit.</div>
-      </div>
-
-      <!-- (5) PrizePicks Edge -->
+      <!-- (2) PrizePicks Edge -->
       <div class="feat">
         <div class="feat__head">
           <div class="feat__title">PrizePicks Edge</div>
@@ -4794,8 +4718,8 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="feat__desc">Fantasy Score, Aces, Double Faults, Breaks, Passes, Saves, Shots — every line devigged against sharp market consensus so you only play real edges.</div>
       </div>
 
-      <!-- (6) DK Salary Tracker -->
-      <div class="feat feat--m-hide">
+      <!-- (3) DK Salary Tracker -->
+      <div class="feat">
         <div class="feat__head">
           <div class="feat__title">DK Salary Tracker</div>
           <div class="feat__icon">
@@ -6998,8 +6922,20 @@ main, nav, footer { position: relative; z-index: 1; }
           const img = document.createElement('img');
           img.className = 'flag-img';
           img.alt = cc.toUpperCase();
-          img.loading = 'lazy';
+          // Flags are tiny + above the fold — load eagerly so they never sit as
+          // empty boxes (the lazy loader was the mobile bug). Explicit height/width
+          // keeps the box from collapsing before load.
+          img.loading = 'eager';
           img.decoding = 'async';
+          img.height = 12;
+          img.width = 18;
+          img.style.width = 'auto';
+          // If the CDN is blocked/unreachable, fall back to the native flag emoji
+          // (iOS/Android render it) so a failed image is never a dark empty box.
+          const original = m[0];
+          img.onerror = function () {
+            if (img.parentNode) img.parentNode.replaceChild(document.createTextNode(original), img);
+          };
           img.src = `https://flagcdn.com/h20/${cc}.png`;
           img.srcset = `https://flagcdn.com/h40/${cc}.png 2x, https://flagcdn.com/h60/${cc}.png 3x`;
           frag.appendChild(img);
