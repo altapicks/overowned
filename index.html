@@ -4139,6 +4139,10 @@ main, nav, footer { position: relative; z-index: 1; }
   .section__head { margin-bottom: 36px; }
 
   .features-grid { grid-template-columns: 1fr; }
+  /* Mobile: simplify the feature stack — lead with the key feature (Live Leverage),
+     hide the two most secondary ones (Trap Detection, DK Salary Tracker) to cut clutter. */
+  .features-grid .feat--lead { order: -1; }
+  .features-grid .feat--m-hide { display: none; }
   /* .steps now uses auto-fit grid + per-card max-width — handled fluidly above. */
   .steps::before { display: none; }
   .sports { grid-template-columns: 1fr; }
@@ -4692,7 +4696,7 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
 
       <!-- (2) Trap Detection -->
-      <div class="feat">
+      <div class="feat feat--m-hide">
         <div class="feat__head">
           <div class="feat__title">Trap Detection</div>
           <div class="feat__icon">
@@ -4745,7 +4749,7 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
 
       <!-- (4) Live Leverage -->
-      <div class="feat">
+      <div class="feat feat--lead">
         <div class="feat__head">
           <div class="feat__title">Live Leverage</div>
           <div class="feat__icon">
@@ -4791,7 +4795,7 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
 
       <!-- (6) DK Salary Tracker -->
-      <div class="feat">
+      <div class="feat feat--m-hide">
         <div class="feat__head">
           <div class="feat__title">DK Salary Tracker</div>
           <div class="feat__icon">
