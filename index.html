@@ -3405,7 +3405,7 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-stx-hero .lp-stx-flag { width:38px; height:28px; border-radius:5px; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto; box-shadow:0 2px 10px rgba(0,0,0,0.45); font-size:23px; line-height:28px; }
 .lp-stx-hero .lp-stx-flag img { width:38px !important; height:28px !important; max-width:38px; object-fit:cover; border-radius:5px; display:block; }
 .lp-scc { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:26px; align-items:start; }
-@media (max-width:860px){ .lp-scc { grid-template-columns:1fr; gap:22px; justify-items:center; } }
+@media (max-width:1024px){ .lp-scc { grid-template-columns:1fr; gap:22px; justify-items:center; } }
 .lp-gallery { display:flex; flex-wrap:wrap; justify-content:center; gap:22px 18px; }
 .lp-gphone { position:relative; width:240px; flex:0 0 auto; aspect-ratio:240/500; background:#05060a; border-radius:40px; padding:9px; box-shadow:0 28px 56px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(255,255,255,0.07), 0 0 0 1px rgba(0,0,0,0.8); }
 .lp-gphone__island { position:absolute; top:17px; left:50%; transform:translateX(-50%); width:72px; height:21px; background:#000; border-radius:999px; z-index:6; }
@@ -3472,11 +3472,20 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-rf__o { font-weight:600; color:#e8ecf4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .lp-rf__a { font-weight:800; min-width:30px; text-align:right; font-variant-numeric:tabular-nums; }
 .lp-rf__b { font-weight:700; color:rgba(203,213,225,0.55); min-width:26px; text-align:right; font-variant-numeric:tabular-nums; }
-/* tall soccer Stat-Intel phone — internal scroll so the full real popup shows */
-.lp-gphone--soc { aspect-ratio:240/600; }
+/* soccer Stat-Intel — two side-by-side phones (desktop), full-width native sheet (mobile) */
+.lp-scc-phones { display:flex; gap:16px; align-items:flex-start; justify-content:center; }
+.lp-gphone--soc { width:262px; aspect-ratio:262/610; }
 .lp-gphone--soc .lp-prof__body { overflow-y:auto; overflow-x:hidden; scrollbar-width:none; }
 .lp-gphone--soc .lp-prof__body::-webkit-scrollbar { width:0; height:0; }
-@media (max-width:520px){ .lp-gphone--soc { width:min(86vw,320px); aspect-ratio:320/660; } }
+@media (max-width:640px){
+  .lp-scc-phones { flex-direction:column; gap:16px; width:100%; align-items:stretch; }
+  .lp-gphone--soc { width:100%; aspect-ratio:auto; background:none; border-radius:0; padding:0; box-shadow:none; }
+  .lp-gphone--soc .lp-gphone__island { display:none; }
+  .lp-gphone--soc .lp-gphone__screen { height:auto; border-radius:18px; overflow:visible; border:1px solid rgba(255,255,255,0.08); background:#070d18; }
+  .lp-gphone--soc .lp-prof { position:relative; inset:auto; }
+  .lp-gphone--soc .lp-prof__body { overflow:visible; padding:2px 14px 16px; gap:11px; }
+  .lp-gphone--soc .lp-prof__bar { padding:14px 14px 4px; }
+}
 
 .lp-line { position: relative; z-index: 1; display: flex; justify-content: space-evenly; align-items: center; gap: 4px; }
 .lp-pchip { display: flex; flex-direction: column; align-items: center; width: clamp(46px, 19%, 78px); }
@@ -4980,6 +4989,7 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
       </div>
+      <div class="lp-scc-phones">
       <div class="lp-gphone lp-gphone--soc">
         <div class="lp-gphone__island"></div>
         <div class="lp-gphone__screen">
@@ -5018,6 +5028,21 @@ main, nav, footer { position: relative; z-index: 1; }
                   <div class="lp-gtile"><span class="lp-gtile__l">Adj Proj</span><span class="lp-gtile__v" style="color:#F87171">3.0</span><span class="lp-gtile__s">lean under</span></div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="lp-gphone lp-gphone--soc">
+        <div class="lp-gphone__island"></div>
+        <div class="lp-gphone__screen">
+          <div class="lp-prof">
+            <div class="lp-prof__bg" style="background:radial-gradient(120% 70% at 8% 2%, rgba(61,220,132,0.28), transparent 52%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+            <div class="lp-prof__bar"><span class="lp-prof__ey">World Cup · Stat Intel</span></div>
+            <div class="lp-prof__body">
+              <div class="lp-prof__hero" style="margin-bottom:4px">
+                <span class="lp-prof__av" style="border-color:#6EE7B7"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Isak%20Hi%C3%A9n.jpg?width=120" alt="" referrerpolicy="no-referrer" onerror="this.remove()">IH</span>
+                <div style="min-width:0"><div class="lp-prof__nl">Hien</div><div class="lp-prof__ns" style="color:#8CDC9B">🇸🇪 Quality &amp; Markers</div></div>
+              </div>
               <div class="lp-gcard">
                 <div class="lp-gcard__t">Quality Profile</div>
                 <div class="lp-radar">
@@ -5055,6 +5080,7 @@ main, nav, footer { position: relative; z-index: 1; }
           </div>
         </div>
       </div>
+      </div>
     </div>
   </div>
 </section>
@@ -5077,7 +5103,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">WTA · Player Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <span class="lp-prof__av" style="border-color:#8CDC9B"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Iga%20%C5%9Awi%C4%85tek%20%282022%29.jpg?width=120" alt="" referrerpolicy="no-referrer" onerror="this.remove()">IŚ</span>
+                  <span class="lp-prof__av" style="border-color:#8CDC9B"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg/330px-Iga_Swiatek_2023_Cropped_%2B_Retouched.jpg" alt="" referrerpolicy="no-referrer" onerror="this.remove()">IŚ</span>
                   <div style="min-width:0"><div class="lp-prof__nf">Iga</div><div class="lp-prof__nl">Świątek</div><div class="lp-prof__ns" style="color:#8CDC9B">🇵🇱 Grass · Model 3rd</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5109,7 +5135,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">Golf · Player Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <span class="lp-prof__av" style="border-color:#FFD84A"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Scottie%20Scheffler%202022.jpg?width=120" alt="" referrerpolicy="no-referrer" onerror="this.remove()">SS</span>
+                  <span class="lp-prof__av" style="border-color:#FFD84A"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg/330px-Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg" alt="" referrerpolicy="no-referrer" onerror="this.remove()">SS</span>
                   <div style="min-width:0"><div class="lp-prof__nf">Scottie</div><div class="lp-prof__nl">Scheffler</div><div class="lp-prof__ns" style="color:#FFD84A">🇺🇸 DataGolf #1</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5139,7 +5165,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">UFC · Fighter Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <span class="lp-prof__av" style="border-color:#8CC3F0"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/Islam%20Makhachev%202023.jpg?width=120" alt="" referrerpolicy="no-referrer" onerror="this.remove()">IM</span>
+                  <span class="lp-prof__av" style="border-color:#8CC3F0"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Islam_Makhachev_and_Sergey_Melikov_2025_%28cropped%29.jpg/330px-Islam_Makhachev_and_Sergey_Melikov_2025_%28cropped%29.jpg" alt="" referrerpolicy="no-referrer" onerror="this.remove()">IM</span>
                   <div style="min-width:0"><div class="lp-prof__nf">Islam</div><div class="lp-prof__nl">Makhachev</div><div class="lp-prof__ns" style="color:#8CC3F0">🇷🇺 LW · 26–1</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5168,7 +5194,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">WNBA · Projection</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <span class="lp-prof__av" style="border-color:#FFD84A"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/A%27ja%20Wilson%20%282019%29.jpg?width=120" alt="" referrerpolicy="no-referrer" onerror="this.remove()">AW</span>
+                  <span class="lp-prof__av" style="border-color:#FFD84A"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/A%27ja_Wilson_%2853756794398%29_%28cropped%29.jpg/330px-A%27ja_Wilson_%2853756794398%29_%28cropped%29.jpg" alt="" referrerpolicy="no-referrer" onerror="this.remove()">AW</span>
                   <div style="min-width:0"><div class="lp-prof__nf">A&#39;ja</div><div class="lp-prof__nl">Wilson</div><div class="lp-prof__ns" style="color:#8CC3F0">Las Vegas · F</div></div>
                 </div>
                 <div class="lp-gcard">
