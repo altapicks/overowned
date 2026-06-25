@@ -3277,10 +3277,13 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-switch__btn.is-active { background: var(--oo-gold); color: #0a1426; }
 .lp-phone { position: relative; width: 300px; max-width: 86vw; aspect-ratio: 300 / 624; background: #05060a; border-radius: 46px; padding: 11px; box-shadow: 0 34px 70px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.07), 0 0 0 1px rgba(0,0,0,0.8); }
 .lp-phone__island { position: absolute; top: 21px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; background: #000; border-radius: 999px; z-index: 6; }
-.lp-phone__screen { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: linear-gradient(180deg, #0E1B33 0%, #0A1628 100%); }
-.lp-ipop { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; }
+.lp-phone__screen { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: linear-gradient(180deg, rgba(20,33,55,0.96) 0%, rgba(11,23,40,0.98) 100%); }
+/* Bottom-sheet grab grip — exact app chrome ([data-oo-sheet-grip]); shared across all sport popups, clears the island. */
+.lp-phone__screen::after { content: ""; position: absolute; top: 41px; left: 50%; transform: translateX(-50%); width: 38px; height: 4px; border-radius: 999px; background: rgba(255,255,255,0.20); z-index: 5; pointer-events: none; }
+.lp-ipop { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
 .lp-ipop[hidden] { display: none; }
-.lp-ipop .lp-pop__head { padding-top: 50px; background: radial-gradient(ellipse 60% 90% at 0% 0%, rgba(255,209,26,0.12), transparent 70%), rgba(255,255,255,0.015); }
+/* Continuous gold wash from grip through the header, fading to dark glass body — mirrors .oo-wintel-modal mobile. */
+.lp-ipop .lp-pop__head { padding-top: 56px; border-bottom: 1px solid rgba(245,197,24,0.16); background: linear-gradient(180deg, rgba(245,197,24,0.16) 0%, rgba(245,197,24,0.10) 26%, rgba(245,197,24,0.035) 52%, rgba(11,23,40,0) 78%); }
 .lp-ipop .lp-pop__body { padding: 14px 16px 22px; }
 @media (max-width: 420px) { .lp-phone { width: 270px; } .lp-switch__btn { padding: 6px 10px; font-size: 11px; } }
 /* Win-Intel glass popup */
