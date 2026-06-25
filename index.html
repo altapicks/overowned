@@ -3482,7 +3482,7 @@ main, nav, footer { position: relative; z-index: 1; }
 @media (max-width:640px){
   /* stack the two framed soccer phones; keep the frame, just shrink to fit 360/390 */
   .lp-scc-phones { flex-direction:column; gap:22px; width:100%; align-items:center; }
-  .lp-gphone--soc { width:min(82vw,262px); aspect-ratio:262/610; }
+  .lp-gphone--soc { width:min(84vw,300px); aspect-ratio:300/600; }
 }
 
 .lp-line { position: relative; z-index: 1; display: flex; justify-content: space-evenly; align-items: center; gap: 4px; }
@@ -5050,7 +5050,7 @@ main, nav, footer { position: relative; z-index: 1; }
 <section class="section section--alt" id="peek-gallery">
   <div class="container">
     <div class="section__head reveal">
-      <div class="section__eyebrow">Apple-Sports Design</div>
+      <div class="section__eyebrow">Data-Driven Design</div>
       <h2 class="section__title">The popups you'll tap every day.</h2>
     </div>
     <div class="lp-tabs" role="tablist" aria-label="Sport popups">
@@ -7012,7 +7012,7 @@ main, nav, footer { position: relative; z-index: 1; }
         // Hero glow drifts as you scroll past it
         if (heroBg && scrollTop < 1000) heroBg.style.transform = `translate3d(0, ${scrollTop * 0.18}px, 0)`;
         // Hero recedes — scales down, lifts and fades as the next section rises
-        // over it, so leaving the hero feels like a page handing off (Apple Sports).
+        // over it, so leaving the hero feels like a page handing off (native-app feel).
         if (heroGrid && scrollTop < vh() * 1.1) {
           const p = Math.min(1, scrollTop / (vh() * 0.85));
           heroGrid.style.transform = `translate3d(0, ${p * 46}px, 0) scale(${1 - p * 0.05})`;
