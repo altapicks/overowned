@@ -4544,6 +4544,11 @@ main, nav, footer { position: relative; z-index: 1; }
   .lp-gallery .lp-gphone[data-sport] { display: none; }
   .lp-gallery .lp-gphone[data-sport].is-active { display: block; }
 }
+/* PC landing only: popup phone-mockup avatars render as initials (the photos don't
+   size right at desktop scale). The soccer PITCH (.lp-pchip__av) keeps its photos. */
+@media (min-width: 769px) {
+  .lp-prof__av img, .lp-mk__av img { display: none !important; }
+}
 </style>
 </head>
 <body>
