@@ -3401,6 +3401,26 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-pitch { position: relative; border-radius: 16px; padding: 16px 10px; height: 392px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0 10%, rgba(255,255,255,0) 10% 20%), linear-gradient(170deg, rgba(22,96,54,0.97), rgba(8,44,25,0.99)); border: 1px solid rgba(61,220,132,0.24); box-shadow: inset 0 0 70px rgba(0,0,0,0.4); }
 .lp-pitch-glow { position: absolute; top: -16%; left: 50%; width: 78%; height: 44%; transform: translateX(-50%); background: radial-gradient(ellipse at center, rgba(61,220,132,0.20), rgba(61,220,132,0) 70%); pointer-events: none; }
 
+/* Team profile card — facts row + team-quality donut strip (mirrors app oo-stx rail) */
+.lp-tprofile { width: 300px; display: flex; flex-direction: column; gap: 14px; }
+.lp-tprofile__facts { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; }
+.lp-tfact { background: linear-gradient(180deg, rgba(17,25,42,0.72), rgba(11,18,33,0.78)); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 11px 8px; text-align: center; }
+.lp-tfact b { display: block; font-size: 17px; font-weight: 800; color: #f1f5fb; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.lp-tfact span { display: block; margin-top: 3px; font-size: 8.5px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; color: rgba(203,213,225,0.55); }
+.lp-tquality { background: linear-gradient(180deg, rgba(17,25,42,0.72), rgba(11,18,33,0.78)); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 15px 14px; }
+.lp-tquality__head { display: flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: #e8ecf4; margin-bottom: 14px; }
+.lp-tquality__head em { font-style: normal; font-size: 9.5px; font-weight: 700; letter-spacing: 0.3px; color: rgba(203,213,225,0.5); text-transform: none; }
+.lp-tquality__dot { width: 7px; height: 7px; border-radius: 50%; background: #3ddc84; box-shadow: 0 0 6px rgba(61,220,132,0.7); flex: 0 0 auto; }
+.lp-tdonuts { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px 8px; }
+.lp-tdonut { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.lp-tdonut__ring { position: relative; width: 62px; height: 62px; }
+.lp-tdonut__v { position: absolute; inset: 0; display: grid; place-items: center; font-size: 16px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.lp-tdonut__l { font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: #e8ecf4; text-align: center; line-height: 1.2; }
+.lp-tdonut__r { font-size: 10px; font-weight: 700; color: rgba(203,213,225,0.55); text-align: center; line-height: 1.2; }
+.lp-tdonut__r.lead { color: var(--oo-gold); }
+@media (max-width:1024px){ .lp-tprofile { width: 100%; max-width: 420px; } }
+@media (max-width:420px){ .lp-tdonuts { gap: 14px 6px; } .lp-tdonut__ring { width: 56px; height: 56px; } }
+
 /* ── A Look Inside v2 — soccer showcase + mobile popup gallery ───────────── */
 .lp-stx-hero .lp-stx-flag { width:38px; height:28px; border-radius:5px; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto; box-shadow:0 2px 10px rgba(0,0,0,0.45); font-size:23px; line-height:28px; }
 .lp-stx-hero .lp-stx-flag img { width:38px !important; height:28px !important; max-width:38px; object-fit:cover; border-radius:5px; display:block; }
@@ -3472,20 +3492,10 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-rf__o { font-weight:600; color:#e8ecf4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .lp-rf__a { font-weight:800; min-width:30px; text-align:right; font-variant-numeric:tabular-nums; }
 .lp-rf__b { font-weight:700; color:rgba(203,213,225,0.55); min-width:26px; text-align:right; font-variant-numeric:tabular-nums; }
-/* soccer Stat-Intel — two side-by-side phones (desktop); on mobile they keep the
-   SAME iPhone phone-frame mockup as every other sport popup (stacked vertically),
-   for visual consistency across the gallery. */
-.lp-scc-phones { display:flex; gap:16px; align-items:flex-start; justify-content:center; }
-.lp-gphone--soc { width:240px; aspect-ratio:240/500; }
-.lp-gphone--soc .lp-prof__body { overflow-y:auto; overflow-x:hidden; scrollbar-width:none; }
-.lp-gphone--soc .lp-prof__body::-webkit-scrollbar { width:0; height:0; }
-@media (max-width:640px){
-  /* single framed soccer phone (scrolls internally); keep the frame, shrink to fit 360/390 */
-  .lp-scc-phones { flex-direction:column; gap:22px; width:100%; align-items:center; }
-  .lp-gphone--soc { width:min(84vw,300px); aspect-ratio:300/600; }
-}
+/* soccer Stat-Intel popup now lives in the shared gallery (data-sport="soccer"); it
+   reuses the standard .lp-gallery .lp-gphone frame + the invisible-scroll rule below. */
 
-/* ── Peek-gallery phones (tennis/golf/ufc/wnba): fill the frame top-to-bottom ──
+/* ── Peek-gallery phones (tennis/golf/soccer/ufc/wnba): fill the frame top-to-bottom ──
    These are tabbed display phones with a fixed frame. The bodies now hold the full
    per-sport popup (header → donuts → tiles → percentile bars → chips → recent form)
    so content fills the screen like the real app. Body scrolls invisibly if a sport
@@ -4961,7 +4971,7 @@ main, nav, footer { position: relative; z-index: 1; }
 <section class="section" id="peek">
   <div class="container">
     <div class="section__head reveal">
-      <div class="section__eyebrow">A Look Inside</div>
+      <div class="section__eyebrow">The Tactical Board</div>
       <h2 class="section__title">The whole pitch, decoded.</h2>
     </div>
     <div class="lp-scc reveal">
@@ -4979,9 +4989,9 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">AB<img src="https://images.fotmob.com/image_resources/playerimages/319784.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Alisson</div></div>
             </div>
             <div class="lp-line">
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">DA<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Danilo_and_Bilal_El_Khannouss_at_2026_FIFA_World_Cup_by_YantsImages_%28cropped%29.jpg/400px-Danilo_and_Bilal_El_Khannouss_at_2026_FIFA_World_Cup_by_YantsImages_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">80</span></div><div class="lp-pchip__nm">Danilo</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">DA<img src="https://images.fotmob.com/image_resources/playerimages/208077.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">80</span></div><div class="lp-pchip__nm">Danilo</div></div>
               <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">MA<img src="https://images.fotmob.com/image_resources/playerimages/267365.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">86</span></div><div class="lp-pchip__nm">Marquinhos</div></div>
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">GM<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Gabriel_Magalhaes_Brazil_V_Morocco_13_June_2026-132_%28cropped%29.jpg/400px-Gabriel_Magalhaes_Brazil_V_Morocco_13_June_2026-132_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">83</span></div><div class="lp-pchip__nm">G. Magalhães</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">GM<img src="https://images.fotmob.com/image_resources/playerimages/795179.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">83</span></div><div class="lp-pchip__nm">G. Magalhães</div></div>
               <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">WE<img src="https://images.fotmob.com/image_resources/playerimages/487867.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">79</span></div><div class="lp-pchip__nm">Wendell</div></div>
             </div>
             <div class="lp-line">
@@ -4998,83 +5008,42 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
       </div>
-      <div class="lp-scc-phones">
-      <div class="lp-gphone lp-gphone--soc">
-        <div class="lp-gphone__island"></div>
-        <div class="lp-gphone__screen">
-          <div class="lp-prof">
-            <div class="lp-prof__bg" style="background:radial-gradient(120% 70% at 8% 2%, rgba(61,220,132,0.28), transparent 52%), linear-gradient(180deg,#0b1424,#070d18)"></div>
-            <div class="lp-prof__bar"><span class="lp-prof__ey">World Cup · Stat Intel</span></div>
-            <div class="lp-prof__body">
-              <div class="lp-prof__hero">
-                <div class="lp-prof__av" style="border-color:#8CDC9B">IH<img src="https://images.fotmob.com/image_resources/playerimages/939780.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
-                <div style="min-width:0">
-                  <div class="lp-prof__nf">Isak</div>
-                  <div class="lp-prof__nl">Hien</div>
-                  <div class="lp-prof__ns" style="color:#8CDC9B">🇸🇪 D · 6.82</div>
-                  <div style="font-size:8.5px;font-weight:800;letter-spacing:0.5px;color:#FFD84A;margin-top:2px">FAN SCORE · 7.5</div>
-                </div>
-              </div>
-              <div class="lp-gcard">
-                <div class="lp-gcard__t">Fan Score Matchup</div>
-                <div class="lp-gmm">
-                  <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="45.2 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">30%</div></div><div class="lp-gmm__lbl">Player Rank<br>#917/1316</div></div>
-                  <div class="lp-gmm__mid"><div class="lp-gmm__edge" style="color:#6BB6FF">-4.5</div><div class="lp-gmm__ec">Lean Under</div></div>
-                  <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">100%</div></div><div class="lp-gmm__lbl">Japan D<br>#1 toughest</div></div>
-                </div>
-              </div>
-              <div class="lp-gcard">
-                <div class="lp-gcard__t">Matchup Read</div>
-                <div class="lp-pill"><b>Lean Under</b><span>adj 3.0 vs 7.5</span></div>
-                <div class="lp-pill"><b>Tough Defense</b><span>0.45× allowed</span></div>
-              </div>
-              <div class="lp-gcard">
-                <div class="lp-gcard__t">Numbers</div>
-                <div class="lp-gtiles">
-                  <div class="lp-gtile"><span class="lp-gtile__l">PP Line</span><span class="lp-gtile__v">7.5</span></div>
-                  <div class="lp-gtile"><span class="lp-gtile__l">Player Avg</span><span class="lp-gtile__v gold">6.5</span><span class="lp-gtile__s">#917 of 1316</span></div>
-                  <div class="lp-gtile"><span class="lp-gtile__l">Opp Allowed</span><span class="lp-gtile__v grn">0.45×</span><span class="lp-gtile__s">#1 toughest</span></div>
-                  <div class="lp-gtile"><span class="lp-gtile__l">Adj Proj</span><span class="lp-gtile__v" style="color:#F87171">3.0</span><span class="lp-gtile__s">lean under</span></div>
-                </div>
-              </div>
-              <div class="lp-gcard">
-                <div class="lp-gcard__t">Quality Profile</div>
-                <div class="lp-radar">
-                  <svg width="150" height="152" viewBox="0 0 150 152">
-                    <polygon points="75,18 124.5,53.9 105.6,112.1 44.4,112.1 25.5,53.9" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
-                    <polygon points="75,38.8 104.7,60.4 93.3,95.2 56.7,95.2 45.3,60.4" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-                    <line x1="75" y1="70" x2="75" y2="18" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="124.5" y2="53.9" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="105.6" y2="112.1" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="44.4" y2="112.1" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="25.5" y2="53.9" stroke="rgba(255,255,255,0.06)"/>
-                    <polygon points="75,41.4 102.2,61.2 91.8,93.1 58.2,93.1 47.8,61.2" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1" stroke-dasharray="3 3"/>
-                    <polygon points="75,51.8 93.8,63.9 94.0,96.1 52.4,101.1 54.2,63.3" fill="rgba(255,209,26,0.42)" stroke="#FFD84A" stroke-width="1.5"/>
-                    <circle cx="75" cy="51.8" r="2" fill="#FFD84A"/><circle cx="93.8" cy="63.9" r="2" fill="#FFD84A"/><circle cx="94.0" cy="96.1" r="2" fill="#FFD84A"/><circle cx="52.4" cy="101.1" r="2" fill="#FFD84A"/><circle cx="54.2" cy="63.3" r="2" fill="#FFD84A"/>
-                    <text x="75" y="13" text-anchor="middle">ATT</text><text x="129" y="52" text-anchor="start">TEC</text><text x="106" y="128" text-anchor="middle">TAC</text><text x="44" y="128" text-anchor="middle">DEF</text><text x="21" y="52" text-anchor="end">CRE</text>
-                  </svg>
-                </div>
-                <div class="lp-attr"><span class="lp-attr__l">ATT</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:35%;background:#F87171"></span></span><span class="lp-attr__v">35</span><span class="lp-attr__p" style="color:#F87171">35<small>pct</small></span></div>
-                <div class="lp-attr"><span class="lp-attr__l">TEC</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:38%;background:#F87171"></span></span><span class="lp-attr__v">38</span><span class="lp-attr__p" style="color:#F87171">38<small>pct</small></span></div>
-                <div class="lp-attr"><span class="lp-attr__l">TAC</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:62%;background:#19D27F"></span></span><span class="lp-attr__v">62</span><span class="lp-attr__p" style="color:#19D27F">62<small>pct</small></span></div>
-                <div class="lp-attr"><span class="lp-attr__l">DEF</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:74%;background:#19D27F"></span></span><span class="lp-attr__v">74</span><span class="lp-attr__p" style="color:#19D27F">74<small>pct</small></span></div>
-                <div class="lp-attr"><span class="lp-attr__l">CRE</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:42%;background:#F87171"></span></span><span class="lp-attr__v">42</span><span class="lp-attr__p" style="color:#F87171">42<small>pct</small></span></div>
-              </div>
-              <div class="lp-gcard">
-                <div class="lp-gcard__t">Likely Marker</div>
-                <div class="lp-mk">
-                  <div class="lp-mk__av" style="border-color:#6BB6FF">JS<img src="https://images.fotmob.com/image_resources/playerimages/1337765.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
-                  <div class="lp-mk__id"><div class="lp-mk__nm">Junnosuke Suzuki</div><div class="lp-mk__meta">🇯🇵 D · 7.30 rating</div></div>
-                  <div class="lp-mk__st"><div class="lp-mk__s"><b>1.5</b><span>Tkl</span></div><div class="lp-mk__s"><b>1.0</b><span>Int</span></div><div class="lp-mk__s"><b>3.5</b><span>Duel W</span></div></div>
-                </div>
-              </div>
-              <div class="lp-gcard">
-                <div class="lp-gcard__t">Recent Form · Fan Score</div>
-                <div class="lp-rf"><span class="lp-rf__o">🇹🇳 Tunisia</span><span class="lp-rf__a" style="color:#FFD84A">0.1</span><span class="lp-rf__b">—</span></div>
-                <div class="lp-rf"><span class="lp-rf__o">🇬🇷 Greece</span><span class="lp-rf__a" style="color:#FFD84A">10.1</span><span class="lp-rf__b">7.4</span></div>
-                <div class="lp-rf"><span class="lp-rf__o">🇳🇴 Norway</span><span class="lp-rf__a" style="color:#FFD84A">6.0</span><span class="lp-rf__b">5.8</span></div>
-              </div>
+      <aside class="lp-tprofile">
+        <div class="lp-tprofile__facts">
+          <div class="lp-tfact"><b>25.8</b><span>Avg Age</span></div>
+          <div class="lp-tfact"><b>€812M</b><span>XI Value</span></div>
+          <div class="lp-tfact"><b style="color:#3ddc84">7.34</b><span>Squad Rating</span></div>
+        </div>
+        <div class="lp-tquality">
+          <div class="lp-tquality__head"><span class="lp-tquality__dot"></span>Team Quality<em>· vs field</em></div>
+          <div class="lp-tdonuts">
+            <div class="lp-tdonut">
+              <div class="lp-tdonut__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="28" fill="none" stroke="#3ddc84" stroke-width="6" stroke-linecap="round" stroke-dasharray="129.2 175.9" transform="rotate(-90 31 31)" style="filter:drop-shadow(0 0 4px #3ddc8455)"/></svg><div class="lp-tdonut__v" style="color:#3ddc84">7.3</div></div>
+              <div class="lp-tdonut__l">Rating</div><div class="lp-tdonut__r lead">1st of 32</div>
+            </div>
+            <div class="lp-tdonut">
+              <div class="lp-tdonut__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="28" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="159.0 175.9" transform="rotate(-90 31 31)" style="filter:drop-shadow(0 0 4px #FFD84A55)"/></svg><div class="lp-tdonut__v" style="color:#FFD84A">90</div></div>
+              <div class="lp-tdonut__l">Attack</div><div class="lp-tdonut__r lead">1st of 32</div>
+            </div>
+            <div class="lp-tdonut">
+              <div class="lp-tdonut__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="28" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="154.6 175.9" transform="rotate(-90 31 31)" style="filter:drop-shadow(0 0 4px #FFD84A55)"/></svg><div class="lp-tdonut__v" style="color:#FFD84A">88</div></div>
+              <div class="lp-tdonut__l">Technical</div><div class="lp-tdonut__r">2nd of 32</div>
+            </div>
+            <div class="lp-tdonut">
+              <div class="lp-tdonut__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="28" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.2 175.9" transform="rotate(-90 31 31)" style="filter:drop-shadow(0 0 4px #FFD84A55)"/></svg><div class="lp-tdonut__v" style="color:#FFD84A">85</div></div>
+              <div class="lp-tdonut__l">Tactical</div><div class="lp-tdonut__r">4th of 32</div>
+            </div>
+            <div class="lp-tdonut">
+              <div class="lp-tdonut__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="28" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="144.0 175.9" transform="rotate(-90 31 31)" style="filter:drop-shadow(0 0 4px #FFD84A55)"/></svg><div class="lp-tdonut__v" style="color:#FFD84A">82</div></div>
+              <div class="lp-tdonut__l">Defending</div><div class="lp-tdonut__r">6th of 32</div>
+            </div>
+            <div class="lp-tdonut">
+              <div class="lp-tdonut__ring"><svg width="62" height="62" viewBox="0 0 62 62"><circle cx="31" cy="31" r="28" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="31" cy="31" r="28" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="160.8 175.9" transform="rotate(-90 31 31)" style="filter:drop-shadow(0 0 4px #FFD84A55)"/></svg><div class="lp-tdonut__v" style="color:#FFD84A">91</div></div>
+              <div class="lp-tdonut__l">Creativity</div><div class="lp-tdonut__r lead">1st of 32</div>
             </div>
           </div>
         </div>
-      </div>
-      </div>
+      </aside>
     </div>
   </div>
 </section>
@@ -5091,6 +5060,7 @@ main, nav, footer { position: relative; z-index: 1; }
     <div class="lp-tabs" role="tablist" aria-label="Sport popups">
         <button type="button" class="lp-tab is-active" data-sport="tennis">Tennis</button>
         <button type="button" class="lp-tab" data-sport="golf">Golf</button>
+        <button type="button" class="lp-tab" data-sport="soccer">Soccer</button>
         <button type="button" class="lp-tab" data-sport="ufc">UFC</button>
         <button type="button" class="lp-tab" data-sport="wnba">WNBA</button>
       </div>
@@ -5103,7 +5073,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">ATP · Player Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div class="lp-prof__av">ZB<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Bergs_Rosmalen_%28cropped%29.jpg/400px-Bergs_Rosmalen_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div class="lp-prof__av">ZB<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Zizou_Bergs_%282023_US_Open%29_03_%28cropped%29.jpg/500px-Zizou_Bergs_%282023_US_Open%29_03_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
                   <div style="min-width:0"><div class="lp-prof__nf">Zizou</div><div class="lp-prof__nl">Bergs</div><div class="lp-prof__ns" style="color:#8CDC9B">🇧🇪 Grass · Model #90</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5197,6 +5167,81 @@ main, nav, footer { position: relative; z-index: 1; }
                   <div class="lp-gbar"><span class="lp-gbar__l">Approach</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:63%"></span></span><span class="lp-gbar__v">+0.47</span></div>
                   <div class="lp-gbar"><span class="lp-gbar__l">Ar Green</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:23%"></span></span><span class="lp-gbar__v">+0.00</span></div>
                   <div class="lp-gbar"><span class="lp-gbar__l">Drv Acc</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:89%"></span></span><span class="lp-gbar__v">89</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-gphone" data-sport="soccer">
+          <div class="lp-gphone__island"></div>
+          <div class="lp-gphone__screen">
+            <div class="lp-prof">
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 70% at 8% 2%, rgba(61,220,132,0.28), transparent 52%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bar"><span class="lp-prof__ey">World Cup · Stat Intel</span></div>
+              <div class="lp-prof__body">
+                <div class="lp-prof__hero">
+                  <div class="lp-prof__av" style="border-color:#8CDC9B">IH<img src="https://images.fotmob.com/image_resources/playerimages/939780.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div style="min-width:0">
+                    <div class="lp-prof__nf">Isak</div>
+                    <div class="lp-prof__nl">Hien</div>
+                    <div class="lp-prof__ns" style="color:#8CDC9B">🇸🇪 D · 6.82</div>
+                    <div style="font-size:8.5px;font-weight:800;letter-spacing:0.5px;color:#FFD84A;margin-top:2px">FAN SCORE · 7.5</div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Fan Score Matchup</div>
+                  <div class="lp-gmm">
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="45.2 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">30%</div></div><div class="lp-gmm__lbl">Player Rank<br>#917/1316</div></div>
+                    <div class="lp-gmm__mid"><div class="lp-gmm__edge" style="color:#6BB6FF">-4.5</div><div class="lp-gmm__ec">Lean Under</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">100%</div></div><div class="lp-gmm__lbl">Japan D<br>#1 toughest</div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Matchup Read</div>
+                  <div class="lp-pill"><b>Lean Under</b><span>adj 3.0 vs 7.5</span></div>
+                  <div class="lp-pill"><b>Tough Defense</b><span>0.45× allowed</span></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Numbers</div>
+                  <div class="lp-gtiles">
+                    <div class="lp-gtile"><span class="lp-gtile__l">PP Line</span><span class="lp-gtile__v">7.5</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Player Avg</span><span class="lp-gtile__v gold">6.5</span><span class="lp-gtile__s">#917 of 1316</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Opp Allowed</span><span class="lp-gtile__v grn">0.45×</span><span class="lp-gtile__s">#1 toughest</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Adj Proj</span><span class="lp-gtile__v" style="color:#F87171">3.0</span><span class="lp-gtile__s">lean under</span></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Quality Profile</div>
+                  <div class="lp-radar">
+                    <svg width="150" height="152" viewBox="0 0 150 152">
+                      <polygon points="75,18 124.5,53.9 105.6,112.1 44.4,112.1 25.5,53.9" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+                      <polygon points="75,38.8 104.7,60.4 93.3,95.2 56.7,95.2 45.3,60.4" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                      <line x1="75" y1="70" x2="75" y2="18" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="124.5" y2="53.9" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="105.6" y2="112.1" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="44.4" y2="112.1" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="25.5" y2="53.9" stroke="rgba(255,255,255,0.06)"/>
+                      <polygon points="75,41.4 102.2,61.2 91.8,93.1 58.2,93.1 47.8,61.2" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1" stroke-dasharray="3 3"/>
+                      <polygon points="75,51.8 93.8,63.9 94.0,96.1 52.4,101.1 54.2,63.3" fill="rgba(255,209,26,0.42)" stroke="#FFD84A" stroke-width="1.5"/>
+                      <circle cx="75" cy="51.8" r="2" fill="#FFD84A"/><circle cx="93.8" cy="63.9" r="2" fill="#FFD84A"/><circle cx="94.0" cy="96.1" r="2" fill="#FFD84A"/><circle cx="52.4" cy="101.1" r="2" fill="#FFD84A"/><circle cx="54.2" cy="63.3" r="2" fill="#FFD84A"/>
+                      <text x="75" y="13" text-anchor="middle">ATT</text><text x="129" y="52" text-anchor="start">TEC</text><text x="106" y="128" text-anchor="middle">TAC</text><text x="44" y="128" text-anchor="middle">DEF</text><text x="21" y="52" text-anchor="end">CRE</text>
+                    </svg>
+                  </div>
+                  <div class="lp-attr"><span class="lp-attr__l">ATT</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:35%;background:#F87171"></span></span><span class="lp-attr__v">35</span><span class="lp-attr__p" style="color:#F87171">35<small>pct</small></span></div>
+                  <div class="lp-attr"><span class="lp-attr__l">TEC</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:38%;background:#F87171"></span></span><span class="lp-attr__v">38</span><span class="lp-attr__p" style="color:#F87171">38<small>pct</small></span></div>
+                  <div class="lp-attr"><span class="lp-attr__l">TAC</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:62%;background:#19D27F"></span></span><span class="lp-attr__v">62</span><span class="lp-attr__p" style="color:#19D27F">62<small>pct</small></span></div>
+                  <div class="lp-attr"><span class="lp-attr__l">DEF</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:74%;background:#19D27F"></span></span><span class="lp-attr__v">74</span><span class="lp-attr__p" style="color:#19D27F">74<small>pct</small></span></div>
+                  <div class="lp-attr"><span class="lp-attr__l">CRE</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:42%;background:#F87171"></span></span><span class="lp-attr__v">42</span><span class="lp-attr__p" style="color:#F87171">42<small>pct</small></span></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Likely Marker</div>
+                  <div class="lp-mk">
+                    <div class="lp-mk__av" style="border-color:#6BB6FF">JS<img src="https://images.fotmob.com/image_resources/playerimages/1337765.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                    <div class="lp-mk__id"><div class="lp-mk__nm">Junnosuke Suzuki</div><div class="lp-mk__meta">🇯🇵 D · 7.30 rating</div></div>
+                    <div class="lp-mk__st"><div class="lp-mk__s"><b>1.5</b><span>Tkl</span></div><div class="lp-mk__s"><b>1.0</b><span>Int</span></div><div class="lp-mk__s"><b>3.5</b><span>Duel W</span></div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Recent Form · Fan Score</div>
+                  <div class="lp-rf"><span class="lp-rf__o">🇹🇳 Tunisia</span><span class="lp-rf__a" style="color:#FFD84A">0.1</span><span class="lp-rf__b">—</span></div>
+                  <div class="lp-rf"><span class="lp-rf__o">🇬🇷 Greece</span><span class="lp-rf__a" style="color:#FFD84A">10.1</span><span class="lp-rf__b">7.4</span></div>
+                  <div class="lp-rf"><span class="lp-rf__o">🇳🇴 Norway</span><span class="lp-rf__a" style="color:#FFD84A">6.0</span><span class="lp-rf__b">5.8</span></div>
                 </div>
               </div>
             </div>
