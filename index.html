@@ -4392,6 +4392,29 @@ main, nav, footer { position: relative; z-index: 1; }
   .cpi-colhead { padding-left: 14px; padding-right: 14px; }
   .cpi-list { padding-left: 8px; padding-right: 8px; }
 }
+
+/* ── Mobile tightening: fit ~1 extra block per screen (additive, mobile-only, Alta 2026-06-25) ── */
+@media (max-width: 768px) {
+  .section { padding: 46px 0; }
+  .section__head { margin-bottom: 24px; }
+  .section__title { font-size: 25px; line-height: 1.16; letter-spacing: -0.5px; }
+  .section__eyebrow { margin-bottom: 8px; }
+  .section__sub { font-size: 13.5px; }
+  .hero { padding: 42px 0 52px; }
+  .hero__grid { gap: 30px; }
+  .hero__headline { font-size: 33px; }
+  .sport-card { padding: 20px 16px; }
+  .tier { padding: 22px 18px; }
+  .season-card { padding: 26px 18px; }
+  .season-amount { font-size: 38px; }
+  .kpi { padding: 8px; }
+}
+@media (max-width: 420px) {
+  .section { padding: 36px 0; }
+  .section__head { margin-bottom: 20px; }
+  .section__title { font-size: 22px; }
+  .hero__headline { font-size: 28px; }
+}
 </style>
 </head>
 <body>
