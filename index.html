@@ -4139,6 +4139,10 @@ main, nav, footer { position: relative; z-index: 1; }
   .section__head { margin-bottom: 36px; }
 
   .features-grid { grid-template-columns: 1fr; }
+  /* Mobile: simplify the feature stack — lead with the key feature (Live Leverage),
+     hide the two most secondary ones (Trap Detection, DK Salary Tracker) to cut clutter. */
+  .features-grid .feat--lead { order: -1; }
+  .features-grid .feat--m-hide { display: none; }
   /* .steps now uses auto-fit grid + per-card max-width — handled fluidly above. */
   .steps::before { display: none; }
   .sports { grid-template-columns: 1fr; }
@@ -4391,6 +4395,40 @@ main, nav, footer { position: relative; z-index: 1; }
   .cpi-colhead, .cpi-row { grid-template-columns: 22px 1fr 36px 42px; gap: 6px; }
   .cpi-colhead { padding-left: 14px; padding-right: 14px; }
   .cpi-list { padding-left: 8px; padding-right: 8px; }
+}
+
+/* ── Mobile tightening: fit ~1 extra block per screen (additive, mobile-only, Alta 2026-06-25) ── */
+@media (max-width: 768px) {
+  .section { padding: 46px 0; }
+  .section__head { margin-bottom: 24px; }
+  .section__title { font-size: 25px; line-height: 1.16; letter-spacing: -0.5px; }
+  .section__eyebrow { margin-bottom: 8px; }
+  .section__sub { font-size: 13.5px; }
+  .hero { padding: 42px 0 52px; }
+  .hero__grid { gap: 30px; }
+  .hero__headline { font-size: 33px; }
+  .sport-card { padding: 20px 16px; }
+  .tier { padding: 22px 18px; }
+  .season-card { padding: 26px 18px; }
+  .season-amount { font-size: 38px; }
+  .kpi { padding: 8px; }
+}
+@media (max-width: 420px) {
+  .section { padding: 36px 0; }
+  .section__head { margin-bottom: 20px; }
+  .section__title { font-size: 22px; }
+  .hero__headline { font-size: 28px; }
+}
+
+/* ── Mobile sport-tab switcher for the popup gallery (mobile-only; desktop shows all) ── */
+.lp-tabs { display: none; }
+@media (max-width: 768px) {
+  .lp-tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0 0 18px; padding-bottom: 2px; }
+  .lp-tabs::-webkit-scrollbar { display: none; }
+  .lp-tab { flex: 0 0 auto; min-height: 40px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--oo-border); background: var(--oo-panel); color: var(--oo-muted); font: 700 13px var(--oo-font, inherit); cursor: pointer; white-space: nowrap; transition: background .15s, color .15s, border-color .15s; }
+  .lp-tab.is-active { color: #07101f; background: var(--oo-gold); border-color: var(--oo-gold); }
+  .lp-gallery .lp-gphone[data-sport] { display: none; }
+  .lp-gallery .lp-gphone[data-sport].is-active { display: block; }
 }
 </style>
 </head>
@@ -4658,7 +4696,7 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
 
       <!-- (2) Trap Detection -->
-      <div class="feat">
+      <div class="feat feat--m-hide">
         <div class="feat__head">
           <div class="feat__title">Trap Detection</div>
           <div class="feat__icon">
@@ -4711,7 +4749,7 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
 
       <!-- (4) Live Leverage -->
-      <div class="feat">
+      <div class="feat feat--lead">
         <div class="feat__head">
           <div class="feat__title">Live Leverage</div>
           <div class="feat__icon">
@@ -4757,7 +4795,7 @@ main, nav, footer { position: relative; z-index: 1; }
       </div>
 
       <!-- (6) DK Salary Tracker -->
-      <div class="feat">
+      <div class="feat feat--m-hide">
         <div class="feat__head">
           <div class="feat__title">DK Salary Tracker</div>
           <div class="feat__icon">
@@ -5091,8 +5129,14 @@ main, nav, footer { position: relative; z-index: 1; }
       <div class="section__eyebrow">Apple-Sports Design</div>
       <h2 class="section__title">The popups you'll tap every day.</h2>
     </div>
-    <div class="lp-gallery reveal">
-        <div class="lp-gphone">
+    <div class="lp-tabs" role="tablist" aria-label="Sport popups">
+        <button type="button" class="lp-tab is-active" data-sport="tennis">Tennis</button>
+        <button type="button" class="lp-tab" data-sport="golf">Golf</button>
+        <button type="button" class="lp-tab" data-sport="ufc">UFC</button>
+        <button type="button" class="lp-tab" data-sport="wnba">WNBA</button>
+      </div>
+      <div class="lp-gallery reveal">
+        <div class="lp-gphone is-active" data-sport="tennis">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -5123,7 +5167,7 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
         </div>
-        <div class="lp-gphone">
+        <div class="lp-gphone" data-sport="golf">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -5152,7 +5196,7 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
         </div>
-        <div class="lp-gphone">
+        <div class="lp-gphone" data-sport="ufc">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -5180,7 +5224,7 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
         </div>
-        <div class="lp-gphone">
+        <div class="lp-gphone" data-sport="wnba">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -7422,6 +7466,17 @@ main, nav, footer { position: relative; z-index: 1; }
   apply();
   var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(apply, 120); });
 })();
+
+  (function(){
+    var tabs=document.querySelectorAll('.lp-tab');
+    if(!tabs.length) return;
+    var phones=document.querySelectorAll('.lp-gallery .lp-gphone[data-sport]');
+    tabs.forEach(function(t){ t.addEventListener('click', function(){
+      var s=t.getAttribute('data-sport');
+      tabs.forEach(function(x){ x.classList.toggle('is-active', x===t); });
+      phones.forEach(function(p){ p.classList.toggle('is-active', p.getAttribute('data-sport')===s); });
+    }); });
+  })();
 </script>
 
 </body>
