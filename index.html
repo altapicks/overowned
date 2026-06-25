@@ -3485,6 +3485,52 @@ main, nav, footer { position: relative; z-index: 1; }
   .lp-gphone--soc { width:min(84vw,300px); aspect-ratio:300/600; }
 }
 
+/* ── Peek-gallery phones (tennis/golf/ufc/wnba): fill the frame top-to-bottom ──
+   These are tabbed display phones with a fixed frame. The bodies now hold the full
+   per-sport popup (header → donuts → tiles → percentile bars → chips → recent form)
+   so content fills the screen like the real app. Body scrolls invisibly if a sport
+   runs a hair tall, so nothing ever clips/overflows the frame. */
+.lp-gallery .lp-gphone .lp-prof__body { overflow-y:auto; overflow-x:hidden; scrollbar-width:none; gap:8px; }
+.lp-gallery .lp-gphone .lp-prof__body::-webkit-scrollbar { width:0; height:0; }
+/* "Latest result" / single-line result row */
+.lp-res { display:flex; align-items:center; gap:8px; }
+.lp-res__b { width:22px; height:22px; border-radius:6px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:900; color:#07101f; }
+.lp-res__b.w { background:#34D399; } .lp-res__b.l { background:#F87171; }
+.lp-res__m { min-width:0; flex:1 1 auto; } .lp-res__o { font-size:10.5px; font-weight:700; color:#f1f5fb; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .lp-res__s { font-size:8.5px; color:rgba(203,213,225,0.55); margin-top:1px; }
+/* service/return + offense/defense percentile bar rows (label · bar · value · pct) */
+.lp-pbar { display:grid; grid-template-columns:1fr 56px auto auto; align-items:center; gap:8px; margin-top:7px; } .lp-pbar:first-of-type{ margin-top:2px; }
+.lp-pbar__l { font-size:9px; font-weight:600; color:#e8ecf4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lp-pbar__t { height:6px; border-radius:999px; background:rgba(255,255,255,0.08); position:relative; overflow:hidden; }
+.lp-pbar__f { position:absolute; top:0; bottom:0; left:0; border-radius:999px; } .lp-pbar__f.g{ background:linear-gradient(90deg,rgba(52,211,153,0.6),#34D399); } .lp-pbar__f.r{ background:linear-gradient(90deg,rgba(248,113,113,0.6),#F87171); }
+.lp-pbar__v { font-size:10px; font-weight:800; color:#f1f5fb; text-align:right; font-variant-numeric:tabular-nums; }
+.lp-pbar__p { font-size:8.5px; font-weight:800; text-align:right; font-variant-numeric:tabular-nums; } .lp-pbar__p.g{ color:#34D399; } .lp-pbar__p.r{ color:#F87171; }
+/* stat-rank rows (stat · value · rank-pct) */
+.lp-rk { display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:12px; padding:4px 0; font-size:10px; } .lp-rk + .lp-rk{ border-top:1px solid rgba(255,255,255,0.05); }
+.lp-rk__l { font-weight:600; color:#e8ecf4; } .lp-rk__v { font-weight:800; color:#f1f5fb; font-variant-numeric:tabular-nums; } .lp-rk__r { font-weight:800; min-width:30px; text-align:right; font-variant-numeric:tabular-nums; } .lp-rk__r.g{ color:#34D399; } .lp-rk__r.m{ color:rgba(203,213,225,0.6); }
+/* surface-form mini tiles (3-up) */
+.lp-surf { display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; }
+.lp-surf__c { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:7px 5px; text-align:center; }
+.lp-surf__l { font-size:7.5px; font-weight:800; letter-spacing:0.4px; text-transform:uppercase; } .lp-surf__l.h{ color:#6BB6FF; } .lp-surf__l.c{ color:#FB923C; } .lp-surf__l.g{ color:#34D399; }
+.lp-surf__v { font-size:14px; font-weight:900; color:#f1f5fb; line-height:1.1; font-variant-numeric:tabular-nums; margin-top:1px; } .lp-surf__s { font-size:7px; color:rgba(203,213,225,0.5); margin-top:1px; }
+/* style/tendency rounded chips (wrap) */
+.lp-tags { display:flex; flex-wrap:wrap; gap:5px; }
+.lp-tag { display:inline-flex; align-items:center; gap:5px; font-size:8.5px; font-weight:800; border-radius:999px; padding:4px 9px; border:1px solid; } .lp-tag__d{ width:5px; height:5px; border-radius:50%; flex:0 0 auto; }
+.lp-tag.gold { color:#FBBF24; background:rgba(245,197,24,0.10); border-color:rgba(245,197,24,0.32); } .lp-tag.gold .lp-tag__d{ background:#FBBF24; }
+.lp-tag.grn { color:#34D399; background:rgba(52,211,153,0.10); border-color:rgba(52,211,153,0.30); } .lp-tag.grn .lp-tag__d{ background:#34D399; }
+.lp-tag__x { font-weight:700; color:rgba(203,213,225,0.6); }
+/* finish-rate stacked bar (UFC) */
+.lp-fin { display:flex; height:8px; border-radius:999px; overflow:hidden; }
+.lp-fin span { display:block; height:100%; }
+.lp-finleg { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; font-size:8.5px; font-weight:700; color:rgba(203,213,225,0.7); } .lp-finleg b{ color:#f1f5fb; }
+/* recent-form rows with avatar + score (tennis/wnba) */
+.lp-rf2 { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:9px; padding:5px 0; } .lp-rf2 + .lp-rf2{ border-top:1px solid rgba(255,255,255,0.05); }
+.lp-rf2__b { width:18px; height:18px; border-radius:5px; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:900; color:#07101f; } .lp-rf2__b.w{ background:#34D399; } .lp-rf2__b.l{ background:#F87171; }
+.lp-rf2__o { min-width:0; } .lp-rf2__n { font-size:10px; font-weight:700; color:#f1f5fb; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; } .lp-rf2__d { font-size:8px; color:rgba(203,213,225,0.5); }
+.lp-rf2__s { font-size:9.5px; font-weight:700; color:rgba(203,213,225,0.75); font-variant-numeric:tabular-nums; text-align:right; }
+/* edges-vs grid (UFC) */
+.lp-edges { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.lp-edge { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:6px 8px; } .lp-edge__l{ font-size:7px; font-weight:800; letter-spacing:0.4px; text-transform:uppercase; color:rgba(203,213,225,0.5); } .lp-edge__v{ font-size:11px; font-weight:800; color:#f1f5fb; margin-top:2px; } .lp-edge__v.g{ color:#34D399; } .lp-edge__v.r{ color:#F87171; }
+
 .lp-line { position: relative; z-index: 1; display: flex; justify-content: space-evenly; align-items: center; gap: 4px; }
 .lp-pchip { display: flex; flex-direction: column; align-items: center; width: clamp(46px, 19%, 78px); }
 .lp-pchip__av { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 2.5px solid; background: #0c2a18; font-size: 12px; font-weight: 800; color: #fff; }
@@ -5064,28 +5110,55 @@ main, nav, footer { position: relative; z-index: 1; }
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
-              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(61,220,132,0.32), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
-              <div class="lp-prof__bar"><span class="lp-prof__ey">WTA · Player Intel</span></div>
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(245,197,24,0.30), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bar"><span class="lp-prof__ey">ATP · Player Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div style="min-width:0"><div class="lp-prof__nf">Iga</div><div class="lp-prof__nl">Świątek</div><div class="lp-prof__ns" style="color:#8CDC9B">🇵🇱 Grass · Model 3rd</div></div>
+                  <div class="lp-prof__av">ZB<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Zizou_Bergs_%282023_US_Open%29_03_%28cropped%29.jpg/330px-Zizou_Bergs_%282023_US_Open%29_03_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div style="min-width:0"><div class="lp-prof__nf">Zizou</div><div class="lp-prof__nl">Bergs</div><div class="lp-prof__ns" style="color:#8CDC9B">🇧🇪 Grass · Model #90</div></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Latest Result · 200 matches</div>
+                  <div class="lp-res"><span class="lp-res__b w">W</span><div class="lp-res__m"><div class="lp-res__o">vs Altmaier</div><div class="lp-res__s">Jun 24 · 6–3 3–2</div></div></div>
                 </div>
                 <div class="lp-gcard">
                   <div class="lp-gcard__t">Model vs Market</div>
                   <div class="lp-gmm">
-                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="92.0 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">61%</div></div><div class="lp-gmm__lbl">OverOwned</div></div>
-                    <div class="lp-gmm__mid"><div class="lp-gmm__edge">+7<small>pp</small></div><div class="lp-gmm__ec">model favors</div></div>
-                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="81.4 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">54%</div></div><div class="lp-gmm__lbl">Kalshi</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="111.6 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">74%</div></div><div class="lp-gmm__lbl">OverOwned</div></div>
+                    <div class="lp-gmm__mid"><div class="lp-gmm__edge">+1.4<small>pp</small></div><div class="lp-gmm__ec">model favors</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="110.1 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">73%</div></div><div class="lp-gmm__lbl">Kalshi</div></div>
                   </div>
                 </div>
                 <div class="lp-gcard">
                   <div class="lp-gcard__t">Ranking &amp; Honours</div>
                   <div class="lp-gtiles">
-                    <div class="lp-gtile"><span class="lp-gtile__l">Surface Rtg</span><span class="lp-gtile__v gold">3rd</span><span class="lp-gtile__s">2118</span></div>
-                    <div class="lp-gtile"><span class="lp-gtile__l">WTA Rank</span><span class="lp-gtile__v">1st</span><span class="lp-gtile__s">live</span></div>
-                    <div class="lp-gtile"><span class="lp-gtile__l">Titles</span><span class="lp-gtile__v">24</span><span class="lp-gtile__s">8 finals</span></div>
-                    <div class="lp-gtile"><span class="lp-gtile__l">Win %</span><span class="lp-gtile__v">88%</span><span class="lp-gtile__s">210 mt</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Surface Rtg</span><span class="lp-gtile__v gold">#90</span><span class="lp-gtile__s">1619</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">ATP Rank</span><span class="lp-gtile__v">#48</span><span class="lp-gtile__s">live</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Titles</span><span class="lp-gtile__v">1</span><span class="lp-gtile__s">2 finals</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Win %</span><span class="lp-gtile__v">41%</span><span class="lp-gtile__s">17 mt</span></div>
                   </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Service &amp; Return Profile</div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">Hold rate</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:83%"></span></span><span class="lp-pbar__v">83%</span><span class="lp-pbar__p g">79<small>pct</small></span></div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">Break rate</span><span class="lp-pbar__t"><span class="lp-pbar__f r" style="width:14%"></span></span><span class="lp-pbar__v">14%</span><span class="lp-pbar__p r">49<small>pct</small></span></div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">Ace rate</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:73%"></span></span><span class="lp-pbar__v">8%</span><span class="lp-pbar__p g">73<small>pct</small></span></div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">BP saved</span><span class="lp-pbar__t"><span class="lp-pbar__f r" style="width:58%"></span></span><span class="lp-pbar__v">58%</span><span class="lp-pbar__p r">48<small>pct</small></span></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Surface Form</div>
+                  <div class="lp-surf">
+                    <div class="lp-surf__c"><div class="lp-surf__l h">Hard</div><div class="lp-surf__v">52%</div><div class="lp-surf__s">6.8 PR · 114m</div></div>
+                    <div class="lp-surf__c"><div class="lp-surf__l c">Clay</div><div class="lp-surf__v">58%</div><div class="lp-surf__s">7.2 PR · 59m</div></div>
+                    <div class="lp-surf__c"><div class="lp-surf__l g">Grass</div><div class="lp-surf__v">50%</div><div class="lp-surf__s">7.7 PR · 24m</div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Recent Form</div>
+                  <div class="lp-rf2"><span class="lp-rf2__b w">W</span><div class="lp-rf2__o"><div class="lp-rf2__n">🇩🇪 Altmaier</div><div class="lp-rf2__d">Jun 24</div></div><span class="lp-rf2__s">6–3 3–2</span></div>
+                  <div class="lp-rf2"><span class="lp-rf2__b w">W</span><div class="lp-rf2__o"><div class="lp-rf2__n">🇵🇱 Munar</div><div class="lp-rf2__d">Jun 22</div></div><span class="lp-rf2__s">6–2 6–4</span></div>
+                  <div class="lp-rf2"><span class="lp-rf2__b l">L</span><div class="lp-rf2__o"><div class="lp-rf2__n">🇺🇸 Fritz</div><div class="lp-rf2__d">Jun 17</div></div><span class="lp-rf2__s">6–7 7–5 4–6</span></div>
+                  <div class="lp-rf2"><span class="lp-rf2__b l">L</span><div class="lp-rf2__o"><div class="lp-rf2__n">🇦🇺 McCabe</div><div class="lp-rf2__d">Jun 10</div></div><span class="lp-rf2__s">7–6 2–6 6–7</span></div>
                 </div>
               </div>
             </div>
@@ -5095,26 +5168,46 @@ main, nav, footer { position: relative; z-index: 1; }
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
-              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(245,197,24,0.26), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(52,211,153,0.24), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
               <div class="lp-prof__bar"><span class="lp-prof__ey">Golf · Player Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div style="min-width:0"><div class="lp-prof__nf">Scottie</div><div class="lp-prof__nl">Scheffler</div><div class="lp-prof__ns" style="color:#FFD84A">🇺🇸 DataGolf #1</div></div>
+                  <div class="lp-prof__av" style="border-color:#34D399">SS<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg/330px-Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div style="min-width:0"><div class="lp-prof__nf">Scottie</div><div class="lp-prof__nl">Scheffler</div><div class="lp-prof__ns" style="color:#34D399">🇺🇸 DataGolf #1</div></div>
                 </div>
                 <div class="lp-gcard">
-                  <div class="lp-gcard__t">Course Fit</div>
+                  <div class="lp-gcard__t">Course Fit &amp; Finish</div>
                   <div class="lp-gmm">
-                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="132.7 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">88%</div></div><div class="lp-gmm__lbl">Fit Score</div></div>
-                    <div class="lp-gmm__mid"><div class="lp-gmm__edge" style="color:#FFD84A">A+</div><div class="lp-gmm__ec">grade</div></div>
-                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="61.8 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">41%</div></div><div class="lp-gmm__lbl">Top 10</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="129.7 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">86%</div></div><div class="lp-gmm__lbl">Course Fit</div></div>
+                    <div class="lp-gmm__mid"><div class="lp-gmm__edge">−0.30</div><div class="lp-gmm__ec">underpriced</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="69.4 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">46%</div></div><div class="lp-gmm__lbl">PP Line</div></div>
                   </div>
                 </div>
                 <div class="lp-gcard">
-                  <div class="lp-gcard__t">Strokes Gained · pctile</div>
-                  <div class="lp-gbar"><span class="lp-gbar__l">Total SG</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:96%"></span></span><span class="lp-gbar__v">96</span></div>
-                  <div class="lp-gbar"><span class="lp-gbar__l">Approach</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:99%"></span></span><span class="lp-gbar__v">99</span></div>
-                  <div class="lp-gbar"><span class="lp-gbar__l">Off Tee</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:84%"></span></span><span class="lp-gbar__v">84</span></div>
-                  <div class="lp-gbar"><span class="lp-gbar__l">Putting</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:68%"></span></span><span class="lp-gbar__v">68</span></div>
+                  <div class="lp-gcard__t">Scouting Tendencies</div>
+                  <div class="lp-tags">
+                    <span class="lp-tag gold"><span class="lp-tag__d"></span>Strong Approach<span class="lp-tag__x">92nd pct</span></span>
+                    <span class="lp-tag grn"><span class="lp-tag__d"></span>Strong Driving<span class="lp-tag__x">89th pct</span></span>
+                    <span class="lp-tag grn"><span class="lp-tag__d"></span>Underpriced<span class="lp-tag__x">−0.30 edge</span></span>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Projection &amp; Market</div>
+                  <div class="lp-gtiles">
+                    <div class="lp-gtile"><span class="lp-gtile__l">Proj</span><span class="lp-gtile__v gold">38.9</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Value</span><span class="lp-gtile__v">5.63</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Own %</span><span class="lp-gtile__v">5.1%</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Salary</span><span class="lp-gtile__v">$6.9k</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Top 10</span><span class="lp-gtile__v">10%</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Top 20</span><span class="lp-gtile__v">23%</span></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Strokes-Gained Profile · pctile</div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Off Tee</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:48%"></span></span><span class="lp-gbar__v">+0.24</span></div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Approach</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:63%"></span></span><span class="lp-gbar__v">+0.47</span></div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Ar Green</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:23%"></span></span><span class="lp-gbar__v">+0.00</span></div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Drv Acc</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:89%"></span></span><span class="lp-gbar__v">89</span></div>
                 </div>
               </div>
             </div>
@@ -5124,25 +5217,49 @@ main, nav, footer { position: relative; z-index: 1; }
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
-              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(140,195,240,0.26), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(245,197,24,0.24), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
               <div class="lp-prof__bar"><span class="lp-prof__ey">UFC · Fighter Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div style="min-width:0"><div class="lp-prof__nf">Islam</div><div class="lp-prof__nl">Makhachev</div><div class="lp-prof__ns" style="color:#8CC3F0">🇷🇺 LW · 26–1</div></div>
+                  <div class="lp-prof__av" style="border-color:#F472B6">VO<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Vinicius_Oliveira_2026.jpg/330px-Vinicius_Oliveira_2026.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div style="min-width:0"><div class="lp-prof__nf">Vinicius</div><div class="lp-prof__nl">Oliveira</div><div class="lp-prof__ns" style="color:#8CC3F0">🇧🇷 “LokDog” · 23–4</div></div>
                 </div>
                 <div class="lp-gcard">
-                  <div class="lp-gcard__t">Model vs Kalshi</div>
+                  <div class="lp-gcard__t">Model vs Kalshi · close</div>
                   <div class="lp-gmm">
-                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="102.5 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">68%</div></div><div class="lp-gmm__lbl">OverOwned</div></div>
-                    <div class="lp-gmm__mid"><div class="lp-gmm__edge">+7<small>pp</small></div><div class="lp-gmm__ec">model favors</div></div>
-                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="92.0 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">61%</div></div><div class="lp-gmm__lbl">Kalshi</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="104.0 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">69%</div></div><div class="lp-gmm__lbl">Model</div></div>
+                    <div class="lp-gmm__mid"><div class="lp-gmm__edge" style="color:#F87171">−1.4<small>pp</small></div><div class="lp-gmm__ec">market favors</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="107.1 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">71%</div></div><div class="lp-gmm__lbl">Kalshi</div></div>
                   </div>
                 </div>
                 <div class="lp-gcard">
                   <div class="lp-gcard__t">Style Matchup</div>
-                  <div class="lp-gchip pos"><span class="lp-gchip__dot"></span><span class="lp-gchip__l">Grappling edge</span><span class="lp-gchip__d">+3.4 TD/15</span></div>
-                  <div class="lp-gchip pos"><span class="lp-gchip__dot"></span><span class="lp-gchip__l">Control time</span><span class="lp-gchip__d">strong lean</span></div>
-                  <div class="lp-gchip neg"><span class="lp-gchip__dot"></span><span class="lp-gchip__l">Reach</span><span class="lp-gchip__d">−2&quot; deficit</span></div>
+                  <div class="lp-tags">
+                    <span class="lp-tag grn"><span class="lp-tag__d"></span>Well-Rounded / Counter</span>
+                    <span class="lp-tag gold"><span class="lp-tag__d"></span>Beats Grappler 40%<span class="lp-tag__x">387 fights</span></span>
+                    <span class="lp-tag gold"><span class="lp-tag__d"></span>Decided on grappling control</span>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">How Vinicius Wins</div>
+                  <div class="lp-fin"><span style="width:63%;background:#F87171"></span><span style="width:7%;background:#6BB6FF"></span><span style="width:19%;background:#9CA3AF"></span></div>
+                  <div class="lp-finleg"><span style="color:#F87171">● KO/TKO <b>63%</b></span><span style="color:#6BB6FF">● Sub <b>7%</b></span><span style="color:#9CA3AF">● Dec <b>19%</b></span><span style="color:#34D399;margin-left:auto">79% finish</span></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Edges vs Andre Fili</div>
+                  <div class="lp-edges">
+                    <div class="lp-edge"><div class="lp-edge__l">Reach</div><div class="lp-edge__v r">70″ vs 74″ (−4)</div></div>
+                    <div class="lp-edge"><div class="lp-edge__l">Age</div><div class="lp-edge__v g">31 vs 36 (−5y)</div></div>
+                    <div class="lp-edge"><div class="lp-edge__l">Height</div><div class="lp-edge__v r">69″ vs 71″ (−2)</div></div>
+                    <div class="lp-edge"><div class="lp-edge__l">Stance</div><div class="lp-edge__v">Switch vs Orthodox</div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Offense vs Field</div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">Sig strikes / min</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:71%"></span></span><span class="lp-pbar__v">4.73</span><span class="lp-pbar__p g">71<small>pct</small></span></div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">Striking acc</span><span class="lp-pbar__t"><span class="lp-pbar__f r" style="width:26%"></span></span><span class="lp-pbar__v">43%</span><span class="lp-pbar__p r">26<small>pct</small></span></div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">Takedowns / 15</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:63%"></span></span><span class="lp-pbar__v">1.45</span><span class="lp-pbar__p g">63<small>pct</small></span></div>
+                  <div class="lp-pbar"><span class="lp-pbar__l">Opp-adj FS</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:57%"></span></span><span class="lp-pbar__v">52.6</span><span class="lp-pbar__p g">57<small>pct</small></span></div>
                 </div>
               </div>
             </div>
@@ -5152,27 +5269,55 @@ main, nav, footer { position: relative; z-index: 1; }
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
-              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(245,197,24,0.26), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(107,182,255,0.24), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
               <div class="lp-prof__bar"><span class="lp-prof__ey">WNBA · Projection</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div style="min-width:0"><div class="lp-prof__nf">A&#39;ja</div><div class="lp-prof__nl">Wilson</div><div class="lp-prof__ns" style="color:#8CC3F0">Las Vegas · F</div></div>
+                  <div class="lp-prof__av" style="border-color:#6BB6FF">VB<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Veronica_Burton_Valkyries_%28cropped%29.jpg/330px-Veronica_Burton_Valkyries_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div style="min-width:0"><div class="lp-prof__nf">Veronica</div><div class="lp-prof__nl">Burton</div><div class="lp-prof__ns" style="color:#8CC3F0">Golden State · G/UTIL · vs ATL</div></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">PP Fan Score · Lean Over</div>
+                  <div class="lp-gtiles" style="grid-template-columns:1fr 1fr 1fr">
+                    <div class="lp-gtile"><span class="lp-gtile__l">PP FS Line</span><span class="lp-gtile__v">26.5</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Our Line</span><span class="lp-gtile__v gold">28.5</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Edge</span><span class="lp-gtile__v grn">+2.0</span></div>
+                  </div>
                 </div>
                 <div class="lp-gcard">
                   <div class="lp-gcard__t">Projection</div>
-                  <div class="lp-gtiles" style="grid-template-columns:1fr 1fr 1fr">
-                    <div class="lp-gtile"><span class="lp-gtile__l">PP Line</span><span class="lp-gtile__v">47.5</span></div>
-                    <div class="lp-gtile"><span class="lp-gtile__l">Our FS</span><span class="lp-gtile__v gold">53.0</span></div>
-                    <div class="lp-gtile"><span class="lp-gtile__l">Edge</span><span class="lp-gtile__v grn">+5.5</span></div>
+                  <div class="lp-gtiles">
+                    <div class="lp-gtile"><span class="lp-gtile__l">Proj</span><span class="lp-gtile__v gold">29.2</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Salary</span><span class="lp-gtile__v">$9.7k</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Value</span><span class="lp-gtile__v grn">3.01</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Own %</span><span class="lp-gtile__v">7.3%</span></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Likely Defender · estimate</div>
+                  <div class="lp-mk">
+                    <div class="lp-mk__av" style="border-color:#6BB6FF">RH</div>
+                    <div class="lp-mk__id"><div class="lp-mk__nm">Rhyne Howard</div><div class="lp-mk__meta">ATL · G · #2 at G</div></div>
+                    <div class="lp-mk__st"><div class="lp-mk__s"><b style="color:#34D399">−4.0</b><span>FS Δ/9</span></div><div class="lp-mk__s"><b>98</b><span>Pctl</span></div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Recent Form · last 5</div>
+                  <div class="lp-gtiles" style="grid-template-columns:repeat(5,1fr)">
+                    <div class="lp-gtile"><span class="lp-gtile__v">30</span><span class="lp-gtile__s">06-17</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__v">21</span><span class="lp-gtile__s">06-14</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__v">30</span><span class="lp-gtile__s">06-12</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__v">43</span><span class="lp-gtile__s">06-10</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__v">27</span><span class="lp-gtile__s">06-06</span></div>
                   </div>
                 </div>
                 <div class="lp-gcard">
                   <div class="lp-gcard__t">True Line Composition</div>
                   <table class="lp-gcomp">
-                    <tr><th>Stat</th><th>PP</th><th>Ours</th></tr>
-                    <tr><td>Points</td><td>22.5</td><td class="gold">24.1</td></tr>
-                    <tr><td>Rebounds</td><td>9.5</td><td class="gold">10.2</td></tr>
-                    <tr><td>Assists</td><td>2.5</td><td class="gold">2.8</td></tr>
+                    <tr><th>Stat</th><th>Line</th><th>Wgt</th><th>Contrib</th></tr>
+                    <tr><td>Points</td><td>12.0</td><td>×1</td><td class="gold">+12.00</td></tr>
+                    <tr><td>Rebounds</td><td>3.0</td><td>×1.2</td><td class="gold">+3.69</td></tr>
+                    <tr><td>Assists</td><td>5.0</td><td>×1.5</td><td class="gold">+7.50</td></tr>
                   </table>
                 </div>
               </div>
