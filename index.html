@@ -4415,6 +4415,17 @@ main, nav, footer { position: relative; z-index: 1; }
   .section__title { font-size: 22px; }
   .hero__headline { font-size: 28px; }
 }
+
+/* ── Mobile sport-tab switcher for the popup gallery (mobile-only; desktop shows all) ── */
+.lp-tabs { display: none; }
+@media (max-width: 768px) {
+  .lp-tabs { display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0 0 18px; padding-bottom: 2px; }
+  .lp-tabs::-webkit-scrollbar { display: none; }
+  .lp-tab { flex: 0 0 auto; min-height: 40px; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--oo-border); background: var(--oo-panel); color: var(--oo-muted); font: 700 13px var(--oo-font, inherit); cursor: pointer; white-space: nowrap; transition: background .15s, color .15s, border-color .15s; }
+  .lp-tab.is-active { color: #07101f; background: var(--oo-gold); border-color: var(--oo-gold); }
+  .lp-gallery .lp-gphone[data-sport] { display: none; }
+  .lp-gallery .lp-gphone[data-sport].is-active { display: block; }
+}
 </style>
 </head>
 <body>
@@ -5114,8 +5125,14 @@ main, nav, footer { position: relative; z-index: 1; }
       <div class="section__eyebrow">Apple-Sports Design</div>
       <h2 class="section__title">The popups you'll tap every day.</h2>
     </div>
-    <div class="lp-gallery reveal">
-        <div class="lp-gphone">
+    <div class="lp-tabs" role="tablist" aria-label="Sport popups">
+        <button type="button" class="lp-tab is-active" data-sport="tennis">Tennis</button>
+        <button type="button" class="lp-tab" data-sport="golf">Golf</button>
+        <button type="button" class="lp-tab" data-sport="ufc">UFC</button>
+        <button type="button" class="lp-tab" data-sport="wnba">WNBA</button>
+      </div>
+      <div class="lp-gallery reveal">
+        <div class="lp-gphone is-active" data-sport="tennis">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -5146,7 +5163,7 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
         </div>
-        <div class="lp-gphone">
+        <div class="lp-gphone" data-sport="golf">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -5175,7 +5192,7 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
         </div>
-        <div class="lp-gphone">
+        <div class="lp-gphone" data-sport="ufc">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -5203,7 +5220,7 @@ main, nav, footer { position: relative; z-index: 1; }
             </div>
           </div>
         </div>
-        <div class="lp-gphone">
+        <div class="lp-gphone" data-sport="wnba">
           <div class="lp-gphone__island"></div>
           <div class="lp-gphone__screen">
             <div class="lp-prof">
@@ -7445,6 +7462,17 @@ main, nav, footer { position: relative; z-index: 1; }
   apply();
   var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(apply, 120); });
 })();
+
+  (function(){
+    var tabs=document.querySelectorAll('.lp-tab');
+    if(!tabs.length) return;
+    var phones=document.querySelectorAll('.lp-gallery .lp-gphone[data-sport]');
+    tabs.forEach(function(t){ t.addEventListener('click', function(){
+      var s=t.getAttribute('data-sport');
+      tabs.forEach(function(x){ x.classList.toggle('is-active', x===t); });
+      phones.forEach(function(p){ p.classList.toggle('is-active', p.getAttribute('data-sport')===s); });
+    }); });
+  })();
 </script>
 
 </body>
