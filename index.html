@@ -573,6 +573,31 @@ main, nav, footer { position: relative; z-index: 1; }
   gap: 12px;
   flex-wrap: wrap;
 }
+/* Quiet, premium "spots remaining" line under the CTA — genuine, not scarcity-loud. */
+.hero__spots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--oo-muted);
+  letter-spacing: 0.1px;
+}
+.hero__spots-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--oo-green);
+  box-shadow: 0 0 8px rgba(25,210,127,0.55);
+  flex: 0 0 auto;
+}
+.hero__spots #hero-spots-remaining {
+  color: var(--oo-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.hero__spots[hidden] { display: none; }
 
 /* ── Hero preview mock (right side) ───────────────────────── */
 .preview {
@@ -4293,6 +4318,10 @@ main, nav, footer { position: relative; z-index: 1; }
           <a href="#pricing" class="btn btn--primary">Claim 75% Off</a>
           <a href="#inside" class="btn btn--ghost">Take the Tour</a>
         </div>
+        <div class="hero__spots reveal" id="hero-spots">
+          <span class="hero__spots-dot"></span>
+          <span><span id="hero-spots-remaining">25</span> of 25 Season 1 spots left</span>
+        </div>
         <a href="#pricing" class="wb-count reveal" id="wb-count" aria-label="Wimbledon countdown">
           <span class="wb-count__dot"></span>
           <span class="wb-count__lbl">Wimbledon starts in</span>
@@ -6972,6 +7001,9 @@ main, nav, footer { position: relative; z-index: 1; }
       const data = await res.json();
       if (typeof data.season_remaining === 'number') {
         document.getElementById('season-remaining').textContent = data.season_remaining;
+        // Mirror the live count into the hero "spots remaining" indicator.
+        const heroRem = document.getElementById('hero-spots-remaining');
+        if (heroRem) heroRem.textContent = data.season_remaining;
       }
       // Per Alta 2026-05-18: also write season_total / daypass_total so the
       // 'X of Y' display stays consistent. Previously the total spans were
@@ -6987,6 +7019,8 @@ main, nav, footer { position: relative; z-index: 1; }
           btn.disabled = true;
           btn.textContent = 'Sold Out — Season 2 coming soon';
         }
+        const heroSpots = document.getElementById('hero-spots');
+        if (heroSpots) heroSpots.hidden = true;
       }
     } catch (_) { /* keep static defaults */ }
   })();
