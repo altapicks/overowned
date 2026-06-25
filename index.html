@@ -573,6 +573,31 @@ main, nav, footer { position: relative; z-index: 1; }
   gap: 12px;
   flex-wrap: wrap;
 }
+/* Quiet, premium "spots remaining" line under the CTA — genuine, not scarcity-loud. */
+.hero__spots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--oo-muted);
+  letter-spacing: 0.1px;
+}
+.hero__spots-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--oo-green);
+  box-shadow: 0 0 8px rgba(25,210,127,0.55);
+  flex: 0 0 auto;
+}
+.hero__spots #hero-spots-remaining {
+  color: var(--oo-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.hero__spots[hidden] { display: none; }
 
 /* ── Hero preview mock (right side) ───────────────────────── */
 .preview {
@@ -3265,8 +3290,38 @@ main, nav, footer { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .gl-tape__track, .gl-live__dot, .gl-row, .gl-row__badge { animation: none !important; opacity: 1; } }
 
 /* ── Sneak peek: app popup + Draws replicas (matches in-app chrome) ──── */
-.lp-peek { display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 22px; align-items: start; }
-@media (max-width: 900px) { .lp-peek { grid-template-columns: 1fr; gap: 18px; } }
+.lp-peek { display: flex; flex-direction: column; gap: 22px; }
+.lp-soccer { display: grid; grid-template-columns: minmax(0,0.64fr) minmax(0,0.36fr); gap: 16px; align-items: stretch; }
+.lp-peek-row { display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 22px; align-items: start; }
+@media (max-width: 900px) { .lp-soccer, .lp-peek-row { grid-template-columns: 1fr; gap: 16px; } }
+/* iPhone-framed multi-sport intel popups */
+.lp-phone-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.lp-switch { display: inline-flex; flex-wrap: wrap; justify-content: center; gap: 2px; padding: 3px; background: rgba(255,255,255,0.04); border: 1px solid var(--oo-border); border-radius: 999px; }
+.lp-switch__btn { border: none; background: transparent; color: var(--oo-muted); font-family: inherit; font-size: 12px; font-weight: 700; letter-spacing: 0.2px; padding: 6px 13px; border-radius: 999px; cursor: pointer; transition: background .15s, color .15s; }
+.lp-switch__btn:hover { color: var(--oo-text); }
+.lp-switch__btn.is-active { background: var(--oo-gold); color: #0a1426; }
+.lp-phone { position: relative; width: 300px; max-width: 86vw; aspect-ratio: 300 / 624; background: #05060a; border-radius: 46px; padding: 11px; box-shadow: 0 34px 70px rgba(0,0,0,0.6), inset 0 0 0 2px rgba(255,255,255,0.07), 0 0 0 1px rgba(0,0,0,0.8); }
+.lp-phone__island { position: absolute; top: 21px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; background: #000; border-radius: 999px; z-index: 6; }
+.lp-phone__screen { position: relative; width: 100%; height: 100%; border-radius: 36px; overflow: hidden; background: linear-gradient(180deg, rgba(20,33,55,0.96) 0%, rgba(11,23,40,0.98) 100%); }
+/* Bottom-sheet grab grip — exact app chrome ([data-oo-sheet-grip]); shared across all sport popups, clears the island. */
+.lp-phone__screen::after { content: ""; position: absolute; top: 41px; left: 50%; transform: translateX(-50%); width: 38px; height: 4px; border-radius: 999px; background: rgba(255,255,255,0.20); z-index: 5; pointer-events: none; }
+.lp-ipop { position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; -webkit-overflow-scrolling: touch; }
+.lp-ipop[hidden] { display: none; }
+/* Continuous gold wash from grip through the header, fading to dark glass body — mirrors .oo-wintel-modal mobile. */
+.lp-ipop .lp-pop__head { padding-top: 56px; border-bottom: 1px solid rgba(245,197,24,0.16); background: linear-gradient(180deg, rgba(245,197,24,0.16) 0%, rgba(245,197,24,0.10) 26%, rgba(245,197,24,0.035) 52%, rgba(11,23,40,0) 78%); }
+.lp-ipop .lp-pop__body { padding: 14px 16px 22px; }
+@media (max-width: 420px) {
+  .lp-phone { width: 270px; }
+  .lp-switch__btn { padding: 6px 10px; font-size: 11px; }
+  /* keep the in-phone popup internals from crushing on a 270px screen */
+  .lp-bar { grid-template-columns: 70px 1fr 38px; gap: 7px; }
+  .lp-attr { grid-template-columns: 52px 1fr 22px 28px; gap: 7px; }
+  .lp-tbl { font-size: 10px; }
+  .lp-tile { padding: 11px 6px; }
+  .lp-tile__value { font-size: 19px; }
+  .lp-mm__ring { width: 56px; height: 56px; }
+  .wb-count { font-size: 11.5px; flex-wrap: wrap; justify-content: center; row-gap: 2px; max-width: 100%; }
+}
 /* Win-Intel glass popup */
 .lp-pop { background: linear-gradient(180deg,#0e1b33 0%,#0a1628 100%); border: 1px solid rgba(255,209,26,0.20); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 30px rgba(255,209,26,0.10); overflow: hidden; }
 .lp-pop__head { padding: 15px 18px 13px; background: radial-gradient(ellipse 60% 90% at 0% 0%, rgba(255,209,26,0.12), transparent 70%), rgba(255,255,255,0.015); border-bottom: 1px solid rgba(255,209,26,0.18); display: flex; justify-content: space-between; align-items: flex-start; }
@@ -3290,6 +3345,34 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-chip__dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
 .lp-chip.pos .lp-chip__dot { background: #34D399; } .lp-chip.neg .lp-chip__dot { background: #f59e0b; }
 .lp-chip__label { font-weight: 700; color: var(--oo-text); } .lp-chip__detail { color: var(--oo-muted); margin-left: auto; font-size: 11.5px; }
+/* ── faithful per-sport intel popup internals (mirror the app modal cards) ── */
+.lp-card { margin-top: 11px; background: rgba(255,255,255,0.018); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px 13px; }
+.lp-card__title { font-size: 10.5px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; color: var(--oo-gold); margin: 0 0 9px; }
+.lp-mm { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px; }
+.lp-mm__donut { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+.lp-mm__ring { position: relative; width: 62px; height: 62px; }
+.lp-mm__pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--oo-mono); font-size: 15px; font-weight: 800; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+.lp-mm__lbl { font-size: 8px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase; color: var(--oo-muted-2); text-align: center; }
+.lp-mm__cap { font-size: 8.5px; font-weight: 600; color: var(--oo-muted); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 86px; }
+.lp-mm__mid { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.lp-mm__edge { font-size: 16px; font-weight: 900; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; line-height: 1; color: #4ADE80; }
+.lp-mm__edge small { font-size: 9px; font-weight: 700; opacity: 0.7; margin-left: 1px; }
+.lp-mm__edgecap { font-size: 7.5px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; color: var(--oo-muted-2); }
+.lp-bars { display: flex; flex-direction: column; gap: 9px; }
+.lp-bar { display: grid; grid-template-columns: 86px 1fr 42px; align-items: center; gap: 8px; }
+.lp-bar__label { font-size: 11px; font-weight: 600; color: var(--oo-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lp-bar__track { height: 7px; border-radius: 4px; background: rgba(255,255,255,0.05); position: relative; overflow: hidden; }
+.lp-bar__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: #34D399; }
+.lp-bar__fill.red { background: #F87171; } .lp-bar__fill.gold { background: linear-gradient(90deg, rgba(245,197,24,0.7), #FFD84A); } .lp-bar__fill.blue { background: #6BB6FF; }
+.lp-bar__val { font-family: var(--oo-mono); font-size: 11.5px; font-weight: 700; color: var(--oo-text); text-align: right; font-variant-numeric: tabular-nums; }
+.lp-ptiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lp-tbl { width: 100%; border-collapse: collapse; font-size: 11px; }
+.lp-tbl th { font-size: 8px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase; color: var(--oo-muted-2); text-align: right; padding: 0 0 6px; }
+.lp-tbl th:first-child { text-align: left; }
+.lp-tbl td { padding: 5px 0; border-top: 1px solid rgba(255,255,255,0.05); text-align: right; font-family: var(--oo-mono); color: var(--oo-muted); font-variant-numeric: tabular-nums; }
+.lp-tbl td:first-child { text-align: left; font-family: inherit; color: var(--oo-text); font-weight: 600; }
+.lp-tbl tfoot td { font-weight: 800; color: var(--oo-text); border-top: 1px solid rgba(255,209,26,0.22); }
+.lp-tbl tfoot td.gold { color: var(--oo-gold); }
 /* Draws */
 .lp-draws { display: flex; flex-direction: column; gap: 12px; }
 .lp-draws__hdr { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--oo-muted-2); }
@@ -3307,6 +3390,160 @@ main, nav, footer { position: relative; z-index: 1; }
 .lp-bk__row { display: flex; justify-content: space-between; gap: 8px; padding: 6px 9px; font-size: 11.5px; }
 .lp-bk__row + .lp-bk__row { border-top: 1px solid rgba(255,255,255,0.05); }
 .lp-bk__nm { font-weight: 600; color: var(--oo-text); } .lp-bk__sc { font-family: var(--oo-mono); font-weight: 700; color: var(--oo-muted); }
+
+/* Soccer team profile — formation pitch + player profile (matches app oo-stx/oo-pp) */
+.lp-stx-hero { display: flex; align-items: center; gap: 11px; padding: 10px 14px; margin-bottom: 12px; border-radius: 12px; background: linear-gradient(135deg, rgba(25,210,127,0.12), rgba(13,29,48,0.55) 58%); border: 1px solid rgba(25,210,127,0.20); }
+.lp-stx-flag { width: 32px; height: 24px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+.lp-stx-name { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; line-height: 1; color: var(--oo-text); }
+.lp-stx-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.lp-stx-form { font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #3ddc84; background: rgba(61,220,132,0.14); border: 1px solid rgba(61,220,132,0.32); border-radius: 999px; padding: 2px 9px; }
+.lp-stx-xi { font-size: 9px; text-transform: uppercase; letter-spacing: 0.7px; color: var(--oo-muted); font-weight: 700; }
+.lp-pitch { position: relative; border-radius: 16px; padding: 16px 10px; height: 392px; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0 10%, rgba(255,255,255,0) 10% 20%), linear-gradient(170deg, rgba(22,96,54,0.97), rgba(8,44,25,0.99)); border: 1px solid rgba(61,220,132,0.24); box-shadow: inset 0 0 70px rgba(0,0,0,0.4); }
+.lp-pitch-glow { position: absolute; top: -16%; left: 50%; width: 78%; height: 44%; transform: translateX(-50%); background: radial-gradient(ellipse at center, rgba(61,220,132,0.20), rgba(61,220,132,0) 70%); pointer-events: none; }
+
+/* ── A Look Inside v2 — soccer showcase + mobile popup gallery ───────────── */
+.lp-stx-hero .lp-stx-flag { width:38px; height:28px; border-radius:5px; overflow:hidden; display:inline-flex; align-items:center; justify-content:center; flex:0 0 auto; box-shadow:0 2px 10px rgba(0,0,0,0.45); font-size:23px; line-height:28px; }
+.lp-stx-hero .lp-stx-flag img { width:38px !important; height:28px !important; max-width:38px; object-fit:cover; border-radius:5px; display:block; }
+.lp-scc { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:26px; align-items:start; }
+@media (max-width:1024px){ .lp-scc { grid-template-columns:1fr; gap:22px; justify-items:center; } }
+.lp-gallery { display:flex; flex-wrap:wrap; justify-content:center; gap:22px 18px; }
+.lp-gphone { position:relative; width:240px; flex:0 0 auto; aspect-ratio:240/500; background:#05060a; border-radius:40px; padding:9px; box-shadow:0 28px 56px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(255,255,255,0.07), 0 0 0 1px rgba(0,0,0,0.8); }
+.lp-gphone__island { position:absolute; top:17px; left:50%; transform:translateX(-50%); width:72px; height:21px; background:#000; border-radius:999px; z-index:6; }
+.lp-gphone__screen { position:relative; width:100%; height:100%; border-radius:32px; overflow:hidden; background:#070d18; }
+@media (max-width:520px){ .lp-gphone { width:min(84vw,300px); aspect-ratio:300/600; } }
+.lp-prof { position:absolute; inset:0; display:flex; flex-direction:column; }
+.lp-prof__bg { position:absolute; inset:0; z-index:0; pointer-events:none; }
+.lp-prof__bar { position:relative; z-index:2; display:flex; align-items:center; justify-content:flex-end; padding:32px 13px 6px; }
+.lp-prof__ey { font-size:8.5px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:rgba(203,213,225,0.55); }
+.lp-prof__body { position:relative; z-index:2; flex:1 1 auto; overflow:hidden; padding:0 11px 12px; display:flex; flex-direction:column; gap:9px; }
+.lp-prof__hero { display:flex; align-items:center; gap:11px; padding:2px 1px; }
+.lp-prof__av { width:50px; height:50px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#fff; background:radial-gradient(circle at 30% 25%, rgba(255,255,255,0.18), rgba(0,0,0,0.42)); border:2.5px solid #FFD84A; }
+.lp-prof__nf { font-size:11px; font-weight:600; color:rgba(226,232,240,0.8); letter-spacing:0.2px; }
+.lp-prof__nl { font-size:19px; font-weight:800; line-height:1.04; letter-spacing:-0.4px; color:#f4f7fc; }
+.lp-prof__ns { margin-top:2px; font-size:9.5px; font-weight:700; letter-spacing:0.3px; }
+.lp-gcard { background:linear-gradient(180deg, rgba(17,25,42,0.72), rgba(11,18,33,0.78)); border:0.5px solid rgba(255,255,255,0.08); border-radius:12px; padding:10px 11px; box-shadow:inset 0 1px 0 rgba(255,255,255,0.05); }
+.lp-gcard__t { font-size:8.5px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:rgba(245,197,24,0.7); margin-bottom:8px; }
+.lp-gmm { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:6px; }
+.lp-gmm__d { display:flex; flex-direction:column; align-items:center; gap:4px; min-width:0; }
+.lp-gmm__ring { position:relative; width:54px; height:54px; }
+.lp-gmm__pct { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:900; letter-spacing:-0.5px; font-variant-numeric:tabular-nums; }
+.lp-gmm__lbl { font-size:7.5px; font-weight:800; letter-spacing:0.4px; text-transform:uppercase; color:rgba(203,213,225,0.55); text-align:center; }
+.lp-gmm__mid { display:flex; flex-direction:column; align-items:center; gap:1px; }
+.lp-gmm__edge { font-size:14px; font-weight:900; letter-spacing:-0.5px; color:#4ADE80; font-variant-numeric:tabular-nums; }
+.lp-gmm__edge small { font-size:8px; font-weight:700; opacity:0.7; margin-left:1px; }
+.lp-gmm__ec { font-size:7px; font-weight:700; letter-spacing:0.4px; text-transform:uppercase; color:rgba(203,213,225,0.5); text-align:center; }
+.lp-gtiles { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.lp-gtile { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); border-radius:8px; padding:7px 6px; text-align:center; display:flex; flex-direction:column; gap:1px; }
+.lp-gtile__l { font-size:7.5px; font-weight:800; letter-spacing:0.3px; text-transform:uppercase; color:rgba(203,213,225,0.5); }
+.lp-gtile__v { font-size:15px; font-weight:800; color:#f1f5fb; line-height:1.1; font-variant-numeric:tabular-nums; } .lp-gtile__v.gold{ color:#FFD84A; } .lp-gtile__v.grn{ color:#4ADE80; }
+.lp-gtile__s { font-size:8px; color:rgba(203,213,225,0.5); }
+.lp-gbar { display:grid; grid-template-columns:52px 1fr 24px; align-items:center; gap:7px; margin-bottom:7px; } .lp-gbar:last-child{ margin-bottom:0; }
+.lp-gbar__l { font-size:9px; font-weight:600; color:#e8ecf4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lp-gbar__t { height:6px; border-radius:999px; background:rgba(255,255,255,0.08); position:relative; overflow:hidden; }
+.lp-gbar__f { position:absolute; top:0; bottom:0; left:0; border-radius:999px; background:linear-gradient(90deg, rgba(245,197,24,0.7), #FFD84A); }
+.lp-gbar__v { font-size:10px; font-weight:800; color:#f1f5fb; text-align:right; font-variant-numeric:tabular-nums; }
+.lp-gchip { display:flex; align-items:center; gap:6px; padding:5px 0; font-size:9.5px; } .lp-gchip + .lp-gchip { border-top:1px solid rgba(255,255,255,0.05); }
+.lp-gchip__dot { width:6px; height:6px; border-radius:50%; flex:0 0 auto; box-shadow:0 0 6px currentColor; } .lp-gchip.pos .lp-gchip__dot{ background:#34D399; color:rgba(52,211,153,0.6); } .lp-gchip.neg .lp-gchip__dot{ background:#F59E0B; color:rgba(245,158,11,0.6); }
+.lp-gchip__l { font-weight:700; color:#e8ecf4; } .lp-gchip.pos .lp-gchip__l{ color:#4ADE80; } .lp-gchip.neg .lp-gchip__l{ color:#FBBF24; } .lp-gchip__d { margin-left:auto; color:rgba(203,213,225,0.6); font-size:9px; }
+.lp-gcomp { width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; }
+.lp-gcomp th { font-size:7.5px; text-transform:uppercase; letter-spacing:0.3px; color:rgba(203,213,225,0.5); font-weight:800; text-align:right; padding:0 0 5px; } .lp-gcomp th:first-child{ text-align:left; }
+.lp-gcomp td { font-size:10px; padding:4px 0; border-top:1px solid rgba(255,255,255,0.05); text-align:right; color:#e8ecf4; font-weight:700; } .lp-gcomp td:first-child{ text-align:left; color:rgba(203,213,225,0.7); font-weight:600; } .lp-gcomp td.gold{ color:#FFD84A; }
+.lp-mk { display:flex; align-items:center; gap:9px; }
+.lp-mk__av { width:44px; height:44px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:#fff; background:#0c2a18; border:2.5px solid #6EE7B7; }
+.lp-mk__id { min-width:0; flex:1 1 auto; } .lp-mk__nm { font-size:12px; font-weight:700; color:#f1f5fb; } .lp-mk__meta { font-size:9px; color:rgba(203,213,225,0.6); margin-top:1px; }
+.lp-mk__st { display:flex; gap:8px; } .lp-mk__s { text-align:center; } .lp-mk__s b{ display:block; font-size:13px; font-weight:800; color:#f1f5fb; } .lp-mk__s span{ font-size:7px; text-transform:uppercase; letter-spacing:0.3px; color:rgba(203,213,225,0.5); }
+/* avatar photos — graceful fallback to initials (img removed onerror) */
+.lp-prof__av, .lp-mk__av { position:relative; overflow:hidden; }
+.lp-prof__av img, .lp-mk__av img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; border-radius:50%; }
+/* matchup-read pills */
+.lp-pill { display:flex; align-items:center; gap:6px; font-size:9px; font-weight:700; color:#FBBF24; background:rgba(245,197,24,0.10); border:1px solid rgba(245,197,24,0.30); border-radius:999px; padding:5px 10px; margin-top:6px; } .lp-pill:first-of-type{ margin-top:0; } .lp-pill b{ color:#FFD84A; } .lp-pill span{ color:rgba(203,213,225,0.6); font-weight:600; margin-left:auto; }
+/* quality-profile radar */
+.lp-radar { display:flex; justify-content:center; padding:2px 0 4px; }
+.lp-radar text { font-size:8px; font-weight:800; letter-spacing:0.5px; fill:rgba(203,213,225,0.72); }
+/* attribute bars (value vs field pct) */
+.lp-attr { display:grid; grid-template-columns:30px 1fr 22px 28px; align-items:center; gap:8px; margin-top:7px; } .lp-attr:first-of-type{ margin-top:2px; }
+.lp-attr__l { font-size:9px; font-weight:800; letter-spacing:0.3px; color:#e8ecf4; }
+.lp-attr__t { height:6px; border-radius:999px; background:rgba(255,255,255,0.08); position:relative; overflow:hidden; }
+.lp-attr__f { position:absolute; top:0; bottom:0; left:0; border-radius:999px; }
+.lp-attr__v { font-size:11px; font-weight:800; color:#f1f5fb; text-align:right; font-variant-numeric:tabular-nums; }
+.lp-attr__p { font-size:8.5px; font-weight:800; text-align:right; font-variant-numeric:tabular-nums; }
+/* recent form rows */
+.lp-rf { display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:12px; padding:5px 0; font-size:10px; } .lp-rf + .lp-rf{ border-top:1px solid rgba(255,255,255,0.05); }
+.lp-rf__o { font-weight:600; color:#e8ecf4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.lp-rf__a { font-weight:800; min-width:30px; text-align:right; font-variant-numeric:tabular-nums; }
+.lp-rf__b { font-weight:700; color:rgba(203,213,225,0.55); min-width:26px; text-align:right; font-variant-numeric:tabular-nums; }
+/* soccer Stat-Intel — two side-by-side phones (desktop), full-width native sheet (mobile) */
+.lp-scc-phones { display:flex; gap:16px; align-items:flex-start; justify-content:center; }
+.lp-gphone--soc { width:262px; aspect-ratio:262/610; }
+.lp-gphone--soc .lp-prof__body { overflow-y:auto; overflow-x:hidden; scrollbar-width:none; }
+.lp-gphone--soc .lp-prof__body::-webkit-scrollbar { width:0; height:0; }
+@media (max-width:640px){
+  .lp-scc-phones { flex-direction:column; gap:16px; width:100%; align-items:stretch; }
+  .lp-gphone--soc { width:100%; aspect-ratio:auto; background:none; border-radius:0; padding:0; box-shadow:none; }
+  .lp-gphone--soc .lp-gphone__island { display:none; }
+  .lp-gphone--soc .lp-gphone__screen { height:auto; border-radius:18px; overflow:visible; border:1px solid rgba(255,255,255,0.08); background:#070d18; }
+  .lp-gphone--soc .lp-prof { position:relative; inset:auto; }
+  .lp-gphone--soc .lp-prof__body { overflow:visible; padding:2px 14px 16px; gap:11px; }
+  .lp-gphone--soc .lp-prof__bar { padding:14px 14px 4px; }
+}
+
+.lp-line { position: relative; z-index: 1; display: flex; justify-content: space-evenly; align-items: center; gap: 4px; }
+.lp-pchip { display: flex; flex-direction: column; align-items: center; width: clamp(46px, 19%, 78px); }
+.lp-pchip__av { position: relative; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; border: 2.5px solid; background: #0c2a18; font-size: 12px; font-weight: 800; color: #fff; }
+.lp-pchip__rt { position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); font-size: 9.5px; font-weight: 800; background: #06160a; border: 1.5px solid; border-radius: 999px; padding: 0 4px; line-height: 15px; min-width: 24px; text-align: center; }
+.lp-pchip__nm { margin-top: 9px; font-size: 10px; font-weight: 700; color: #fff; text-align: center; padding: 1px 6px; border-radius: 6px; background: rgba(3,18,10,0.62); white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.lp-pp { display: flex; flex-direction: column; gap: 12px; }
+.lp-pp-h { display: flex; align-items: center; gap: 12px; padding: 13px 15px; border-radius: 14px; background: linear-gradient(135deg, rgba(255,209,26,0.08), rgba(13,29,48,0.55) 58%); border: 1px solid rgba(255,255,255,0.08); }
+.lp-pp-photo { width: 54px; height: 54px; border-radius: 50%; border: 3px solid var(--oo-gold); display: grid; place-items: center; background: #0c2238; font-size: 17px; font-weight: 800; color: var(--oo-gold); flex: 0 0 auto; }
+.lp-pp-name { font-size: 19px; font-weight: 800; letter-spacing: -0.4px; line-height: 1.05; color: var(--oo-text); }
+.lp-pp-sub { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.lp-pp-team { font-size: 12px; font-weight: 700; color: var(--oo-text); }
+.lp-pp-pos { font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; color: var(--oo-muted); background: rgba(255,255,255,0.06); border: 1px solid var(--oo-border-2); border-radius: 999px; padding: 2px 8px; }
+.lp-pp-rt { margin-left: auto; text-align: center; border: 1px solid var(--oo-gold); border-radius: 12px; padding: 7px 13px; flex: 0 0 auto; }
+.lp-pp-rt__v { font-size: 23px; font-weight: 800; color: var(--oo-gold); line-height: 1; }
+.lp-pp-rt__l { font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--oo-muted); font-weight: 700; margin-top: 4px; }
+.lp-pp-card { padding: 13px 15px; background: rgba(13,29,48,0.55); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; }
+.lp-pp-card__t { font-size: 10px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; color: var(--oo-gold); margin-bottom: 11px; }
+.lp-pp-radar { display: flex; justify-content: center; }
+.lp-pp-legend { display: flex; justify-content: center; gap: 16px; font-size: 10px; color: var(--oo-muted); font-weight: 600; margin-top: 6px; }
+.lp-pp-legend i { display: inline-block; width: 14px; vertical-align: middle; margin-right: 5px; }
+.lp-pp-attrs { display: flex; flex-direction: column; gap: 12px; }
+.lp-attr { display: grid; grid-template-columns: 62px 1fr 26px 30px; align-items: center; gap: 9px; }
+.lp-attr__l { font-size: 11px; font-weight: 700; color: var(--oo-text); }
+.lp-attr__track { position: relative; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.08); }
+.lp-attr__fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: linear-gradient(90deg, rgba(255,209,26,0.7), var(--oo-gold)); }
+.lp-attr__avg { position: absolute; top: -3px; width: 2px; height: 14px; background: rgba(255,255,255,0.7); transform: translateX(-50%); border-radius: 1px; }
+.lp-attr__v { font-size: 12.5px; font-weight: 800; color: var(--oo-text); text-align: right; font-variant-numeric: tabular-nums; }
+.lp-attr__d { font-size: 10.5px; font-weight: 800; text-align: right; color: #4ADE80; font-variant-numeric: tabular-nums; }
+
+/* Wimbledon countdown — festive (grass-green → strawberry-cream) */
+.wb-count { display: inline-flex; align-items: center; gap: 9px; margin-top: 18px; padding: 9px 16px; border-radius: 999px; text-decoration: none; font-size: 12.5px; font-weight: 700; color: var(--oo-text); background: linear-gradient(135deg, rgba(25,210,127,0.10) 0%, rgba(255,245,235,0.06) 100%); border: 1px solid transparent; background-clip: padding-box; position: relative; transition: transform .18s ease; }
+.wb-count::before { content: ''; position: absolute; inset: 0; border-radius: 999px; padding: 1px; background: linear-gradient(135deg, #1f9d57, #f8e7d8 55%, #d64f6e); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+.wb-count:hover { transform: translateY(-1px); }
+.wb-count__dot { width: 7px; height: 7px; border-radius: 50%; background: #d64f6e; box-shadow: 0 0 8px rgba(214,79,110,0.6); flex: 0 0 auto; }
+.wb-count__lbl { color: var(--oo-muted); font-weight: 600; }
+.wb-count__time { font-family: var(--oo-mono); font-weight: 700; color: var(--oo-text); letter-spacing: 0.3px; font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { .wb-count { transition: none; } }
+.btn--stack { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; line-height: 1.12; }
+.btn--stack small { font-size: 10px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0.72; }
+
+/* Trends live-grades feed (current app style) */
+.lp-tfeed { margin-top: 10px; }
+.lp-tfeed__head { display: flex; justify-content: space-between; align-items: center; padding: 6px 4px 9px; }
+.lp-tfeed__ttl { display: inline-flex; align-items: center; gap: 7px; font-size: 10px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+.lp-tfeed__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--oo-gold); box-shadow: 0 0 6px rgba(255,209,26,0.6); }
+.lp-tfeed__cnt { font-size: 9.5px; color: var(--oo-muted); font-weight: 700; }
+.lp-tfeed__rows { display: flex; flex-direction: column; gap: 6px; max-height: min(54vh, 460px); overflow-y: auto; padding-right: 2px; }
+.lp-tfeed__row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 10px; background: rgba(255,255,255,0.02); border-left: 3px solid; }
+.lp-tfeed__top { display: flex; align-items: center; gap: 8px; }
+.lp-tag { font-size: 9.5px; font-weight: 900; letter-spacing: 0.5px; border: 1px solid; border-radius: 5px; padding: 1px 5px; }
+.lp-tfeed__pl { font-size: 13px; font-weight: 700; color: #F1F5F9; }
+.lp-tfeed__pl em { color: #64748B; font-weight: 500; font-style: normal; }
+.lp-tfeed__sub { font-size: 11px; color: #94A3B8; margin-top: 3px; }
+.lp-hit { min-width: 48px; text-align: center; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: 0.4px; flex: 0 0 auto; }
+.lp-hit--hit { color: #4ADE80; background: rgba(52,211,153,0.10); border: 1px solid rgba(52,211,153,0.30); }
+.lp-hit--miss { color: #F87171; background: rgba(248,113,113,0.10); border: 1px solid rgba(248,113,113,0.30); }
+
 .tr-donut__label { margin-top: 4px; font-size: 12.5px; font-weight: 800; color: var(--oo-text); letter-spacing: 0.2px; }
 .tr-donut__sub { font-size: 10.5px; color: var(--oo-muted); line-height: 1.35; }
 .tr-donut__n { font-size: 10px; color: var(--oo-muted-2); font-variant-numeric: tabular-nums; }
@@ -4197,12 +4434,8 @@ main, nav, footer { position: relative; z-index: 1; }
     <div class="hero__grid">
       <!-- LEFT: copy + CTAs -->
       <div class="hero__copy">
-        <div class="hero__badge reveal">
-          <span class="hero__badge-dot"></span>
-          Wimbledon Special · 75% off with code WIMBY
-        </div>
         <h1 class="hero__headline reveal">
-          Every tool<br>
+          All the data<br>
           <span class="hero__accent">the books have.</span>
         </h1>
         <div class="hero__proof reveal">
@@ -4210,9 +4443,14 @@ main, nav, footer { position: relative; z-index: 1; }
           Five sports live · 95% on graded PP glitches
         </div>
         <div class="hero__cta reveal">
-          <a href="#pricing" class="btn btn--primary">Claim 75% Off</a>
+          <a href="#pricing" class="btn btn--primary btn--stack">Claim 75% Off<small>while supplies last</small></a>
           <a href="#inside" class="btn btn--ghost">Take the Tour</a>
         </div>
+        <a href="#pricing" class="wb-count reveal" id="wb-count" aria-label="Wimbledon countdown">
+          <span class="wb-count__dot"></span>
+          <span class="wb-count__lbl">Wimbledon starts in</span>
+          <span class="wb-count__time" id="wb-time">—</span>
+        </a>
       </div>
 
       <!-- RIGHT: animated dashboard preview -->
@@ -4605,8 +4843,7 @@ main, nav, footer { position: relative; z-index: 1; }
   <div class="container">
     <div class="section__head reveal">
       <div class="section__eyebrow">Sports Coverage</div>
-      <h2 class="section__title">Five sports. One sharp model.</h2>
-      <p class="section__sub">Tennis, Golf, WNBA, Soccer (World Cup) and UFC — all live and interactive. The same market-calibrated engine, projections, signals and lineup builders, tuned for each sport.</p>
+      <h2 class="section__title">Every sport. One sharp model.</h2>
     </div>
     <div class="sports reveal-stagger">
       <!-- Tennis · LIVE -->
@@ -4691,6 +4928,20 @@ main, nav, footer { position: relative; z-index: 1; }
           Live · Interactive
         </div>
       </div>
+
+      <!-- MLB · COMING SOON -->
+      <div class="sport-card sport-card--soon">
+        <div class="sport-card__icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9.5"/>
+            <path d="M5.5 5.5 C 8 8, 8 16, 5.5 18.5"/>
+            <path d="M18.5 5.5 C 16 8, 16 16, 18.5 18.5"/>
+          </svg>
+        </div>
+        <div class="sport-card__name">MLB</div>
+        <div class="sport-card__loader" aria-hidden="true"><span></span></div>
+        <div class="sport-card__status sport-card__status--soon">Coming soon</div>
+      </div>
     </div>
   </div>
 </section>
@@ -4702,73 +4953,264 @@ main, nav, footer { position: relative; z-index: 1; }
   <div class="container">
     <div class="section__head reveal">
       <div class="section__eyebrow">A Look Inside</div>
-      <h2 class="section__title">Built like a sharp's terminal.</h2>
-      <p class="section__sub">Tap any player for the full Win Intel breakdown, or read the whole draw at a glance. This is the real interface.</p>
+      <h2 class="section__title">The whole pitch, decoded.</h2>
     </div>
-    <div class="lp-peek reveal">
-
-      <!-- Win Intel glass popup -->
-      <div class="lp-pop">
-        <div class="lp-pop__head">
+    <div class="lp-scc reveal">
+      <div>
+        <div class="lp-stx-hero">
+          <span class="lp-stx-flag">🇧🇷</span>
           <div>
-            <div class="lp-pop__eyebrow">Win Intel · Grass</div>
-            <h3 class="lp-pop__title"><span class="lp-pop__name">Iga Świątek</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Coco Gauff</span></h3>
+            <div class="lp-stx-name">Brazil</div>
+            <div class="lp-stx-meta"><span class="lp-stx-form">4-2-3-1</span><span class="lp-stx-xi">Confirmed XI</span></div>
           </div>
-          <span class="lp-pop__x" aria-hidden="true">×</span>
         </div>
-        <div class="lp-pop__body">
-          <div class="lp-hero">
-            <div class="lp-tile"><span class="lp-tile__label">Win Prob</span><span class="lp-tile__value gold">61%</span><span class="lp-tile__sub">model</span></div>
-            <div class="lp-tile"><span class="lp-tile__label">Proj FS</span><span class="lp-tile__value">42.8</span><span class="lp-tile__sub"><span class="pos">+5.1 edge</span></span></div>
-            <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">37.5</span><span class="lp-tile__sub">fade under</span></div>
+          <div class="lp-pitch">
+            <div class="lp-pitch-glow"></div>
+            <div class="lp-line">
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">AB<span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Alisson</div></div>
+            </div>
+            <div class="lp-line">
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">DA<span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">80</span></div><div class="lp-pchip__nm">Danilo</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">MA<span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">86</span></div><div class="lp-pchip__nm">Marquinhos</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">GM<span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">83</span></div><div class="lp-pchip__nm">G. Magalhães</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">WE<span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">79</span></div><div class="lp-pchip__nm">Wendell</div></div>
+            </div>
+            <div class="lp-line">
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">CA<span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Casemiro</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">BG<span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">85</span></div><div class="lp-pchip__nm">Bruno G.</div></div>
+            </div>
+            <div class="lp-line">
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">RA<span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">87</span></div><div class="lp-pchip__nm">Raphinha</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">PA<span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Paquetá</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">VJ<span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">88</span></div><div class="lp-pchip__nm">Vinícius</div></div>
+            </div>
+            <div class="lp-line">
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">RO<span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">85</span></div><div class="lp-pchip__nm">Rodrygo</div></div>
+            </div>
           </div>
-          <div class="lp-why">
-            <div class="lp-why__title">Why we lean over</div>
-            <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Serve hold edge</span><span class="lp-chip__detail">+8% vs field</span></div>
-            <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Return points won</span><span class="lp-chip__detail">top-5 on grass</span></div>
-            <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Opponent break threat</span><span class="lp-chip__detail">manageable</span></div>
+      </div>
+      <div class="lp-scc-phones">
+      <div class="lp-gphone lp-gphone--soc">
+        <div class="lp-gphone__island"></div>
+        <div class="lp-gphone__screen">
+          <div class="lp-prof">
+            <div class="lp-prof__bg" style="background:radial-gradient(120% 70% at 8% 2%, rgba(61,220,132,0.28), transparent 52%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+            <div class="lp-prof__bar"><span class="lp-prof__ey">World Cup · Stat Intel</span></div>
+            <div class="lp-prof__body">
+              <div class="lp-prof__hero">
+                <div style="min-width:0">
+                  <div class="lp-prof__nf">Isak</div>
+                  <div class="lp-prof__nl">Hien</div>
+                  <div class="lp-prof__ns" style="color:#8CDC9B">🇸🇪 D · 6.82</div>
+                  <div style="font-size:8.5px;font-weight:800;letter-spacing:0.5px;color:#FFD84A;margin-top:2px">FAN SCORE · 7.5</div>
+                </div>
+              </div>
+              <div class="lp-gcard">
+                <div class="lp-gcard__t">Fan Score Matchup</div>
+                <div class="lp-gmm">
+                  <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="45.2 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">30%</div></div><div class="lp-gmm__lbl">Player Rank<br>#917/1316</div></div>
+                  <div class="lp-gmm__mid"><div class="lp-gmm__edge" style="color:#6BB6FF">-4.5</div><div class="lp-gmm__ec">Lean Under</div></div>
+                  <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="150.8 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">100%</div></div><div class="lp-gmm__lbl">Japan D<br>#1 toughest</div></div>
+                </div>
+              </div>
+              <div class="lp-gcard">
+                <div class="lp-gcard__t">Matchup Read</div>
+                <div class="lp-pill"><b>Lean Under</b><span>adj 3.0 vs 7.5</span></div>
+                <div class="lp-pill"><b>Tough Defense</b><span>0.45× allowed</span></div>
+              </div>
+              <div class="lp-gcard">
+                <div class="lp-gcard__t">Numbers</div>
+                <div class="lp-gtiles">
+                  <div class="lp-gtile"><span class="lp-gtile__l">PP Line</span><span class="lp-gtile__v">7.5</span></div>
+                  <div class="lp-gtile"><span class="lp-gtile__l">Player Avg</span><span class="lp-gtile__v gold">6.5</span><span class="lp-gtile__s">#917 of 1316</span></div>
+                  <div class="lp-gtile"><span class="lp-gtile__l">Opp Allowed</span><span class="lp-gtile__v grn">0.45×</span><span class="lp-gtile__s">#1 toughest</span></div>
+                  <div class="lp-gtile"><span class="lp-gtile__l">Adj Proj</span><span class="lp-gtile__v" style="color:#F87171">3.0</span><span class="lp-gtile__s">lean under</span></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- Draws: win-prob donuts + mini bracket -->
-      <div class="lp-draws">
-        <div class="lp-draws__hdr">Draws · Wimbledon</div>
-        <div class="lp-wp-grid">
-          <div class="lp-wp">
-            <div class="lp-wp__name">🇪🇸 C. Alcaraz</div>
-            <div class="lp-wp__ring">
-              <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="38" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/><circle cx="42" cy="42" r="38" fill="none" stroke="var(--oo-gold)" stroke-width="6" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="88.4" transform="rotate(-90 42 42)"/></svg>
-              <div class="lp-wp__pct" style="color:var(--oo-gold)">63%</div>
+      <div class="lp-gphone lp-gphone--soc">
+        <div class="lp-gphone__island"></div>
+        <div class="lp-gphone__screen">
+          <div class="lp-prof">
+            <div class="lp-prof__bg" style="background:radial-gradient(120% 70% at 8% 2%, rgba(61,220,132,0.28), transparent 52%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+            <div class="lp-prof__bar"><span class="lp-prof__ey">World Cup · Stat Intel</span></div>
+            <div class="lp-prof__body">
+              <div class="lp-prof__hero" style="margin-bottom:4px">
+                <div style="min-width:0"><div class="lp-prof__nl">Hien</div><div class="lp-prof__ns" style="color:#8CDC9B">🇸🇪 Quality &amp; Markers</div></div>
+              </div>
+              <div class="lp-gcard">
+                <div class="lp-gcard__t">Quality Profile</div>
+                <div class="lp-radar">
+                  <svg width="150" height="152" viewBox="0 0 150 152">
+                    <polygon points="75,18 124.5,53.9 105.6,112.1 44.4,112.1 25.5,53.9" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+                    <polygon points="75,38.8 104.7,60.4 93.3,95.2 56.7,95.2 45.3,60.4" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+                    <line x1="75" y1="70" x2="75" y2="18" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="124.5" y2="53.9" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="105.6" y2="112.1" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="44.4" y2="112.1" stroke="rgba(255,255,255,0.06)"/><line x1="75" y1="70" x2="25.5" y2="53.9" stroke="rgba(255,255,255,0.06)"/>
+                    <polygon points="75,41.4 102.2,61.2 91.8,93.1 58.2,93.1 47.8,61.2" fill="none" stroke="rgba(255,255,255,0.32)" stroke-width="1" stroke-dasharray="3 3"/>
+                    <polygon points="75,51.8 93.8,63.9 94.0,96.1 52.4,101.1 54.2,63.3" fill="rgba(255,209,26,0.42)" stroke="#FFD84A" stroke-width="1.5"/>
+                    <circle cx="75" cy="51.8" r="2" fill="#FFD84A"/><circle cx="93.8" cy="63.9" r="2" fill="#FFD84A"/><circle cx="94.0" cy="96.1" r="2" fill="#FFD84A"/><circle cx="52.4" cy="101.1" r="2" fill="#FFD84A"/><circle cx="54.2" cy="63.3" r="2" fill="#FFD84A"/>
+                    <text x="75" y="13" text-anchor="middle">ATT</text><text x="129" y="52" text-anchor="start">TEC</text><text x="106" y="128" text-anchor="middle">TAC</text><text x="44" y="128" text-anchor="middle">DEF</text><text x="21" y="52" text-anchor="end">CRE</text>
+                  </svg>
+                </div>
+                <div class="lp-attr"><span class="lp-attr__l">ATT</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:35%;background:#F87171"></span></span><span class="lp-attr__v">35</span><span class="lp-attr__p" style="color:#F87171">35<small>pct</small></span></div>
+                <div class="lp-attr"><span class="lp-attr__l">TEC</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:38%;background:#F87171"></span></span><span class="lp-attr__v">38</span><span class="lp-attr__p" style="color:#F87171">38<small>pct</small></span></div>
+                <div class="lp-attr"><span class="lp-attr__l">TAC</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:62%;background:#19D27F"></span></span><span class="lp-attr__v">62</span><span class="lp-attr__p" style="color:#19D27F">62<small>pct</small></span></div>
+                <div class="lp-attr"><span class="lp-attr__l">DEF</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:74%;background:#19D27F"></span></span><span class="lp-attr__v">74</span><span class="lp-attr__p" style="color:#19D27F">74<small>pct</small></span></div>
+                <div class="lp-attr"><span class="lp-attr__l">CRE</span><span class="lp-attr__t"><span class="lp-attr__f" style="width:42%;background:#F87171"></span></span><span class="lp-attr__v">42</span><span class="lp-attr__p" style="color:#F87171">42<small>pct</small></span></div>
+              </div>
+              <div class="lp-gcard">
+                <div class="lp-gcard__t">Likely Marker</div>
+                <div class="lp-mk">
+                  <div class="lp-mk__id"><div class="lp-mk__nm">Junnosuke Suzuki</div><div class="lp-mk__meta">🇯🇵 D · 7.30 rating</div></div>
+                  <div class="lp-mk__st"><div class="lp-mk__s"><b>1.5</b><span>Tkl</span></div><div class="lp-mk__s"><b>1.0</b><span>Int</span></div><div class="lp-mk__s"><b>3.5</b><span>Duel W</span></div></div>
+                </div>
+              </div>
+              <div class="lp-gcard">
+                <div class="lp-gcard__t">Recent Form · Fan Score</div>
+                <div class="lp-rf"><span class="lp-rf__o">🇹🇳 Tunisia</span><span class="lp-rf__a" style="color:#FFD84A">0.1</span><span class="lp-rf__b">—</span></div>
+                <div class="lp-rf"><span class="lp-rf__o">🇬🇷 Greece</span><span class="lp-rf__a" style="color:#FFD84A">10.1</span><span class="lp-rf__b">7.4</span></div>
+                <div class="lp-rf"><span class="lp-rf__o">🇳🇴 Norway</span><span class="lp-rf__a" style="color:#FFD84A">6.0</span><span class="lp-rf__b">5.8</span></div>
+              </div>
             </div>
-            <div class="lp-wp__sub">reach final</div>
-          </div>
-          <div class="lp-wp">
-            <div class="lp-wp__name">🇮🇹 J. Sinner</div>
-            <div class="lp-wp__ring">
-              <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="38" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/><circle cx="42" cy="42" r="38" fill="none" stroke="#6EE7B7" stroke-width="6" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="100.3" transform="rotate(-90 42 42)"/></svg>
-              <div class="lp-wp__pct" style="color:#6EE7B7">58%</div>
-            </div>
-            <div class="lp-wp__sub">reach final</div>
-          </div>
-        </div>
-        <div class="lp-bk">
-          <div class="lp-bk__col">
-            <div class="lp-bk__hdr">Quarters</div>
-            <div class="lp-bk__match"><div class="lp-bk__row"><span class="lp-bk__nm">Alcaraz</span><span class="lp-bk__sc">6 4 6</span></div><div class="lp-bk__row" style="opacity:.5"><span class="lp-bk__nm">Rune</span><span class="lp-bk__sc">3 6 4</span></div></div>
-            <div class="lp-bk__match"><div class="lp-bk__row"><span class="lp-bk__nm">Fritz</span><span class="lp-bk__sc">7 6</span></div><div class="lp-bk__row" style="opacity:.5"><span class="lp-bk__nm">Zverev</span><span class="lp-bk__sc">6 4</span></div></div>
-          </div>
-          <div class="lp-bk__col">
-            <div class="lp-bk__hdr">Semis</div>
-            <div class="lp-bk__match live"><div class="lp-bk__row"><span class="lp-bk__nm">Alcaraz</span><span class="lp-bk__sc" style="color:var(--oo-gold)">live</span></div><div class="lp-bk__row"><span class="lp-bk__nm">Fritz</span><span class="lp-bk__sc">·</span></div></div>
-          </div>
-          <div class="lp-bk__col">
-            <div class="lp-bk__hdr" style="color:var(--oo-gold)">Final</div>
-            <div class="lp-bk__match"><div class="lp-bk__row"><span class="lp-bk__nm" style="color:var(--oo-muted-2)">TBD</span><span class="lp-bk__sc"></span></div><div class="lp-bk__row"><span class="lp-bk__nm" style="color:var(--oo-muted-2)">TBD</span><span class="lp-bk__sc"></span></div></div>
           </div>
         </div>
       </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ═══════════════════════════════════════════════════════════
+     MOBILE POPUP GALLERY — real app popups, side by side
+     ═══════════════════════════════════════════════════════════ -->
+<section class="section section--alt" id="peek-gallery">
+  <div class="container">
+    <div class="section__head reveal">
+      <div class="section__eyebrow">Apple-Sports Design</div>
+      <h2 class="section__title">The popups you'll tap every day.</h2>
+    </div>
+    <div class="lp-gallery reveal">
+        <div class="lp-gphone">
+          <div class="lp-gphone__island"></div>
+          <div class="lp-gphone__screen">
+            <div class="lp-prof">
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(61,220,132,0.32), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bar"><span class="lp-prof__ey">WTA · Player Intel</span></div>
+              <div class="lp-prof__body">
+                <div class="lp-prof__hero">
+                  <div style="min-width:0"><div class="lp-prof__nf">Iga</div><div class="lp-prof__nl">Świątek</div><div class="lp-prof__ns" style="color:#8CDC9B">🇵🇱 Grass · Model 3rd</div></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Model vs Market</div>
+                  <div class="lp-gmm">
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="92.0 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">61%</div></div><div class="lp-gmm__lbl">OverOwned</div></div>
+                    <div class="lp-gmm__mid"><div class="lp-gmm__edge">+7<small>pp</small></div><div class="lp-gmm__ec">model favors</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="81.4 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">54%</div></div><div class="lp-gmm__lbl">Kalshi</div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Ranking &amp; Honours</div>
+                  <div class="lp-gtiles">
+                    <div class="lp-gtile"><span class="lp-gtile__l">Surface Rtg</span><span class="lp-gtile__v gold">3rd</span><span class="lp-gtile__s">2118</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">WTA Rank</span><span class="lp-gtile__v">1st</span><span class="lp-gtile__s">live</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Titles</span><span class="lp-gtile__v">24</span><span class="lp-gtile__s">8 finals</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Win %</span><span class="lp-gtile__v">88%</span><span class="lp-gtile__s">210 mt</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-gphone">
+          <div class="lp-gphone__island"></div>
+          <div class="lp-gphone__screen">
+            <div class="lp-prof">
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(245,197,24,0.26), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bar"><span class="lp-prof__ey">Golf · Player Intel</span></div>
+              <div class="lp-prof__body">
+                <div class="lp-prof__hero">
+                  <div style="min-width:0"><div class="lp-prof__nf">Scottie</div><div class="lp-prof__nl">Scheffler</div><div class="lp-prof__ns" style="color:#FFD84A">🇺🇸 DataGolf #1</div></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Course Fit</div>
+                  <div class="lp-gmm">
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="132.7 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">88%</div></div><div class="lp-gmm__lbl">Fit Score</div></div>
+                    <div class="lp-gmm__mid"><div class="lp-gmm__edge" style="color:#FFD84A">A+</div><div class="lp-gmm__ec">grade</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="61.8 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">41%</div></div><div class="lp-gmm__lbl">Top 10</div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Strokes Gained · pctile</div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Total SG</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:96%"></span></span><span class="lp-gbar__v">96</span></div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Approach</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:99%"></span></span><span class="lp-gbar__v">99</span></div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Off Tee</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:84%"></span></span><span class="lp-gbar__v">84</span></div>
+                  <div class="lp-gbar"><span class="lp-gbar__l">Putting</span><span class="lp-gbar__t"><span class="lp-gbar__f" style="width:68%"></span></span><span class="lp-gbar__v">68</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-gphone">
+          <div class="lp-gphone__island"></div>
+          <div class="lp-gphone__screen">
+            <div class="lp-prof">
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(140,195,240,0.26), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bar"><span class="lp-prof__ey">UFC · Fighter Intel</span></div>
+              <div class="lp-prof__body">
+                <div class="lp-prof__hero">
+                  <div style="min-width:0"><div class="lp-prof__nf">Islam</div><div class="lp-prof__nl">Makhachev</div><div class="lp-prof__ns" style="color:#8CC3F0">🇷🇺 LW · 26–1</div></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Model vs Kalshi</div>
+                  <div class="lp-gmm">
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="102.5 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">68%</div></div><div class="lp-gmm__lbl">OverOwned</div></div>
+                    <div class="lp-gmm__mid"><div class="lp-gmm__edge">+7<small>pp</small></div><div class="lp-gmm__ec">model favors</div></div>
+                    <div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="92.0 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">61%</div></div><div class="lp-gmm__lbl">Kalshi</div></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Style Matchup</div>
+                  <div class="lp-gchip pos"><span class="lp-gchip__dot"></span><span class="lp-gchip__l">Grappling edge</span><span class="lp-gchip__d">+3.4 TD/15</span></div>
+                  <div class="lp-gchip pos"><span class="lp-gchip__dot"></span><span class="lp-gchip__l">Control time</span><span class="lp-gchip__d">strong lean</span></div>
+                  <div class="lp-gchip neg"><span class="lp-gchip__dot"></span><span class="lp-gchip__l">Reach</span><span class="lp-gchip__d">−2&quot; deficit</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-gphone">
+          <div class="lp-gphone__island"></div>
+          <div class="lp-gphone__screen">
+            <div class="lp-prof">
+              <div class="lp-prof__bg" style="background:radial-gradient(120% 90% at 8% 4%, rgba(245,197,24,0.26), transparent 50%), linear-gradient(180deg,#0b1424,#070d18)"></div>
+              <div class="lp-prof__bar"><span class="lp-prof__ey">WNBA · Projection</span></div>
+              <div class="lp-prof__body">
+                <div class="lp-prof__hero">
+                  <div style="min-width:0"><div class="lp-prof__nf">A&#39;ja</div><div class="lp-prof__nl">Wilson</div><div class="lp-prof__ns" style="color:#8CC3F0">Las Vegas · F</div></div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">Projection</div>
+                  <div class="lp-gtiles" style="grid-template-columns:1fr 1fr 1fr">
+                    <div class="lp-gtile"><span class="lp-gtile__l">PP Line</span><span class="lp-gtile__v">47.5</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Our FS</span><span class="lp-gtile__v gold">53.0</span></div>
+                    <div class="lp-gtile"><span class="lp-gtile__l">Edge</span><span class="lp-gtile__v grn">+5.5</span></div>
+                  </div>
+                </div>
+                <div class="lp-gcard">
+                  <div class="lp-gcard__t">True Line Composition</div>
+                  <table class="lp-gcomp">
+                    <tr><th>Stat</th><th>PP</th><th>Ours</th></tr>
+                    <tr><td>Points</td><td>22.5</td><td class="gold">24.1</td></tr>
+                    <tr><td>Rebounds</td><td>9.5</td><td class="gold">10.2</td></tr>
+                    <tr><td>Assists</td><td>2.5</td><td class="gold">2.8</td></tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 </section>
@@ -4779,7 +5221,7 @@ main, nav, footer { position: relative; z-index: 1; }
 <section class="section" id="inside">
   <div class="container">
     <div class="section__head reveal">
-      <div class="section__eyebrow">Inside the Product</div>
+      <div class="section__eyebrow">Take the Tour</div>
       <h2 class="section__title">The whole app. One sharp model.<br><span class="section__title-accent">Same slate, every angle.</span></h2>
       <button class="tour-launch reveal" id="tour-launch" type="button">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
@@ -6080,79 +6522,49 @@ main, nav, footer { position: relative; z-index: 1; }
             <div class="tr-donut__n">live now</div>
           </div>
         </div>
-        <div class="tr-feed oo-pc-only">
-          <div class="tr-feed__head"><span class="tr-feed__title"><span class="tr-feed__dot"></span>Live grades</span><span class="tr-feed__count">55 graded · refresh hourly</span></div>
-          <div class="tr-feed__rows">
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-09</span>
-            <div class="trf-pl"><div class="trf-name">Jenson Brooksby <em>vs Zhizhen Zhang</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">4.5</div><div class="trf-base">vs 13</div></div>
-            <span class="trf-delta trf-delta--neg">−8.5</span>
-            <span class="trf-hit trf-hit--miss">MISS</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-09</span>
-            <div class="trf-pl"><div class="trf-name">Dayana Yastremska <em>vs Sara Bejlek</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">23.5</div><div class="trf-base">vs 15.5</div></div>
-            <span class="trf-delta trf-delta--pos">+8</span>
-            <span class="trf-hit trf-hit--hit">HIT</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FCA5A5;background:rgba(252,165,165,0.05)">
-            <span class="trf-date">06-09</span>
-            <div class="trf-pl"><div class="trf-name">Rinky Hijikata <em>vs Tom Gentzsch</em></div><div class="trf-verd" style="color:#FCA5A5">Bearish TRAP</div></div>
-            <div class="trf-score"><div class="trf-act">58.25</div><div class="trf-base">vs 65.27</div></div>
-            <span class="trf-delta trf-delta--neg">−7.02</span>
-            <span class="trf-hit trf-hit--hit">HIT</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-09</span>
-            <div class="trf-pl"><div class="trf-name">Jaume Munar <em>vs Martin Damm Jr</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">3</div><div class="trf-base">vs 12</div></div>
-            <span class="trf-delta trf-delta--neg">−9</span>
-            <span class="trf-hit trf-hit--hit">HIT</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-09</span>
-            <div class="trf-pl"><div class="trf-name">Corentin Moutet <em>vs Nick Kyrgios</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">0.5</div><div class="trf-base">vs 16</div></div>
-            <span class="trf-delta trf-delta--neg">−15.5</span>
-            <span class="trf-hit trf-hit--miss">MISS</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-08</span>
-            <div class="trf-pl"><div class="trf-name">McCartney Kessler <em>vs Karolina Pliskova</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">2</div><div class="trf-base">vs 11</div></div>
-            <span class="trf-delta trf-delta--neg">−9</span>
-            <span class="trf-hit trf-hit--hit">HIT</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-08</span>
-            <div class="trf-pl"><div class="trf-name">Paula Badosa <em>vs Daria Snigur</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">-2.5</div><div class="trf-base">vs 14</div></div>
-            <span class="trf-delta trf-delta--neg">−16.5</span>
-            <span class="trf-hit trf-hit--hit">HIT</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-08</span>
-            <div class="trf-pl"><div class="trf-name">Denis Shapovalov <em>vs Marin Cilic</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">4.5</div><div class="trf-base">vs 11</div></div>
-            <span class="trf-delta trf-delta--neg">−6.5</span>
-            <span class="trf-hit trf-hit--hit">HIT</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#6EE7B7;background:rgba(110,231,183,0.05)">
-            <span class="trf-date">06-08</span>
-            <div class="trf-pl"><div class="trf-name">Francesca Jones <em>vs Laura Siegemund</em></div><div class="trf-verd" style="color:#6EE7B7">Bullish LEVERAGE</div></div>
-            <div class="trf-score"><div class="trf-act">8.5</div><div class="trf-base">vs 27.25</div></div>
-            <span class="trf-delta trf-delta--neg">−18.75</span>
-            <span class="trf-hit trf-hit--miss">MISS</span>
-          </div>
-          <div class="tr-feed__row" style="border-left-color:#FFD84A;background:rgba(245,197,24,0.05)">
-            <span class="trf-date">06-08</span>
-            <div class="trf-pl"><div class="trf-name">Katie Boulter <em>vs Leylah Fernandez</em></div><div class="trf-verd" style="color:#FFD84A">Good Value</div></div>
-            <div class="trf-score"><div class="trf-act">10</div><div class="trf-base">vs 10.5</div></div>
-            <span class="trf-delta trf-delta--neg">−0.5</span>
-            <span class="trf-hit trf-hit--miss">MISS</span>
-          </div>
+        <div class="lp-tfeed oo-pc-only">
+          <div class="lp-tfeed__head"><span class="lp-tfeed__ttl"><span class="lp-tfeed__dot"></span>Live grades</span><span class="lp-tfeed__cnt">55 graded · refresh hourly</span></div>
+          <div class="lp-tfeed__rows">
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">J. Brooksby <em>vs Z. Zhang</em></span></div><div class="lp-tfeed__sub">Good Value · actual 4.5 vs 13 · 06-09</div></div>
+              <span class="lp-hit lp-hit--miss">MISS</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">D. Yastremska <em>vs S. Bejlek</em></span></div><div class="lp-tfeed__sub">Good Value · actual 23.5 vs 15.5 · 06-09</div></div>
+              <span class="lp-hit lp-hit--hit">HIT</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FCA5A5">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FCA5A5;border-color:rgba(252,165,165,0.45)">TRAP</span><span class="lp-tfeed__pl">R. Hijikata <em>vs T. Gentzsch</em></span></div><div class="lp-tfeed__sub">Bearish TRAP · actual 58.3 vs 65.3 · 06-09</div></div>
+              <span class="lp-hit lp-hit--hit">HIT</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">J. Munar <em>vs M. Damm Jr</em></span></div><div class="lp-tfeed__sub">Good Value · actual 3 vs 12 · 06-09</div></div>
+              <span class="lp-hit lp-hit--hit">HIT</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">C. Moutet <em>vs N. Kyrgios</em></span></div><div class="lp-tfeed__sub">Good Value · actual 0.5 vs 16 · 06-09</div></div>
+              <span class="lp-hit lp-hit--miss">MISS</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">M. Kessler <em>vs K. Pliskova</em></span></div><div class="lp-tfeed__sub">Good Value · actual 2 vs 11 · 06-08</div></div>
+              <span class="lp-hit lp-hit--hit">HIT</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">P. Badosa <em>vs D. Snigur</em></span></div><div class="lp-tfeed__sub">Good Value · actual −2.5 vs 14 · 06-08</div></div>
+              <span class="lp-hit lp-hit--hit">HIT</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">D. Shapovalov <em>vs M. Cilic</em></span></div><div class="lp-tfeed__sub">Good Value · actual 4.5 vs 11 · 06-08</div></div>
+              <span class="lp-hit lp-hit--hit">HIT</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">LEV</span><span class="lp-tfeed__pl">F. Jones <em>vs L. Siegemund</em></span></div><div class="lp-tfeed__sub">Bullish Leverage · actual 8.5 vs 27.3 · 06-08</div></div>
+              <span class="lp-hit lp-hit--miss">MISS</span>
+            </div>
+            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
+              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">GV</span><span class="lp-tfeed__pl">K. Boulter <em>vs L. Fernandez</em></span></div><div class="lp-tfeed__sub">Good Value · actual 10 vs 10.5 · 06-08</div></div>
+              <span class="lp-hit lp-hit--miss">MISS</span>
+            </div>
           </div>
         </div>
       </div>
@@ -6573,6 +6985,25 @@ main, nav, footer { position: relative; z-index: 1; }
     revealEls.forEach((el) => el.classList.add('is-in'));
   }
 
+  // ── Wimbledon countdown (live) ───────────────────────────
+  // The Championships 2026 begin Mon 30 Jun? — play opens Mon 2026-06-29 ~11:00 BST.
+  (function wimbledon() {
+    const el = document.getElementById('wb-time');
+    if (!el) return;
+    const TARGET = new Date('2026-06-29T11:00:00+01:00').getTime();
+    const tick = () => {
+      const diff = TARGET - Date.now();
+      if (diff <= 0) { el.textContent = 'Underway'; return; }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      el.textContent = `${d}d ${h}h ${m}m ${s}s`;
+    };
+    tick();
+    setInterval(tick, 1000);
+  })();
+
   // ── Scroll progress bar + Apple-style scroll motion ──────
   const progressBar = document.getElementById('scroll-progress');
   const heroBg = document.querySelector('.hero__bg');
@@ -6725,6 +7156,9 @@ main, nav, footer { position: relative; z-index: 1; }
       const data = await res.json();
       if (typeof data.season_remaining === 'number') {
         document.getElementById('season-remaining').textContent = data.season_remaining;
+        // Mirror the live count into the hero "spots remaining" indicator.
+        const heroRem = document.getElementById('hero-spots-remaining');
+        if (heroRem) heroRem.textContent = data.season_remaining;
       }
       // Per Alta 2026-05-18: also write season_total / daypass_total so the
       // 'X of Y' display stays consistent. Previously the total spans were
@@ -6740,6 +7174,8 @@ main, nav, footer { position: relative; z-index: 1; }
           btn.disabled = true;
           btn.textContent = 'Sold Out — Season 2 coming soon';
         }
+        const heroSpots = document.getElementById('hero-spots');
+        if (heroSpots) heroSpots.hidden = true;
       }
     } catch (_) { /* keep static defaults */ }
   })();
