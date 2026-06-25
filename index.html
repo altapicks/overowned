@@ -3237,6 +3237,76 @@ main, nav, footer { position: relative; z-index: 1; }
 *::-webkit-scrollbar-thumb { background: rgba(245,197,24,0.28); border-radius: 4px; }
 *::-webkit-scrollbar-thumb:hover { background: rgba(245,197,24,0.45); }
 *::-webkit-scrollbar-track { background: transparent; }
+
+/* ── PP Glitch LIVE board ─────────────────────────────────── */
+.gl-live { max-width: 600px; margin: 0 auto; background: var(--oo-panel-strong); border: 1px solid var(--oo-border); border-radius: var(--oo-radius-md); box-shadow: var(--oo-shadow); overflow: hidden; }
+.gl-live__bar { display: flex; align-items: center; gap: 9px; padding: 12px 16px; border-bottom: 1px solid var(--oo-border); font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--oo-muted); }
+.gl-live__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--oo-green); box-shadow: 0 0 10px var(--oo-green); animation: gl-pulse 1.6s ease-in-out infinite; }
+.gl-live__count { margin-left: auto; color: var(--oo-green); font-weight: 700; letter-spacing: 0.5px; }
+@keyframes gl-pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.35; transform: scale(0.75); } }
+.gl-tape { overflow: hidden; border-bottom: 1px solid var(--oo-border); background: rgba(6,17,31,0.45); padding: 9px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.gl-tape__track { display: inline-flex; gap: 24px; white-space: nowrap; animation: gl-scroll 24s linear infinite; will-change: transform; padding-left: 24px; }
+.gl-tape__tick { font-family: var(--oo-mono); font-size: 12px; color: var(--oo-muted-2); }
+.gl-tape__tick b { color: var(--oo-muted); font-weight: 600; }
+@keyframes gl-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.gl-rows { padding: 6px; }
+.gl-row { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 12px; padding: 13px 12px; opacity: 0; animation: gl-in 650ms cubic-bezier(0.16,1,0.3,1) forwards; }
+.gl-row:nth-child(1) { animation-delay: 0.25s; } .gl-row:nth-child(2) { animation-delay: 0.7s; } .gl-row:nth-child(3) { animation-delay: 1.15s; }
+.gl-row + .gl-row { border-top: 1px solid var(--oo-border); }
+@keyframes gl-in { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+.gl-row__badge { font-size: 9px; font-weight: 800; letter-spacing: 0.6px; color: var(--oo-green); background: var(--oo-green-soft); border: 1px solid rgba(25,210,127,0.34); border-radius: 999px; padding: 3px 8px; animation: gl-glow 2s ease-in-out infinite; }
+@keyframes gl-glow { 0%,100% { box-shadow: 0 0 0 rgba(25,210,127,0); } 50% { box-shadow: 0 0 13px rgba(25,210,127,0.45); } }
+.gl-row__name { font-size: 14px; font-weight: 600; color: var(--oo-text); }
+.gl-row__nums { font-family: var(--oo-mono); font-size: 13px; color: var(--oo-muted); font-variant-numeric: tabular-nums; }
+.gl-row__nums b { color: var(--oo-green); font-weight: 700; }
+.gl-row__arrow { color: var(--oo-muted-2); margin: 0 3px; }
+.gl-row__take { font-size: 10px; font-weight: 800; letter-spacing: 0.5px; color: var(--oo-green); border: 1px solid rgba(25,210,127,0.34); border-radius: 6px; padding: 3px 9px; }
+@media (max-width: 560px) { .gl-row { grid-template-columns: auto 1fr auto; gap: 9px; } .gl-row__take { display: none; } .gl-row__name { font-size: 13px; } }
+@media (prefers-reduced-motion: reduce) { .gl-tape__track, .gl-live__dot, .gl-row, .gl-row__badge { animation: none !important; opacity: 1; } }
+
+/* ── Sneak peek: app popup + Draws replicas (matches in-app chrome) ──── */
+.lp-peek { display: grid; grid-template-columns: 1.04fr 0.96fr; gap: 22px; align-items: start; }
+@media (max-width: 900px) { .lp-peek { grid-template-columns: 1fr; gap: 18px; } }
+/* Win-Intel glass popup */
+.lp-pop { background: linear-gradient(180deg,#0e1b33 0%,#0a1628 100%); border: 1px solid rgba(255,209,26,0.20); border-radius: 14px; box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 30px rgba(255,209,26,0.10); overflow: hidden; }
+.lp-pop__head { padding: 15px 18px 13px; background: radial-gradient(ellipse 60% 90% at 0% 0%, rgba(255,209,26,0.12), transparent 70%), rgba(255,255,255,0.015); border-bottom: 1px solid rgba(255,209,26,0.18); display: flex; justify-content: space-between; align-items: flex-start; }
+.lp-pop__eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 1.1px; text-transform: uppercase; color: rgba(255,209,26,0.72); margin-bottom: 4px; }
+.lp-pop__title { margin: 0; font-size: 17px; font-weight: 900; letter-spacing: -0.3px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.lp-pop__name { background: linear-gradient(135deg,#ffe066 0%,#f5c518 55%,#c99a12 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.lp-pop__vs { color: var(--oo-muted-2); font-size: 12px; font-weight: 700; } .lp-pop__opp { color: var(--oo-text); font-weight: 700; font-size: 14px; }
+.lp-pop__x { color: var(--oo-muted-2); font-size: 19px; line-height: 1; }
+.lp-pop__body { padding: 15px 18px 18px; }
+.lp-hero { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.lp-tile { background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 12px 8px; text-align: center; display: flex; flex-direction: column; gap: 3px; align-items: center; }
+.lp-tile__label { font-size: 9px; font-weight: 800; letter-spacing: 0.7px; text-transform: uppercase; color: var(--oo-muted-2); }
+.lp-tile__value { font-family: var(--oo-mono); font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color: var(--oo-text); line-height: 1; }
+.lp-tile__value.gold { background: linear-gradient(135deg,#ffe066,#f5c518 55%,#c99a12); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.lp-tile__sub { font-size: 10px; color: var(--oo-muted); }
+.lp-tile__sub .pos { color: #34D399; font-weight: 700; }
+.lp-why { margin-top: 12px; background: rgba(255,255,255,0.018); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 11px 14px; }
+.lp-why__title { font-size: 11px; font-weight: 800; letter-spacing: 0.9px; text-transform: uppercase; color: var(--oo-gold); margin-bottom: 7px; }
+.lp-chip { display: flex; align-items: center; gap: 8px; padding: 7px 0; font-size: 12.5px; }
+.lp-chip + .lp-chip { border-top: 1px solid rgba(255,255,255,0.05); }
+.lp-chip__dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 auto; }
+.lp-chip.pos .lp-chip__dot { background: #34D399; } .lp-chip.neg .lp-chip__dot { background: #f59e0b; }
+.lp-chip__label { font-weight: 700; color: var(--oo-text); } .lp-chip__detail { color: var(--oo-muted); margin-left: auto; font-size: 11.5px; }
+/* Draws */
+.lp-draws { display: flex; flex-direction: column; gap: 12px; }
+.lp-draws__hdr { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--oo-muted-2); }
+.lp-wp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.lp-wp { position: relative; background: rgba(13,29,48,0.65); border: 1px solid rgba(255,209,26,0.14); border-radius: 12px; padding: 14px 12px 11px; display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.lp-wp__name { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--oo-text); }
+.lp-wp__ring { position: relative; width: 84px; height: 84px; }
+.lp-wp__pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--oo-mono); font-size: 18px; font-weight: 800; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+.lp-wp__sub { font-family: var(--oo-mono); font-size: 9px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; color: var(--oo-muted-2); }
+.lp-bk { background: rgba(13,29,48,0.55); border: 1px solid rgba(255,209,26,0.12); border-radius: 12px; padding: 13px 14px; display: flex; gap: 22px; overflow-x: auto; }
+.lp-bk__col { display: flex; flex-direction: column; justify-content: center; gap: 10px; min-width: 104px; }
+.lp-bk__hdr { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--oo-muted-2); margin-bottom: 2px; }
+.lp-bk__match { background: rgba(13,29,48,0.75); border: 1px solid rgba(255,209,26,0.18); border-radius: 6px; overflow: hidden; }
+.lp-bk__match.live { border-color: rgba(255,209,26,0.55); background: rgba(255,209,26,0.06); }
+.lp-bk__row { display: flex; justify-content: space-between; gap: 8px; padding: 6px 9px; font-size: 11.5px; }
+.lp-bk__row + .lp-bk__row { border-top: 1px solid rgba(255,255,255,0.05); }
+.lp-bk__nm { font-weight: 600; color: var(--oo-text); } .lp-bk__sc { font-family: var(--oo-mono); font-weight: 700; color: var(--oo-muted); }
 .tr-donut__label { margin-top: 4px; font-size: 12.5px; font-weight: 800; color: var(--oo-text); letter-spacing: 0.2px; }
 .tr-donut__sub { font-size: 10.5px; color: var(--oo-muted); line-height: 1.35; }
 .tr-donut__n { font-size: 10px; color: var(--oo-muted-2); font-variant-numeric: tabular-nums; }
@@ -4099,7 +4169,7 @@ main, nav, footer { position: relative; z-index: 1; }
     </a>
     <div class="nav__links">
       <a href="#features">Features</a>
-      <a href="#how-it-works">How It Works</a>
+      <a href="#glitches">The Edge</a>
       <a href="#sports">Sports</a>
       <a href="#pricing">Pricing</a>
       <a href="#pricing" class="nav__cta">
@@ -4141,7 +4211,7 @@ main, nav, footer { position: relative; z-index: 1; }
         </div>
         <div class="hero__cta reveal">
           <a href="#pricing" class="btn btn--primary">Claim 75% Off</a>
-          <a href="#how-it-works" class="btn btn--ghost">See How It Works</a>
+          <a href="#inside" class="btn btn--ghost">Take the Tour</a>
         </div>
       </div>
 
@@ -4486,87 +4556,8 @@ main, nav, footer { position: relative; z-index: 1; }
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════
-     HOW IT WORKS
-     ═══════════════════════════════════════════════════════════ -->
-<section class="section" id="how-it-works">
-  <div class="container">
-    <div class="section__head reveal">
-      <div class="section__eyebrow">How It Works</div>
-      <h2 class="section__title">Three steps from market open to upload.</h2>
-      <p class="section__sub">No spreadsheets. No model-building. Just the same workflow the sharps use, packaged so you can run it in the time it takes to brew coffee.</p>
-    </div>
-    <div class="steps reveal-stagger">
-      <div class="step">
-        <div class="step__num">1</div>
-        <div class="step__title">Pull real lines</div>
-        <div class="step__desc">We ingest sharp markets, DK salaries, ownership, and weather every 13 minutes — automatically.</div>
-        <div class="step__visual">
-          <div class="step-anim-1">
-            <div class="step-anim-1__tape">
-              <span class="step-anim-1__tick">5.92</span>
-              <span class="step-anim-1__tick step-anim-1__tick--y">22.5%</span>
-              <span class="step-anim-1__tick step-anim-1__tick--g">+28.7</span>
-              <span class="step-anim-1__tick">7.28</span>
-              <span class="step-anim-1__tick step-anim-1__tick--b">8.1</span>
-              <span class="step-anim-1__tick">5.52</span>
-              <span class="step-anim-1__tick step-anim-1__tick--y">29.0%</span>
-              <span class="step-anim-1__tick step-anim-1__tick--g">+15.0</span>
-              <span class="step-anim-1__tick step-anim-1__tick--r">−8.5</span>
-              <span class="step-anim-1__tick">6.27</span>
-              <!-- duplicate set for seamless loop -->
-              <span class="step-anim-1__tick">5.92</span>
-              <span class="step-anim-1__tick step-anim-1__tick--y">22.5%</span>
-              <span class="step-anim-1__tick step-anim-1__tick--g">+28.7</span>
-              <span class="step-anim-1__tick">7.28</span>
-              <span class="step-anim-1__tick step-anim-1__tick--b">8.1</span>
-              <span class="step-anim-1__tick">5.52</span>
-              <span class="step-anim-1__tick step-anim-1__tick--y">29.0%</span>
-              <span class="step-anim-1__tick step-anim-1__tick--g">+15.0</span>
-              <span class="step-anim-1__tick step-anim-1__tick--r">−8.5</span>
-              <span class="step-anim-1__tick">6.27</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step__num">2</div>
-        <div class="step__title">Run the sharp model</div>
-        <div class="step__desc">Sport-specific simulation translates the market into per-player DK + PrizePicks projections, trap scores and graded signals.</div>
-        <div class="step__visual">
-          <div class="step-anim-2">
-            <span class="num">−110</span>
-            <span class="arrow">→</span>
-            <span class="num">52.4%</span>
-            <span class="arrow">→</span>
-            <span class="num" style="color: var(--oo-green);">+4.1</span>
-          </div>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step__num">3</div>
-        <div class="step__title">Build &amp; upload</div>
-        <div class="step__desc">Optimize lineups with exposure caps, export the CSV, and upload directly to DraftKings.</div>
-        <div class="step__visual">
-          <div class="step-anim-3">
-            <span class="csv-tag">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.7;"><path d="M14 3v4a1 1 0 0 0 1 1h4"/><path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2z"/></svg>
-              lineups.csv
-            </span>
-            <span class="csv-arrow" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 5 19 12 13 19"/></svg>
-            </span>
-            <span class="csv-ready">Ready to upload</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SPORTS COVERAGE
-     ═══════════════════════════════════════════════════════════ -->
+
 <!-- ═══════════════════════════════════════════════════════════
      PP GLITCH SPOTLIGHT — the signature edge
      ═══════════════════════════════════════════════════════════ -->
@@ -4574,30 +4565,37 @@ main, nav, footer { position: relative; z-index: 1; }
   <div class="container">
     <div class="section__head reveal">
       <div class="section__eyebrow">The Signature Edge</div>
-      <h2 class="section__title">PP Glitches — mispriced lines, caught instantly.</h2>
-      <p class="section__sub">Every so often PrizePicks posts a line our sharp-market model — and PrizePicks' own goblin board — both clear by a wide margin. That's a glitch: a number that's simply wrong. OverOwned flags it the second it appears, so you're on the right side before it corrects. <strong style="color:var(--oo-green);">95% hit rate · 18&ndash;1 on graded glitches.</strong></p>
+      <h2 class="section__title">PP Glitches, caught live.</h2>
+      <p class="section__sub">When PrizePicks misprices a line, we flag it the instant it posts. <strong style="color:var(--oo-green);">95% · 18&ndash;1 graded.</strong></p>
     </div>
-    <div class="preview__table reveal" style="max-width:560px;margin:0 auto;">
-      <div class="preview__table-head">
-        <div>Player</div><div>Stat</div><div class="preview__num">Std</div><div class="preview__num">Proj</div>
+    <div class="gl-live reveal">
+      <div class="gl-live__bar">
+        <span class="gl-live__dot"></span> Scanning PrizePicks
+        <span class="gl-live__count">live</span>
       </div>
-      <div class="preview__table-row">
-        <div class="preview__name">A. Sabalenka</div>
-        <div style="color:var(--oo-muted);">Aces</div>
-        <div class="preview__num">6.5</div>
-        <div class="preview__num" style="color:var(--oo-green);font-weight:700;">9.4</div>
-      </div>
-      <div class="preview__table-row">
-        <div class="preview__name">S. Quinn</div>
-        <div style="color:var(--oo-muted);">Shots</div>
-        <div class="preview__num">1.5</div>
-        <div class="preview__num" style="color:var(--oo-green);font-weight:700;">2.8</div>
-      </div>
-      <div class="preview__table-row">
-        <div class="preview__name">V. Kopriva</div>
-        <div style="color:var(--oo-muted);">Double Faults</div>
-        <div class="preview__num">3.5</div>
-        <div class="preview__num" style="color:var(--oo-green);font-weight:700;">5.1</div>
+      <div class="gl-tape"><div class="gl-tape__track">
+        <span class="gl-tape__tick">Aces <b>6.5</b></span><span class="gl-tape__tick">Shots <b>1.5</b></span><span class="gl-tape__tick">Passes <b>54.5</b></span><span class="gl-tape__tick">Pts+Reb+Ast <b>31.5</b></span><span class="gl-tape__tick">Double Faults <b>3.5</b></span><span class="gl-tape__tick">Goalie Saves <b>3.5</b></span><span class="gl-tape__tick">Strokes <b>69.5</b></span><span class="gl-tape__tick">Fantasy Score <b>22.5</b></span><span class="gl-tape__tick">SOG <b>1.5</b></span><span class="gl-tape__tick">Sig. Strikes <b>74.5</b></span>
+        <span class="gl-tape__tick">Aces <b>6.5</b></span><span class="gl-tape__tick">Shots <b>1.5</b></span><span class="gl-tape__tick">Passes <b>54.5</b></span><span class="gl-tape__tick">Pts+Reb+Ast <b>31.5</b></span><span class="gl-tape__tick">Double Faults <b>3.5</b></span><span class="gl-tape__tick">Goalie Saves <b>3.5</b></span><span class="gl-tape__tick">Strokes <b>69.5</b></span><span class="gl-tape__tick">Fantasy Score <b>22.5</b></span><span class="gl-tape__tick">SOG <b>1.5</b></span><span class="gl-tape__tick">Sig. Strikes <b>74.5</b></span>
+      </div></div>
+      <div class="gl-rows">
+        <div class="gl-row">
+          <span class="gl-row__badge">GLITCH</span>
+          <span class="gl-row__name">A. Sabalenka · Aces</span>
+          <span class="gl-row__nums">6.5 <span class="gl-row__arrow">→</span> <b>9.4</b></span>
+          <span class="gl-row__take">OVER</span>
+        </div>
+        <div class="gl-row">
+          <span class="gl-row__badge">GLITCH</span>
+          <span class="gl-row__name">S. Quinn · Shots</span>
+          <span class="gl-row__nums">1.5 <span class="gl-row__arrow">→</span> <b>2.8</b></span>
+          <span class="gl-row__take">OVER</span>
+        </div>
+        <div class="gl-row">
+          <span class="gl-row__badge">GLITCH</span>
+          <span class="gl-row__name">V. Kopriva · Double Faults</span>
+          <span class="gl-row__nums">3.5 <span class="gl-row__arrow">→</span> <b>5.1</b></span>
+          <span class="gl-row__take">OVER</span>
+        </div>
       </div>
     </div>
   </div>
@@ -4693,6 +4691,84 @@ main, nav, footer { position: relative; z-index: 1; }
           Live · Interactive
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SNEAK PEEK — real app popup + Draws (matched chrome)
+     ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="peek">
+  <div class="container">
+    <div class="section__head reveal">
+      <div class="section__eyebrow">A Look Inside</div>
+      <h2 class="section__title">Built like a sharp's terminal.</h2>
+      <p class="section__sub">Tap any player for the full Win Intel breakdown, or read the whole draw at a glance. This is the real interface.</p>
+    </div>
+    <div class="lp-peek reveal">
+
+      <!-- Win Intel glass popup -->
+      <div class="lp-pop">
+        <div class="lp-pop__head">
+          <div>
+            <div class="lp-pop__eyebrow">Win Intel · Grass</div>
+            <h3 class="lp-pop__title"><span class="lp-pop__name">Iga Świątek</span> <span class="lp-pop__vs">vs</span> <span class="lp-pop__opp">Coco Gauff</span></h3>
+          </div>
+          <span class="lp-pop__x" aria-hidden="true">×</span>
+        </div>
+        <div class="lp-pop__body">
+          <div class="lp-hero">
+            <div class="lp-tile"><span class="lp-tile__label">Win Prob</span><span class="lp-tile__value gold">61%</span><span class="lp-tile__sub">model</span></div>
+            <div class="lp-tile"><span class="lp-tile__label">Proj FS</span><span class="lp-tile__value">42.8</span><span class="lp-tile__sub"><span class="pos">+5.1 edge</span></span></div>
+            <div class="lp-tile"><span class="lp-tile__label">PP Line</span><span class="lp-tile__value">37.5</span><span class="lp-tile__sub">fade under</span></div>
+          </div>
+          <div class="lp-why">
+            <div class="lp-why__title">Why we lean over</div>
+            <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Serve hold edge</span><span class="lp-chip__detail">+8% vs field</span></div>
+            <div class="lp-chip pos"><span class="lp-chip__dot"></span><span class="lp-chip__label">Return points won</span><span class="lp-chip__detail">top-5 on grass</span></div>
+            <div class="lp-chip neg"><span class="lp-chip__dot"></span><span class="lp-chip__label">Opponent break threat</span><span class="lp-chip__detail">manageable</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Draws: win-prob donuts + mini bracket -->
+      <div class="lp-draws">
+        <div class="lp-draws__hdr">Draws · Wimbledon</div>
+        <div class="lp-wp-grid">
+          <div class="lp-wp">
+            <div class="lp-wp__name">🇪🇸 C. Alcaraz</div>
+            <div class="lp-wp__ring">
+              <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="38" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/><circle cx="42" cy="42" r="38" fill="none" stroke="var(--oo-gold)" stroke-width="6" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="88.4" transform="rotate(-90 42 42)"/></svg>
+              <div class="lp-wp__pct" style="color:var(--oo-gold)">63%</div>
+            </div>
+            <div class="lp-wp__sub">reach final</div>
+          </div>
+          <div class="lp-wp">
+            <div class="lp-wp__name">🇮🇹 J. Sinner</div>
+            <div class="lp-wp__ring">
+              <svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="38" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="6"/><circle cx="42" cy="42" r="38" fill="none" stroke="#6EE7B7" stroke-width="6" stroke-linecap="round" stroke-dasharray="238.8" stroke-dashoffset="100.3" transform="rotate(-90 42 42)"/></svg>
+              <div class="lp-wp__pct" style="color:#6EE7B7">58%</div>
+            </div>
+            <div class="lp-wp__sub">reach final</div>
+          </div>
+        </div>
+        <div class="lp-bk">
+          <div class="lp-bk__col">
+            <div class="lp-bk__hdr">Quarters</div>
+            <div class="lp-bk__match"><div class="lp-bk__row"><span class="lp-bk__nm">Alcaraz</span><span class="lp-bk__sc">6 4 6</span></div><div class="lp-bk__row" style="opacity:.5"><span class="lp-bk__nm">Rune</span><span class="lp-bk__sc">3 6 4</span></div></div>
+            <div class="lp-bk__match"><div class="lp-bk__row"><span class="lp-bk__nm">Fritz</span><span class="lp-bk__sc">7 6</span></div><div class="lp-bk__row" style="opacity:.5"><span class="lp-bk__nm">Zverev</span><span class="lp-bk__sc">6 4</span></div></div>
+          </div>
+          <div class="lp-bk__col">
+            <div class="lp-bk__hdr">Semis</div>
+            <div class="lp-bk__match live"><div class="lp-bk__row"><span class="lp-bk__nm">Alcaraz</span><span class="lp-bk__sc" style="color:var(--oo-gold)">live</span></div><div class="lp-bk__row"><span class="lp-bk__nm">Fritz</span><span class="lp-bk__sc">·</span></div></div>
+          </div>
+          <div class="lp-bk__col">
+            <div class="lp-bk__hdr" style="color:var(--oo-gold)">Final</div>
+            <div class="lp-bk__match"><div class="lp-bk__row"><span class="lp-bk__nm" style="color:var(--oo-muted-2)">TBD</span><span class="lp-bk__sc"></span></div><div class="lp-bk__row"><span class="lp-bk__nm" style="color:var(--oo-muted-2)">TBD</span><span class="lp-bk__sc"></span></div></div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
