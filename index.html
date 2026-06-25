@@ -3398,6 +3398,8 @@ main, nav, footer { position: relative; z-index: 1; }
 .wb-count__lbl { color: var(--oo-muted); font-weight: 600; }
 .wb-count__time { font-family: var(--oo-mono); font-weight: 700; color: var(--oo-text); letter-spacing: 0.3px; font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) { .wb-count { transition: none; } }
+.btn--stack { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; line-height: 1.12; }
+.btn--stack small { font-size: 10px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; opacity: 0.72; }
 
 /* Trends live-grades feed (current app style) */
 .lp-tfeed { margin-top: 10px; }
@@ -4315,12 +4317,8 @@ main, nav, footer { position: relative; z-index: 1; }
           Five sports live · 95% on graded PP glitches
         </div>
         <div class="hero__cta reveal">
-          <a href="#pricing" class="btn btn--primary">Claim 75% Off</a>
+          <a href="#pricing" class="btn btn--primary btn--stack">Claim 75% Off<small>while supplies last</small></a>
           <a href="#inside" class="btn btn--ghost">Take the Tour</a>
-        </div>
-        <div class="hero__spots reveal" id="hero-spots">
-          <span class="hero__spots-dot"></span>
-          <span><span id="hero-spots-remaining">25</span> of 25 Season 1 spots left</span>
         </div>
         <a href="#pricing" class="wb-count reveal" id="wb-count" aria-label="Wimbledon countdown">
           <span class="wb-count__dot"></span>
