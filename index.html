@@ -4696,6 +4696,9 @@ main, nav, footer { position: relative; z-index: 1; }
 @media (min-width: 769px) {
   .lp-prof__av img, .lp-mk__av img { display: none !important; }
 }
+/* Mobile: tour (#inside) hidden — the phone-mockup clones didn't match the app.
+   PC tour is unaffected. Pending a screenshot-based rebuild or a permanent bag. */
+@media (max-width: 768px) { #inside { display: none !important; } }
 </style>
 </head>
 <body>
