@@ -3618,6 +3618,131 @@ main, nav, footer { position: relative; z-index: 1; }
 .tr-donut__sub { font-size: 10.5px; color: var(--oo-muted); line-height: 1.35; }
 .tr-donut__n { font-size: 10px; color: var(--oo-muted-2); font-variant-numeric: tabular-nums; }
 
+/* ════════════════════════════════════════════════════════════════════
+   TRENDS — graded donut cards + history drill-down (clone of the app's
+   src/components/SportTrends.tsx: a grid of wide "metric" cards, each a
+   donut + W/L summary + EDGE badge, CLICKABLE → its graded history list).
+   ════════════════════════════════════════════════════════════════════ */
+.oo-trends-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.oo-tcard { display: block; width: 100%; text-align: left; cursor: pointer; padding: 15px 16px; border-radius: 14px;
+  background: rgba(255,255,255,0.025); border: 1px solid var(--oo-border); color: inherit; font: inherit;
+  transition: border-color 0.15s, background 0.15s; -webkit-tap-highlight-color: transparent; }
+.oo-tcard:hover { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.045); }
+.oo-tcard.is-empty { cursor: default; }
+.oo-tcard.is-empty:hover { border-color: var(--oo-border); background: rgba(255,255,255,0.025); }
+.oo-tcard__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.oo-tcard__label { font-size: 12px; font-weight: 800; letter-spacing: 0.3px; text-transform: uppercase; color: var(--oo-muted); }
+.oo-tcard__tag { font-size: 10px; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; color: #FFD84A;
+  background: rgba(245,197,24,0.10); border: 1px solid rgba(245,197,24,0.28); border-radius: 999px; padding: 3px 9px; }
+.oo-tcard__row { display: flex; align-items: center; gap: 18px; margin-top: 12px; }
+.oo-tdonut { position: relative; width: 92px; height: 92px; flex: 0 0 auto; border-radius: 50%;
+  background: radial-gradient(closest-side, transparent 71%, transparent 0),
+    conic-gradient(var(--c, #FFD84A) calc(var(--p, 0) * 360deg), rgba(255,255,255,0.07) 0);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.oo-tdonut::after { content: ''; position: absolute; inset: 11px; border-radius: 50%; background: var(--oo-bg, #060d18); }
+.oo-tdonut--empty { background: radial-gradient(closest-side, transparent 71%, transparent 0), conic-gradient(rgba(255,255,255,0.07) 0deg, rgba(255,255,255,0.07) 0); }
+.oo-tdonut__pct { position: relative; z-index: 1; font-size: 23px; font-weight: 900; font-family: 'JetBrains Mono', ui-monospace, monospace; color: rgba(255,255,255,0.3); line-height: 1; }
+.oo-tdonut__hr { position: relative; z-index: 1; font-size: 8px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--oo-muted-2); margin-top: 2px; }
+.oo-tcard__meta { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.oo-tcard__wl { font-size: 13px; font-weight: 700; color: #d7e0ee; }
+.oo-tcard__wl--dim { color: #8ea0bb; }
+.oo-tcard__n { font-size: 11.5px; font-weight: 600; color: var(--oo-muted); }
+.oo-tcard__note { font-size: 11px; font-weight: 600; color: var(--oo-muted); line-height: 1.35; max-width: 260px; }
+.oo-tcard__badge { align-self: flex-start; margin-top: 4px; font-size: 10px; font-weight: 900; letter-spacing: 0.6px;
+  color: var(--bc, #6EE7B7); border: 1px solid color-mix(in srgb, var(--bc) 40%, transparent);
+  background: color-mix(in srgb, var(--bc) 12%, transparent); border-radius: 6px; padding: 3px 8px; }
+
+/* History drill-down (replaces the donut grid in-place when a card is tapped). */
+.oo-thist { animation: oo-fade-up 0.22s ease; }
+@keyframes oo-fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.oo-thist__back { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px 6px 9px; border-radius: 999px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--oo-border); color: var(--oo-text);
+  font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.oo-thist__back:hover { background: rgba(255,255,255,0.08); }
+.oo-thist__head { margin: 12px 2px 8px; }
+.oo-thist__eyebrow { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #FFD84A; }
+.oo-thist__summary { font-size: 12px; font-weight: 700; margin-top: 4px; color: #d7e0ee; }
+.oo-thist__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.oo-throw { display: flex; align-items: center; gap: 10px; padding: 10px 4px; border-top: 1px solid rgba(255,255,255,0.05); }
+.oo-throw__date { min-width: 46px; font-size: 11px; font-weight: 700; color: var(--oo-muted); font-variant-numeric: tabular-nums; }
+.oo-throw__body { flex: 1 1 auto; min-width: 0; }
+.oo-throw__name { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #f1f5fb; }
+.oo-throw__detail { font-size: 10.5px; color: var(--oo-muted); margin-top: 1px; }
+.oo-throw__side { font-size: 10px; font-weight: 900; letter-spacing: 0.3px; padding: 2px 6px; border-radius: 5px; font-variant-numeric: tabular-nums; }
+.oo-throw__side.u { color: #FCA5A5; border: 1px solid #FCA5A555; background: #FCA5A51a; }
+.oo-throw__side.o { color: #6EE7B7; border: 1px solid #6EE7B755; background: #6EE7B71a; }
+.oo-throw__side.spr { color: #FFD84A; border: 1px solid rgba(255,216,74,0.4); background: rgba(255,216,74,0.10); }
+.oo-throw__res { font-weight: 800; font-size: 12px; font-variant-numeric: tabular-nums; }
+.oo-throw__res.hit { color: var(--oo-green); }
+.oo-throw__res.miss { color: var(--oo-red); }
+
+/* ════════════════════════════════════════════════════════════════════
+   MOBILE TOUR — phone mockups (≤768px only). Each tour panel renders the
+   app's actual MOBILE screen inside a phone frame; the wide PC replica is
+   hidden ≤768px. Reuses the .lp-gphone vocabulary so it matches the
+   landing's existing gallery phones. The phone carries the app's CURRENT
+   mobile nav: the Apple-Sports top-right pill (.oo-tphone__pill) — NOT the
+   old bottom tab bar. (Faithful to NavPanel.tsx + DrawPlayerProfile.tsx.)
+   ════════════════════════════════════════════════════════════════════ */
+.oo-tmobile { display: none; }          /* hidden on PC; shown ≤768px */
+@media (min-width: 769px) { .oo-tmobile { display: none !important; } }
+@media (max-width: 768px) {
+  /* On phones the PC replica is replaced by the phone mockup. */
+  #inside .app-frame, #inside .pp-layout, #inside .profile-frame,
+  #inside .builder-shell, #inside .oo-pc-replica { display: none !important; }
+  #inside .oo-tmobile { display: block; }
+  /* Tour caption sits below the phone; panels never height-cap on phones. */
+  #inside .tab-panel.is-active { height: auto; min-height: 0; overflow: visible; }
+}
+.oo-tphone { position: relative; width: min(86vw, 330px); margin: 0 auto; aspect-ratio: 330/680;
+  background: #05060a; border-radius: 42px; padding: 9px;
+  box-shadow: 0 28px 56px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(255,255,255,0.07), 0 0 0 1px rgba(0,0,0,0.8); }
+.oo-tphone__island { position: absolute; top: 17px; left: 50%; transform: translateX(-50%); width: 78px; height: 22px; background: #000; border-radius: 999px; z-index: 8; }
+.oo-tphone__screen { position: relative; width: 100%; height: 100%; border-radius: 34px; overflow: hidden;
+  background: linear-gradient(180deg, #0B1424 0%, #070D18 100%); display: flex; flex-direction: column; }
+/* The app's real top-right NavPanel pill (current page icon + label + chevron). */
+.oo-tphone__pill { position: absolute; top: 30px; right: 16px; z-index: 7; display: inline-flex; align-items: center; gap: 7px;
+  height: 32px; padding: 0 11px; border-radius: 999px; background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12); color: #f1f5fb; font-size: 12px; font-weight: 700;
+  backdrop-filter: blur(8px) saturate(140%); -webkit-backdrop-filter: blur(8px) saturate(140%); }
+.oo-tphone__pill svg { width: 15px; height: 15px; }
+.oo-tphone__pill .chev { opacity: 0.6; font-size: 10px; }
+/* Scrollable app body inside the phone. */
+.oo-tscreen { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: none;
+  padding: 64px 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.oo-tscreen::-webkit-scrollbar { width: 0; height: 0; }
+.oo-tscreen__h1 { font-size: 21px; font-weight: 800; letter-spacing: -0.4px; color: #f4f7fc; }
+.oo-tscreen__sub { font-size: 11px; font-weight: 600; color: var(--oo-muted); margin-top: -4px; }
+/* The NavPanel glass dropdown (shown on the nav step). */
+.oo-tnavdrop { position: absolute; top: 70px; right: 16px; z-index: 9; width: 230px; max-width: calc(100% - 32px);
+  padding: 10px; border-radius: 16px; background: linear-gradient(180deg, #0E1B33 0%, #0A1426 100%);
+  border: 1px solid rgba(255,255,255,0.10); box-shadow: 0 18px 44px rgba(0,0,0,0.6); }
+.oo-tnavdrop__sec { font-size: 9px; font-weight: 800; letter-spacing: 1.3px; text-transform: uppercase; color: #FFD84A; opacity: 0.85; padding: 9px 8px 4px; }
+.oo-tnavrow { display: flex; align-items: center; gap: 11px; padding: 8px 10px; border-radius: 10px; color: #e8ecf4; }
+.oo-tnavrow.active { background: rgba(245,197,24,0.12); color: #FFD84A; }
+.oo-tnavrow__ic { width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
+.oo-tnavrow.active .oo-tnavrow__ic { background: rgba(245,197,24,0.14); }
+.oo-tnavrow__ic svg { width: 15px; height: 15px; }
+.oo-tnavrow__l { font-size: 13px; font-weight: 700; }
+.oo-tnavrow__s { font-size: 10px; font-weight: 600; color: var(--oo-muted); }
+.oo-tnavrow__txt { display: flex; flex-direction: column; gap: 1px; }
+/* Per-step narration card under the phone (mobile tour explainer). */
+.oo-tnote { margin: 16px auto 0; max-width: 360px; text-align: center; }
+.oo-tnote__eyebrow { font-size: 10px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #FFD84A; }
+.oo-tnote__title { font-size: 17px; font-weight: 800; letter-spacing: -0.2px; color: #f4f7fc; margin-top: 5px; }
+.oo-tnote__body { font-size: 13px; line-height: 1.5; color: var(--oo-muted); margin-top: 7px; }
+/* Compact app rows reused across phone screens. */
+.oo-trow { display: grid; align-items: center; gap: 8px; padding: 9px 10px; border-radius: 10px;
+  background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); }
+.oo-trow--board { grid-template-columns: 1fr auto auto; }
+.oo-trow__nm { font-size: 12.5px; font-weight: 700; color: #f1f5fb; display: flex; align-items: center; gap: 6px; min-width: 0; }
+.oo-trow__nm em { font-style: normal; color: var(--oo-muted); font-weight: 500; font-size: 10.5px; }
+.oo-trow__k { font-size: 12px; font-weight: 800; color: #6BB6FF; font-variant-numeric: tabular-nums; }
+.oo-trow__edge { font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+.oo-trow__edge.pos { color: #4ADE80; } .oo-trow__edge.neg { color: #F87171; }
+.oo-tcard-lite { background: linear-gradient(180deg, rgba(17,25,42,0.72), rgba(11,18,33,0.78)); border: 0.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 11px 12px; }
+.oo-tcard-lite__t { font-size: 9px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: rgba(245,197,24,0.7); margin-bottom: 8px; }
+
 /* ── App pop-ups (Matchup Compare + PP Math) ─────────────── */
 .oo-modal { position: fixed; inset: 0; z-index: 220; display: flex; align-items: center; justify-content: center; padding: 20px 14px; }
 .oo-modal[hidden] { display: none; }
@@ -5464,6 +5589,31 @@ main, nav, footer { position: relative; z-index: 1; }
 
     <!-- ░░ HOME ░░ -->
     <div class="tab-panel is-active" data-panel="home">
+
+      <div class="oo-tmobile">
+        <div class="oo-tphone">
+          <div class="oo-tphone__island"></div>
+          <div class="oo-tphone__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-7H9v7H4.5A1.5 1.5 0 0 1 3 20z"/></svg><span>Home</span><span class="chev">&#8964;</span></div>
+          <div class="oo-tphone__screen">
+            <div class="oo-tscreen">
+              <div class="oo-tscreen__h1">Home</div>
+              <div class="oo-tscreen__sub">ATP 250 &#183; Libema Open &#183; live board</div>
+              <div class="oo-tcard-lite"><div class="oo-tcard-lite__t">Court Pace &#183; Libema Open</div><div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:24px;font-weight:900;color:#FFD84A">40.5</span><span style="font-size:9px;font-weight:800;color:#8CDC9B;background:rgba(140,220,155,0.12);border:1px solid rgba(140,220,155,0.3);border-radius:999px;padding:3px 8px">FAST GRASS</span></div></div>
+              <div class="oo-trow oo-trow--board"><span class="oo-trow__nm">&#127467;&#127470; O. Virtanen <em>&#183; Majchrzak</em></span><span class="oo-trow__k">55%</span><span class="oo-trow__edge pos">+5.1</span></div>
+              <div class="oo-trow oo-trow--board"><span class="oo-trow__nm">&#127465;&#127466; Y. Hanfmann <em>&#183; Bellucci</em></span><span class="oo-trow__k">54%</span><span class="oo-trow__edge pos">+4.3</span></div>
+              <div class="oo-trow oo-trow--board"><span class="oo-trow__nm">&#127467;&#127479; Mpetshi P. <em>&#183; Onclin</em></span><span class="oo-trow__k">60%</span><span class="oo-trow__edge pos">+1.0</span></div>
+              <div class="oo-trow oo-trow--board"><span class="oo-trow__nm">&#127472;&#127487; A. Bublik <em>&#183; Struff</em></span><span class="oo-trow__k">68%</span><span class="oo-trow__edge neg">&#8722;0.8</span></div>
+              <div class="oo-trow oo-trow--board"><span class="oo-trow__nm">&#127482;&#127480; T. Fritz <em>&#183; Landaluce</em></span><span class="oo-trow__k">68%</span><span class="oo-trow__edge neg">&#8722;2.5</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oo-tnote">
+          <div class="oo-tnote__eyebrow">Live &#183; Home</div>
+          <div class="oo-tnote__title">The slate, ranked by edge</div>
+          <div class="oo-tnote__body">Every match on the board with our model win% beside the live Kalshi market line &mdash; sorted by edge so the biggest mispricings sit on top. Court-pace and weather context up top. Tap a row for the full matchup compare.</div>
+        </div>
+      </div>
       <div class="app-frame reveal">
         <div class="home-metrics">
           <div class="hm-card hm-card--blue">
@@ -5531,6 +5681,40 @@ main, nav, footer { position: relative; z-index: 1; }
     </div>
 
     <div class="tab-panel" data-panel="profile">
+
+      <div class="oo-tmobile">
+        <div class="oo-tphone">
+          <div class="oo-tphone__island"></div>
+          <div class="oo-tphone__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3.5-3.5L13 13l5-5"/><circle cx="18" cy="8" r="1.25" fill="currentColor" stroke="none"/></svg><span>Tactics</span><span class="chev">&#8964;</span></div>
+          <div class="oo-tphone__screen">
+            <div class="oo-tscreen">
+              <div style="display:flex;align-items:center;gap:12px;padding:2px 1px 6px">
+                <div class="lp-prof__av" style="width:60px;height:60px;font-size:15px;border-color:#8CC3F0">AdM</div>
+                <div style="min-width:0"><div class="lp-prof__nf">Alex</div><div class="lp-prof__nl">de Minaur</div><div class="lp-prof__ns" style="color:#8CC3F0">Clay &#183; Model #14</div></div>
+              </div>
+              <div class="lp-gcard"><div class="lp-gcard__t">Model vs Market</div>
+                <div class="lp-gmm"><div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#FFD84A" stroke-width="6" stroke-linecap="round" stroke-dasharray="113 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#FFD84A">75%</div></div><div class="lp-gmm__lbl">OverOwned</div></div><div class="lp-gmm__mid"><div class="lp-gmm__edge">+2.0<small>pp</small></div><div class="lp-gmm__ec">model favors</div></div><div class="lp-gmm__d"><div class="lp-gmm__ring"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="24" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6"/><circle cx="27" cy="27" r="24" fill="none" stroke="#6BB6FF" stroke-width="6" stroke-linecap="round" stroke-dasharray="110 150.8" transform="rotate(-90 27 27)"/></svg><div class="lp-gmm__pct" style="color:#6BB6FF">73%</div></div><div class="lp-gmm__lbl">Kalshi</div></div></div>
+              </div>
+              <div class="lp-gcard"><div class="lp-gcard__t">Ranking &amp; Honours</div><div class="lp-gtiles"><div class="lp-gtile"><span class="lp-gtile__l">Surface Rtg</span><span class="lp-gtile__v gold">#14</span><span class="lp-gtile__s">1893</span></div><div class="lp-gtile"><span class="lp-gtile__l">ATP Rank</span><span class="lp-gtile__v">#9</span><span class="lp-gtile__s">live</span></div><div class="lp-gtile"><span class="lp-gtile__l">Titles</span><span class="lp-gtile__v">8</span><span class="lp-gtile__s">15 finals</span></div><div class="lp-gtile"><span class="lp-gtile__l">Win %</span><span class="lp-gtile__v">64%</span><span class="lp-gtile__s">20 mt</span></div></div></div>
+              <div class="lp-gcard"><div class="lp-gcard__t">Service &amp; Return Profile</div>
+                <div class="lp-pbar"><span class="lp-pbar__l">Hold rate</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:81%"></span></span><span class="lp-pbar__v">81%</span><span class="lp-pbar__p g">77<small>pct</small></span></div>
+                <div class="lp-pbar"><span class="lp-pbar__l">Break rate</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:69%"></span></span><span class="lp-pbar__v">28%</span><span class="lp-pbar__p g">88<small>pct</small></span></div>
+                <div class="lp-pbar"><span class="lp-pbar__l">Return pts</span><span class="lp-pbar__t"><span class="lp-pbar__f g" style="width:74%"></span></span><span class="lp-pbar__v">42%</span><span class="lp-pbar__p g">83<small>pct</small></span></div>
+              </div>
+              <div class="lp-gcard"><div class="lp-gcard__t">Recent Form</div>
+                <div class="lp-rf2"><span class="lp-rf2__b w">W</span><div class="lp-rf2__o"><div class="lp-rf2__n">&#127468;&#127463; Samuel</div><div class="lp-rf2__d">May 25</div></div><span class="lp-rf2__s">18&#8211;10 gms</span></div>
+                <div class="lp-rf2"><span class="lp-rf2__b l">L</span><div class="lp-rf2__o"><div class="lp-rf2__n">&#127482;&#127480; Paul</div><div class="lp-rf2__d">May 22</div></div><span class="lp-rf2__s">12&#8211;14 gms</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oo-tnote">
+          <div class="oo-tnote__eyebrow">Research &#183; Player Intel</div>
+          <div class="oo-tnote__title">Tap a player &mdash; full scouting profile</div>
+          <div class="oo-tnote__body">The current Apple-Sports profile: our surface-aware model win% beside the live Kalshi market, ranking &amp; honours, a service/return percentile profile vs the field, and recent form. Swipe back to the board.</div>
+        </div>
+      </div>
       <div class="profile-frame reveal">
 
         <!-- Header card -->
@@ -5751,6 +5935,30 @@ main, nav, footer { position: relative; z-index: 1; }
     </div><!-- /tab-panel profile -->
 
     <div class="tab-panel" data-panel="projections">
+
+      <div class="oo-tmobile">
+        <div class="oo-tphone">
+          <div class="oo-tphone__island"></div>
+          <div class="oo-tphone__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L9 11 L13 14 L20 6"/><path d="M14 6 H20 V12"/></svg><span>Projections</span><span class="chev">&#8964;</span></div>
+          <div class="oo-tphone__screen">
+            <div class="oo-tscreen">
+              <div class="oo-tscreen__h1">Projections</div>
+              <div class="oo-tscreen__sub">PrizePicks Fan Score &#183; 23 lines &#183; LIVE</div>
+              <div class="oo-trow" style="grid-template-columns:1fr auto auto auto"><span class="oo-trow__nm">&#127462;&#127482; de Minaur</span><span style="font-size:10px;color:var(--oo-muted)">FS</span><span style="font-size:12px;font-weight:800;color:#f1f5fb">62.4</span><span class="oo-trow__edge pos">+5.1</span></div>
+              <div class="oo-trow" style="grid-template-columns:1fr auto auto auto"><span class="oo-trow__nm">&#127467;&#127479; Mpetshi P.</span><span style="font-size:10px;color:var(--oo-muted)">FS</span><span style="font-size:12px;font-weight:800;color:#f1f5fb">58.0</span><span class="oo-trow__edge pos">+3.8</span></div>
+              <div class="oo-trow" style="grid-template-columns:1fr auto auto auto"><span class="oo-trow__nm">&#127465;&#127466; Hanfmann</span><span style="font-size:10px;color:var(--oo-muted)">FS</span><span style="font-size:12px;font-weight:800;color:#f1f5fb">51.2</span><span class="oo-trow__edge pos">+2.2</span></div>
+              <div class="oo-trow" style="grid-template-columns:1fr auto auto auto"><span class="oo-trow__nm">&#127472;&#127487; Bublik</span><span style="font-size:10px;color:var(--oo-muted)">FS</span><span style="font-size:12px;font-weight:800;color:#f1f5fb">47.5</span><span class="oo-trow__edge neg">&#8722;1.6</span></div>
+              <div class="oo-trow" style="grid-template-columns:1fr auto auto auto"><span class="oo-trow__nm">&#127482;&#127480; Fritz</span><span style="font-size:10px;color:var(--oo-muted)">FS</span><span style="font-size:12px;font-weight:800;color:#f1f5fb">44.1</span><span class="oo-trow__edge neg">&#8722;3.0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oo-tnote">
+          <div class="oo-tnote__eyebrow">Props &#183; Projections</div>
+          <div class="oo-tnote__title">Our number vs the PrizePicks line</div>
+          <div class="oo-tnote__body">Every PrizePicks Fan Score line with OUR projection and the edge between them &mdash; over/under leans surfaced and ranked. Tap a player for the full math breakdown and open&rarr;current line movement.</div>
+        </div>
+      </div>
       <div class="pp-layout reveal">
 
         <div class="pp-frame">
@@ -5945,6 +6153,32 @@ main, nav, footer { position: relative; z-index: 1; }
     </div><!-- /tab-panel projections -->
 
     <div class="tab-panel" data-panel="builder">
+
+      <div class="oo-tmobile">
+        <div class="oo-tphone">
+          <div class="oo-tphone__island"></div>
+          <div class="oo-tphone__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><line x1="14" y1="18" x2="21" y2="18"/></svg><span>Builder</span><span class="chev">&#8964;</span></div>
+          <div class="oo-tphone__screen">
+            <div class="oo-tscreen">
+              <div class="oo-tscreen__h1">Builder</div>
+              <div class="oo-tscreen__sub">OverOwned DK lineup engine</div>
+              <div class="oo-tcard-lite"><div class="oo-tcard-lite__t">Optimal Lineup &#183; $49.7k</div>
+                <div class="oo-trow" style="grid-template-columns:1fr auto auto;margin-bottom:6px"><span class="oo-trow__nm">&#127462;&#127482; de Minaur</span><span style="font-size:10px;color:var(--oo-muted)">$10.2k</span><span class="oo-trow__edge pos">35%</span></div>
+                <div class="oo-trow" style="grid-template-columns:1fr auto auto;margin-bottom:6px"><span class="oo-trow__nm">&#127467;&#127479; Mpetshi P.</span><span style="font-size:10px;color:var(--oo-muted)">$8.1k</span><span class="oo-trow__edge pos">31%</span></div>
+                <div class="oo-trow" style="grid-template-columns:1fr auto auto;margin-bottom:6px"><span class="oo-trow__nm">&#127467;&#127470; Virtanen</span><span style="font-size:10px;color:var(--oo-muted)">$7.4k</span><span class="oo-trow__edge pos">22%</span></div>
+                <div class="oo-trow" style="grid-template-columns:1fr auto auto"><span class="oo-trow__nm">&#127465;&#127466; Hanfmann</span><span style="font-size:10px;color:var(--oo-muted)">$6.9k</span><span class="oo-trow__edge pos">18%</span></div>
+              </div>
+              <div style="display:flex;gap:8px"><div class="oo-tcard-lite" style="flex:1;text-align:center"><div class="oo-tcard-lite__t">Proj</div><div style="font-size:18px;font-weight:900;color:#FFD84A">271.4</div></div><div class="oo-tcard-lite" style="flex:1;text-align:center"><div class="oo-tcard-lite__t">Leverage</div><div style="font-size:18px;font-weight:900;color:#4ADE80">35%</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oo-tnote">
+          <div class="oo-tnote__eyebrow">DFS &#183; Builder</div>
+          <div class="oo-tnote__title">Tournament-ready DK lineups</div>
+          <div class="oo-tnote__body">Upload your slate and the OverOwned engine builds GPP-optimal lineups &mdash; barbell structure, win-probability gating, and leverage tuned against the real field. Exposure and projected points on every player.</div>
+        </div>
+      </div>
       <div class="builder-frame reveal">
 
         <!-- Header -->
@@ -6644,6 +6878,28 @@ main, nav, footer { position: relative; z-index: 1; }
          Aces / Double-Faults line and our projection is over it → take the OVER).
          Chip tabs mirror the app: All · Spreads · PrizePicks. -->
     <div class="tab-panel" data-panel="signals">
+
+      <div class="oo-tmobile">
+        <div class="oo-tphone">
+          <div class="oo-tphone__island"></div>
+          <div class="oo-tphone__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2-6 3 12 3-9 2 5h3"/></svg><span>Signals</span><span class="chev">&#8964;</span></div>
+          <div class="oo-tphone__screen">
+            <div class="oo-tscreen">
+              <div class="oo-tscreen__h1">Signals</div>
+              <div class="oo-tscreen__sub">Auto-detected glitch lines &#183; take the side</div>
+              <div class="oo-trow" style="grid-template-columns:auto 1fr auto"><span class="oo-throw__side u">U</span><span class="oo-trow__nm" style="margin-left:8px">&#127482;&#127480; Pegula <em>&#183; Aces 6.5</em></span><span class="oo-trow__edge pos">glitch</span></div>
+              <div class="oo-trow" style="grid-template-columns:auto 1fr auto"><span class="oo-throw__side o">O</span><span class="oo-trow__nm" style="margin-left:8px">&#127463;&#127486; Sabalenka <em>&#183; Aces 6.5</em></span><span class="oo-trow__edge pos">+2.9</span></div>
+              <div class="oo-trow" style="grid-template-columns:auto 1fr auto"><span class="oo-throw__side u">U</span><span class="oo-trow__nm" style="margin-left:8px">&#127464;&#127487; Mensik <em>&#183; DFs 3.5</em></span><span class="oo-trow__edge pos">glitch</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oo-tnote">
+          <div class="oo-tnote__eyebrow">Research &#183; Signals</div>
+          <div class="oo-tnote__title">When the book misprices a line</div>
+          <div class="oo-tnote__body">When PrizePicks posts a goblin/demon line that disagrees with our projection, Signals flags the exact play &mdash; player, line, and side &mdash; so you can act before it corrects. Tap to open the matchup.</div>
+        </div>
+      </div>
       <div class="app-frame reveal">
         <div class="ppf-head">
           <span class="ppf-dot"></span>
@@ -6723,82 +6979,112 @@ main, nav, footer { position: relative; z-index: 1; }
 
     <!-- ░░ TRENDS ░░ -->
     <div class="tab-panel" data-panel="trends">
-      <div class="app-frame reveal">
-        <!-- Trends = graded donuts. Real numbers (Jun 2026): PP Glitch Lines is the
-             robust graded bucket (19-1, 95%, 20 graded); Spreads/PrizePicks restarted
-             under the new rule set and the sample is still building (3 graded). -->
-        <div class="tr-grid tr-grid--two">
-          <div class="tr-donut tr-donut--green">
-            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="#6EE7B7" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="10.7" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="#6EE7B7">95%</text></svg>
-            <div class="tr-donut__label">PP GLITCH LINES</div>
-            <div class="tr-donut__sub">goblin above standard → take the over</div>
-            <div class="tr-donut__n">19 / 20 graded</div>
-          </div>
-          <div class="tr-donut tr-donut--gold">
-            <svg viewBox="0 0 80 80" class="tr-ring"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="7" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6" transform="rotate(-90 40 40)"/><text x="40" y="40" class="tr-ring__pct" fill="rgba(255,255,255,0.45)">—</text></svg>
-            <div class="tr-donut__label">SPREADS &middot; PRIZEPICKS</div>
-            <div class="tr-donut__sub">new rule set &mdash; graded sample still building</div>
-            <div class="tr-donut__n">3 graded so far</div>
+
+      <div class="oo-tmobile">
+        <div class="oo-tphone">
+          <div class="oo-tphone__island"></div>
+          <div class="oo-tphone__pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="14" width="4" height="6" rx="1"/><rect x="10" y="10" width="4" height="10" rx="1"/><rect x="16" y="6" width="4" height="14" rx="1"/></svg><span>Trends</span><span class="chev">&#8964;</span></div>
+          <div class="oo-tphone__screen">
+            <div class="oo-tscreen">
+              <div class="oo-tscreen__h1">Trends</div>
+              <div class="oo-tscreen__sub">Every graded signal, by actual result</div>
+              <div class="oo-tcard" style="cursor:default">
+                <div class="oo-tcard__head"><span class="oo-tcard__label">Tennis Trends</span><span class="oo-tcard__tag">Graded</span></div>
+                <div class="oo-tcard__row"><span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">&mdash;</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl oo-tcard__wl--dim">Tracking &mdash; building sample</span><span class="oo-tcard__n">New rule set</span></span></div>
+              </div>
+              <div class="oo-tcard" style="cursor:default">
+                <div class="oo-tcard__head"><span class="oo-tcard__label">PP Glitch Lines</span><span class="oo-tcard__tag">Graded</span></div>
+                <div class="oo-tcard__row"><span class="oo-tdonut" style="--p:0.95;--c:#19D27F"><span class="oo-tdonut__pct" style="color:#19D27F">95%</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl"><b style="color:var(--oo-green)">19W</b> &#183; <b style="color:var(--oo-red)">1L</b></span><span class="oo-tcard__n">20 graded</span><span class="oo-tcard__badge" style="--bc:#6EE7B7">EDGE</span></span></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="lp-tfeed oo-pc-only">
-          <div class="lp-tfeed__head"><span class="lp-tfeed__ttl"><span class="lp-tfeed__dot"></span>Live grades</span><span class="lp-tfeed__cnt">23 graded · refresh hourly</span></div>
-          <div class="lp-tfeed__rows">
-            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">G. Diallo <em>vs J. Draper</em></span></div><div class="lp-tfeed__sub">Aces · actual 10 vs std 7.5 · 06-25</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
+
+        <div class="oo-tnote">
+          <div class="oo-tnote__eyebrow">Props &#183; Trends</div>
+          <div class="oo-tnote__title">We grade ourselves, publicly</div>
+          <div class="oo-tnote__body">Every signal we publish gets graded against the actual result. The donuts show the live hit-rate on each signal type &mdash; tap one to see the full graded history. No cherry-picking.</div>
+        </div>
+      </div>
+      <div class="app-frame reveal">
+        <!-- Trends = the app's grid of graded "metric" cards (clone of
+             src/components/SportTrends.tsx). ONE wide donut card per signal,
+             each showing the live hit-rate + W/L/decided + an EDGE/LEAN badge,
+             and CLICKABLE → its graded history drill-down (mirrors the in-app
+             HistoryModal / oo-pp-math-modal). NO live-grades feed. Tennis is the
+             live wired donut (combined Spread + PrizePicks plays); the others
+             read "Tracking — building sample" exactly like the app. -->
+        <div class="metrics oo-trends-grid">
+          <!-- TENNIS — live: combined Spreads + PrizePicks graded plays. -->
+          <button type="button" class="oo-tcard is-empty" data-trend="tennis">
+            <div class="oo-tcard__head">
+              <span class="oo-tcard__label">Tennis Trends</span>
+              <span class="oo-tcard__tag">Signals Graded</span>
             </div>
-            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">V. Kopriva <em>vs I. Buse</em></span></div><div class="lp-tfeed__sub">Double Faults · actual 5 vs std 2.5 · 06-24</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
+            <div class="oo-tcard__row">
+              <span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">—</span><span class="oo-tdonut__hr">hit rate</span></span>
+              <span class="oo-tcard__meta">
+                <span class="oo-tcard__wl oo-tcard__wl--dim">Tracking — building sample</span>
+                <span class="oo-tcard__note">Every graded Spread + PrizePicks play, by actual result. New rule set — sample still building.</span>
+              </span>
             </div>
-            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">E. Quinn <em>vs M. Cassone</em></span></div><div class="lp-tfeed__sub">Aces · actual 18 vs std 5.5 · 06-24</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
+          </button>
+          <!-- PP GLITCH LINES — its own graded pipeline (goblin-above-standard fade). -->
+          <button type="button" class="oo-tcard" data-trend="glitch">
+            <div class="oo-tcard__head">
+              <span class="oo-tcard__label">PP Glitch Lines</span>
+              <span class="oo-tcard__tag">Signals Graded</span>
             </div>
-            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">I. Swiatek <em>vs E. Navarro</em></span></div><div class="lp-tfeed__sub">Aces · actual 6 vs std 3.5 · 06-24</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
+            <div class="oo-tcard__row">
+              <span class="oo-tdonut" style="--p:0.95;--c:#19D27F"><span class="oo-tdonut__pct" style="color:#19D27F">95%</span><span class="oo-tdonut__hr">hit rate</span></span>
+              <span class="oo-tcard__meta">
+                <span class="oo-tcard__wl"><b style="color:var(--oo-green)">19W</b> · <b style="color:var(--oo-red)">1L</b></span>
+                <span class="oo-tcard__n">20 graded · tap for history</span>
+                <span class="oo-tcard__badge" style="--bc:#6EE7B7">EDGE</span>
+              </span>
             </div>
-            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">E. Svitolina <em>vs L. Samsonova</em></span></div><div class="lp-tfeed__sub">Double Faults · actual 3 vs std 2.5 · 06-23</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
-            </div>
-            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">C. Tauson <em>vs D. Shnaider</em></span></div><div class="lp-tfeed__sub">Aces · actual 6 vs std 4.5 · 06-22</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
-            </div>
-            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">PP</span><span class="lp-tfeed__pl">L. Noskova <em>vs A. Eala</em></span></div><div class="lp-tfeed__sub">PrizePicks · actual 24.5 vs 17.5 · 06-20</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
-            </div>
-            <div class="lp-tfeed__row" style="border-left-color:#FFD84A">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#FFD84A;border-color:rgba(255,216,74,0.45)">SPR</span><span class="lp-tfeed__pl">V. Erjavec <em>vs L. Tararudee</em></span></div><div class="lp-tfeed__sub">Spreads · actual 3 vs 3 · 06-20</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
-            </div>
-            <div class="lp-tfeed__row" style="border-left-color:#6EE7B7">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">A. Zverev <em>vs R. Collignon</em></span></div><div class="lp-tfeed__sub">Aces · actual 14 vs std 9.5 · 06-19</div></div>
-              <span class="lp-hit lp-hit--hit">HIT</span>
-            </div>
-            <div class="lp-tfeed__row" style="border-left-color:#FCA5A5">
-              <div><div class="lp-tfeed__top"><span class="lp-tag" style="color:#6EE7B7;border-color:rgba(110,231,183,0.45)">GLITCH</span><span class="lp-tfeed__pl">B. Shelton <em>vs E. Quinn</em></span></div><div class="lp-tfeed__sub">Aces · actual 16 vs std 10.5 · 06-18</div></div>
-              <span class="lp-hit lp-hit--miss">MISS</span>
-            </div>
+          </button>
+          <!-- Other sports — tracked, sample still building (placeholder donut). -->
+          <button type="button" class="oo-tcard is-empty" data-trend="golf">
+            <div class="oo-tcard__head"><span class="oo-tcard__label">Golf Trends</span><span class="oo-tcard__tag">Signals Graded</span></div>
+            <div class="oo-tcard__row"><span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">—</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl oo-tcard__wl--dim">No graded sample yet</span><span class="oo-tcard__note">Every graded bounce-back UNDER-strokes play, by actual round score.</span></span></div>
+          </button>
+          <button type="button" class="oo-tcard is-empty" data-trend="wnba">
+            <div class="oo-tcard__head"><span class="oo-tcard__label">WNBA Trends</span><span class="oo-tcard__tag">Signals Graded</span></div>
+            <div class="oo-tcard__row"><span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">—</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl oo-tcard__wl--dim">No graded sample yet</span><span class="oo-tcard__note">Tracking — graded sample is still building.</span></span></div>
+          </button>
+          <button type="button" class="oo-tcard is-empty" data-trend="soccer">
+            <div class="oo-tcard__head"><span class="oo-tcard__label">Soccer Trends</span><span class="oo-tcard__tag">Signals Graded</span></div>
+            <div class="oo-tcard__row"><span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">—</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl oo-tcard__wl--dim">No graded sample yet</span><span class="oo-tcard__note">Tracking — graded sample is still building.</span></span></div>
+          </button>
+          <button type="button" class="oo-tcard is-empty" data-trend="ufc">
+            <div class="oo-tcard__head"><span class="oo-tcard__label">UFC Trends</span><span class="oo-tcard__tag">Signals Graded</span></div>
+            <div class="oo-tcard__row"><span class="oo-tdonut oo-tdonut--empty"><span class="oo-tdonut__pct">—</span><span class="oo-tdonut__hr">hit rate</span></span><span class="oo-tcard__meta"><span class="oo-tcard__wl oo-tcard__wl--dim">No graded sample yet</span><span class="oo-tcard__note">Tracking — graded sample is still building.</span></span></div>
+          </button>
+        </div>
+        <!-- Graded-history drill-down — opens when a donut card is clicked.
+             Clone of the in-app HistoryModal (oo-pp-math-modal): header with the
+             W/L/hit summary, then every graded play as a row with date · player
+             + side/line · vs opponent · HIT/MISS. Hidden until a donut is tapped. -->
+        <div class="oo-thist" id="oo-thist" hidden>
+          <button type="button" class="oo-thist__back" id="oo-thist-back">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+            Back to donuts
+          </button>
+          <div class="oo-thist__head">
+            <div class="oo-thist__eyebrow" id="oo-thist-eyebrow">TENNIS TRENDS</div>
+            <div class="oo-thist__summary" id="oo-thist-summary"></div>
           </div>
+          <ul class="oo-thist__list" id="oo-thist-list"></ul>
         </div>
       </div>
     </div>
 
-    <!-- Mobile-only: the real app's bottom nav (add-to-home-screen PWA look).
-         Mirrors the app's current 5-category mobile nav (Live · Research ·
-         Props · DFS · Profile) from src/components/MobileNav.tsx. -->
-    <nav class="oo-mnav" aria-label="App preview navigation">
-      <button class="oo-mnav-btn is-active" data-mnav="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-7H9v7H4.5A1.5 1.5 0 0 1 3 20z"/></svg><span class="oo-mnav-lbl">Live</span></button>
-      <button class="oo-mnav-btn" data-mnav="signals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l3.5-3.5L13 13l5-5"/><circle cx="18" cy="8" r="1.25" fill="currentColor" stroke="none"/></svg><span class="oo-mnav-lbl">Research</span></button>
-      <button class="oo-mnav-btn" data-mnav="projections"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17 L9 11 L13 14 L20 6"/><path d="M14 6 H20 V12"/></svg><span class="oo-mnav-lbl">Props</span></button>
-      <button class="oo-mnav-btn" data-mnav="builder"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="11" rx="1"/><line x1="14" y1="18" x2="21" y2="18"/></svg><span class="oo-mnav-lbl">DFS</span></button>
-      <button class="oo-mnav-btn" data-mnav="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82A1.65 1.65 0 0 0 3.09 14H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="oo-mnav-lbl">Profile</span></button>
-    </nav>
+    <!-- (Removed) The old Live·Research·Props·DFS·Profile bottom tab bar was the
+         legacy MobileNav design. The app's CURRENT mobile nav is the Apple-Sports
+         top-right pill + glass dropdown (NavPanel) — it is rendered INSIDE each
+         phone mockup in the mobile tour below (.oo-tphone__pill), faithful to
+         src/components/NavPanel.tsx. -->
 
   </div>
 </section>
@@ -7380,6 +7666,86 @@ main, nav, footer { position: relative; z-index: 1; }
       });
     });
   }
+
+  // ── Trends donut → graded-history drill-down ─────────────
+  // Mirrors the in-app HistoryModal: click a live donut card → swap the donut
+  // grid for that signal's graded play list. "Back to donuts" returns.
+  (function () {
+    var grid = document.querySelector('[data-panel="trends"] .oo-trends-grid');
+    var hist = document.getElementById('oo-thist');
+    if (!grid || !hist) return;
+    var listEl = document.getElementById('oo-thist-list');
+    var eyebrowEl = document.getElementById('oo-thist-eyebrow');
+    var summaryEl = document.getElementById('oo-thist-summary');
+    var backBtn = document.getElementById('oo-thist-back');
+
+    // Sample graded plays per signal (representative of the real graded feed).
+    var DATA = {
+      tennis: {
+        eyebrow: 'TENNIS TRENDS', summary: 'Tracking — graded sample still building under the new rule set',
+        plays: [
+          ['06-09','Yastremska','spr','+15.5','vs Bejlek','hit'],
+          ['06-09','Hijikata','o','58.3','vs Gentzsch','hit'],
+          ['06-09','Munar','spr','+3','vs Damm Jr','hit'],
+          ['06-09','Brooksby','spr','+4.5','vs Z. Zhang','miss'],
+          ['06-08','Kessler','spr','+2','vs Pliskova','hit'],
+          ['06-08','Badosa','spr','-2.5','vs Snigur','hit'],
+          ['06-08','Shapovalov','spr','+4.5','vs Cilic','hit'],
+          ['06-08','Jones','u','27.3','vs Siegemund','miss'],
+          ['06-08','Boulter','spr','+10','vs Fernandez','miss']
+        ]
+      },
+      glitch: {
+        eyebrow: 'PP GLITCH LINES', summary: '19W · 1L · 95% hit · 20 graded',
+        plays: [
+          ['06-25','Diallo','o','7.5','Aces · actual 10','hit'],
+          ['06-24','Kopriva','o','2.5','Double Faults · actual 5','hit'],
+          ['06-24','Quinn','o','5.5','Aces · actual 18','hit'],
+          ['06-24','Swiatek','o','3.5','Aces · actual 6','hit'],
+          ['06-23','Svitolina','o','2.5','Double Faults · actual 3','hit'],
+          ['06-22','Tauson','o','4.5','Aces · actual 6','hit'],
+          ['06-19','Zverev','o','9.5','Aces · actual 14','hit'],
+          ['06-18','Shelton','o','10.5','Aces · actual 16','miss']
+        ]
+      }
+    };
+
+    function rowHtml(p) {
+      var date = p[0], name = p[1], sideKind = p[2], line = p[3], detail = p[4], res = p[5];
+      var sideHtml = sideKind === 'spr'
+        ? '<span class="oo-throw__side spr">' + line + '</span>'
+        : '<span class="oo-throw__side ' + sideKind + '">' + (sideKind === 'o' ? 'O' : 'U') + '</span> <span style="font-weight:800;font-size:12px">' + line + '</span>';
+      return '<li class="oo-throw">' +
+        '<span class="oo-throw__date">' + date + '</span>' +
+        '<span class="oo-throw__body"><span class="oo-throw__name">' + name + ' ' + sideHtml + '</span>' +
+        '<span class="oo-throw__detail">' + detail + '</span></span>' +
+        '<span class="oo-throw__res ' + res + '">' + (res === 'hit' ? 'HIT' : 'MISS') + '</span></li>';
+    }
+
+    function openHist(key) {
+      var d = DATA[key];
+      if (!d) return;
+      eyebrowEl.textContent = d.eyebrow;
+      summaryEl.textContent = d.summary;
+      listEl.innerHTML = d.plays.map(rowHtml).join('');
+      grid.style.display = 'none';
+      hist.hidden = false;
+    }
+    function closeHist() {
+      hist.hidden = true;
+      grid.style.display = '';
+    }
+
+    grid.querySelectorAll('.oo-tcard').forEach(function (card) {
+      if (card.classList.contains('is-empty')) return;
+      card.addEventListener('click', function () { openHist(card.getAttribute('data-trend')); });
+    });
+    if (backBtn) backBtn.addEventListener('click', closeHist);
+    // Reset to the grid whenever the Trends tab is (re)entered.
+    document.querySelectorAll('.product-tab[data-tab="trends"]').forEach(function (t) {
+      t.addEventListener('click', closeHist);
+    });
+  })();
 
   // ── Spots counter "tick" animation on Season 1 ───────────
   const remEl = document.getElementById('season-remaining');
