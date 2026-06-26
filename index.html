@@ -5638,6 +5638,38 @@ main, nav, footer { position: relative; z-index: 1; }
       </button>
     </div>
 
+    <!-- ░░ MOBILE TOUR — REAL SCREENSHOTS (≤768px only) ░░ -->
+    <div class="mtour" id="mtour">
+      <div class="mtour__phone">
+        <div class="mtour__island"></div>
+        <div class="mtour__screen" id="mtour-screen">
+          <div class="mtour__slide is-on"><img src="/assets/tour/draws.webp" alt="Draws — live bracket with win-probability donuts" loading="eager" width="740" height="1608"></div>
+          <div class="mtour__slide"><img src="/assets/tour/projections.webp" alt="Projections — PrizePicks board with Edge" loading="lazy" width="740" height="1608"></div>
+          <div class="mtour__slide"><img src="/assets/tour/aces.webp" alt="Aces — ace volume and aces allowed vs the PrizePicks line" loading="lazy" width="740" height="1608"></div>
+          <div class="mtour__slide"><img src="/assets/tour/player-intel.webp" alt="Player Intel — scouting tendencies and service/return profile" loading="lazy" width="740" height="1608"></div>
+          <div class="mtour__slide"><img src="/assets/tour/trends.webp" alt="Trends — graded hit-rate donuts by signal type" loading="lazy" width="740" height="1608"></div>
+          <div class="mtour__slide"><img src="/assets/tour/builder.webp" alt="Builder — the OverOwned lineup table" loading="lazy" width="740" height="1608"></div>
+        </div>
+      </div>
+
+      <div class="mtour__cap" id="mtour-cap" aria-live="polite">
+        <div class="mtour__step" id="mtour-step">Step 1 of 6 &#183; Draws</div>
+        <div class="mtour__title" id="mtour-title">The bracket, with live win odds</div>
+        <div class="mtour__body" id="mtour-body">Our model win&#37; on every name beside the live market.</div>
+      </div>
+
+      <div class="mtour__nav">
+        <button class="mtour__btn" id="mtour-prev" type="button" aria-label="Previous screen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="mtour__dots" id="mtour-dots" role="tablist" aria-label="Tour steps"></div>
+        <button class="mtour__btn" id="mtour-next" type="button" aria-label="Next screen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+      <div class="mtour__count"><b id="mtour-num">1</b> / 6 &#183; swipe or tap arrows</div>
+    </div>
+
     <div class="product-tabs reveal" role="tablist" id="product-tabs">
       <button class="product-tab is-active" role="tab" aria-selected="true" data-tab="home">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px; vertical-align: -2px;"><path d="M3 10.5 12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5H15v-7H9v7H4.5A1.5 1.5 0 0 1 3 20z"/></svg>
@@ -7936,6 +7968,102 @@ main, nav, footer { position: relative; z-index: 1; }
       history.replaceState({}, '', window.location.pathname + '#pricing');
     }
   })();
+})();
+</script>
+
+<!-- ── Mobile screenshot tour (≤768px) ─────────────────────── -->
+<script>
+(function () {
+  'use strict';
+  var root = document.getElementById('mtour');
+  if (!root) return;
+  var screen = document.getElementById('mtour-screen');
+  var slides = root.querySelectorAll('.mtour__slide');
+  var dotsWrap = document.getElementById('mtour-dots');
+  var prevBtn = document.getElementById('mtour-prev');
+  var nextBtn = document.getElementById('mtour-next');
+  var stepEl = document.getElementById('mtour-step');
+  var titleEl = document.getElementById('mtour-title');
+  var bodyEl = document.getElementById('mtour-body');
+  var numEl = document.getElementById('mtour-num');
+  if (!slides.length) return;
+
+  // Captions reference the real app features (DrawWinProbDonuts, MatchupCompareModal,
+  // PP projections Edge, Aces tool, Player Intel model-vs-market, Trends graded donuts,
+  // OverOwned builder, surface leaderboard, draw player profile). Value only — no method.
+  // Curated 6-step flow — one short, punchy caption each. Value only, no method.
+  var STEPS = [
+    { step: 'Draws',        title: 'The bracket, with live win odds',
+      body: 'Our model win% on every name beside the live market.' },
+    { step: 'Projections',  title: 'The PrizePicks board, with Edge',
+      body: 'Every line, our projection, sorted by edge.' },
+    { step: 'Aces',         title: 'Ace overs/unders, priced',
+      body: 'Our ace projection vs the line — find the +EV plays.' },
+    { step: 'Player Intel', title: 'A full scouting report on tap',
+      body: 'Tendencies, ranking and a percentile serve/return profile.' },
+    { step: 'Trends',       title: 'Every signal, graded',
+      body: 'Real hit rates, scored against the box score.' },
+    { step: 'Builder',      title: 'Lineups, the OverOwned way',
+      body: 'Optimal builds around our edge — ready in seconds.' }
+  ];
+
+  var n = slides.length;
+  var i = 0;
+
+  // Build dots.
+  var dots = [];
+  for (var d = 0; d < n; d++) {
+    var b = document.createElement('button');
+    b.className = 'mtour__dot' + (d === 0 ? ' is-on' : '');
+    b.type = 'button';
+    b.setAttribute('aria-label', 'Go to step ' + (d + 1));
+    (function (idx) { b.addEventListener('click', function () { go(idx); }); })(d);
+    dotsWrap.appendChild(b);
+    dots.push(b);
+  }
+
+  function render() {
+    for (var s = 0; s < n; s++) {
+      slides[s].classList.toggle('is-on', s === i);
+      dots[s].classList.toggle('is-on', s === i);
+    }
+    var c = STEPS[i] || {};
+    if (stepEl) stepEl.innerHTML = 'Step ' + (i + 1) + ' of ' + n + ' · ' + (c.step || '');
+    if (titleEl) titleEl.innerHTML = c.title || '';
+    if (bodyEl) bodyEl.innerHTML = c.body || '';
+    if (numEl) numEl.textContent = String(i + 1);
+    if (prevBtn) prevBtn.style.opacity = i === 0 ? '0.4' : '1';
+    if (nextBtn) nextBtn.style.opacity = i === n - 1 ? '0.4' : '1';
+  }
+  function go(idx) { i = Math.max(0, Math.min(n - 1, idx)); render(); }
+  function next() { go(i + 1); }
+  function prev() { go(i - 1); }
+
+  if (nextBtn) nextBtn.addEventListener('click', next);
+  if (prevBtn) prevBtn.addEventListener('click', prev);
+
+  // Tap the screen: right half = next, left half = prev.
+  screen.addEventListener('click', function (e) {
+    var r = screen.getBoundingClientRect();
+    if ((e.clientX - r.left) > r.width / 2) next(); else prev();
+  });
+
+  // Swipe.
+  var x0 = null, y0 = null;
+  screen.addEventListener('touchstart', function (e) {
+    var t = e.changedTouches[0]; x0 = t.clientX; y0 = t.clientY;
+  }, { passive: true });
+  screen.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var t = e.changedTouches[0];
+    var dx = t.clientX - x0, dy = t.clientY - y0;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) next(); else prev();
+    }
+    x0 = null; y0 = null;
+  }, { passive: true });
+
+  render();
 })();
 </script>
 
