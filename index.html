@@ -4696,9 +4696,62 @@ main, nav, footer { position: relative; z-index: 1; }
 @media (min-width: 769px) {
   .lp-prof__av img, .lp-mk__av img { display: none !important; }
 }
-/* Mobile: tour (#inside) hidden — the phone-mockup clones didn't match the app.
-   PC tour is unaffected. Pending a screenshot-based rebuild or a permanent bag. */
-@media (max-width: 768px) { #inside { display: none !important; } }
+/* ════════════════════════════════════════════════════════════════════
+   MOBILE TOUR — REAL SCREENSHOTS (≤768px only). A step-through walkthrough
+   of the actual app on a phone, shown inside the landing's iPhone frame.
+   The PC tour (#inside .product-tabs + .tab-panel) is UNTOUCHED; on mobile
+   we hide it and show .mtour instead. One real screenshot per step + an
+   accurate caption; prev/next + tap/swipe advance the image, no app clone.
+   ════════════════════════════════════════════════════════════════════ */
+.mtour { display: none; }                 /* hidden on PC; shown ≤768px */
+@media (min-width: 769px) { .mtour { display: none !important; } }
+@media (max-width: 768px) {
+  /* PC tour internals hidden on phones; the screenshot tour replaces them. */
+  #inside .product-tabs,
+  #inside .tab-panel,
+  #inside #tour-launch { display: none !important; }
+  #inside .mtour { display: block; }
+}
+
+.mtour { margin: 4px auto 0; max-width: 420px; }
+/* Phone frame — reuses the .lp-gphone vocabulary so it matches the gallery. */
+.mtour__phone { position: relative; width: min(82vw, 320px); margin: 0 auto;
+  aspect-ratio: 740/1608; background: #05060a; border-radius: 42px; padding: 8px;
+  box-shadow: 0 28px 56px rgba(0,0,0,0.55), inset 0 0 0 2px rgba(255,255,255,0.07), 0 0 0 1px rgba(0,0,0,0.8); }
+.mtour__island { position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+  width: 74px; height: 21px; background: #000; border-radius: 999px; z-index: 6; }
+.mtour__screen { position: relative; width: 100%; height: 100%; border-radius: 34px;
+  overflow: hidden; background: #070d18; -webkit-touch-callout: none; touch-action: pan-y; }
+.mtour__slide { position: absolute; inset: 0; opacity: 0; transition: opacity .28s ease;
+  display: flex; align-items: flex-start; justify-content: center; pointer-events: none; }
+.mtour__slide.is-on { opacity: 1; pointer-events: auto; }
+.mtour__slide img { display: block; width: 100%; height: 100%; object-fit: cover;
+  object-position: top center; }
+
+/* Caption below the phone. */
+.mtour__cap { margin: 14px auto 0; max-width: 340px; text-align: center; padding: 0 8px; }
+.mtour__step { font-size: 9.5px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase;
+  color: #FFD84A; opacity: 0.9; }
+.mtour__title { font-size: 16px; font-weight: 800; color: #f4f7fc; margin-top: 5px; line-height: 1.2;
+  letter-spacing: -0.2px; }
+.mtour__body { font-size: 12.5px; line-height: 1.5; color: var(--oo-muted, #9aa6b8); margin-top: 7px; }
+
+/* Controls — prev / dots / next. */
+.mtour__nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 16px; }
+.mtour__btn { width: 40px; height: 40px; border-radius: 999px; flex: 0 0 auto;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+  color: #f1f5fb; display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .15s ease, opacity .15s ease; }
+.mtour__btn:active { background: rgba(255,255,255,0.12); }
+.mtour__btn svg { width: 17px; height: 17px; }
+.mtour__dots { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center;
+  max-width: 220px; }
+.mtour__dot { width: 7px; height: 7px; border-radius: 999px; background: rgba(255,255,255,0.22);
+  border: 0; padding: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .15s ease, transform .15s ease; }
+.mtour__dot.is-on { background: #FFD84A; transform: scale(1.25); }
+.mtour__count { margin-top: 12px; text-align: center; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.4px; color: var(--oo-muted, #9aa6b8); }
+.mtour__count b { color: #f4f7fc; }
 </style>
 </head>
 <body>
@@ -5195,25 +5248,25 @@ main, nav, footer { position: relative; z-index: 1; }
           <div class="lp-pitch">
             <div class="lp-pitch-glow"></div>
             <div class="lp-line">
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">AB<img src="https://images.fotmob.com/image_resources/playerimages/319784.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Alisson</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">AB<img src="https://images.fotmob.com/image_resources/playerimages/319784.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Alisson</div></div>
             </div>
             <div class="lp-line">
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">DA<img src="https://images.fotmob.com/image_resources/playerimages/208077.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">80</span></div><div class="lp-pchip__nm">Danilo</div></div>
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">MA<img src="https://images.fotmob.com/image_resources/playerimages/267365.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">86</span></div><div class="lp-pchip__nm">Marquinhos</div></div>
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">GM<img src="https://images.fotmob.com/image_resources/playerimages/795179.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">83</span></div><div class="lp-pchip__nm">G. Magalhães</div></div>
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">WE<img src="https://images.fotmob.com/image_resources/playerimages/487867.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">79</span></div><div class="lp-pchip__nm">Wendell</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">DA<img src="https://images.fotmob.com/image_resources/playerimages/208077.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">80</span></div><div class="lp-pchip__nm">Danilo</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">MA<img src="https://images.fotmob.com/image_resources/playerimages/267365.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">86</span></div><div class="lp-pchip__nm">Marquinhos</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">GM<img src="https://images.fotmob.com/image_resources/playerimages/795179.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">83</span></div><div class="lp-pchip__nm">G. Magalhães</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#93C5FD">WE<img src="https://images.fotmob.com/image_resources/playerimages/487867.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#93C5FD;color:#93C5FD">79</span></div><div class="lp-pchip__nm">Wendell</div></div>
             </div>
             <div class="lp-line">
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">CA<img src="https://images.fotmob.com/image_resources/playerimages/208494.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Casemiro</div></div>
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">BG<img src="https://images.fotmob.com/image_resources/playerimages/850354.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">85</span></div><div class="lp-pchip__nm">Bruno G.</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">CA<img src="https://images.fotmob.com/image_resources/playerimages/208494.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Casemiro</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">BG<img src="https://images.fotmob.com/image_resources/playerimages/850354.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">85</span></div><div class="lp-pchip__nm">Bruno G.</div></div>
             </div>
             <div class="lp-line">
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">RA<img src="https://images.fotmob.com/image_resources/playerimages/696679.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">87</span></div><div class="lp-pchip__nm">Raphinha</div></div>
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">PA<img src="https://images.fotmob.com/image_resources/playerimages/766435.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Paquetá</div></div>
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">VJ<img src="https://images.fotmob.com/image_resources/playerimages/846033.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">88</span></div><div class="lp-pchip__nm">Vinícius</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">RA<img src="https://images.fotmob.com/image_resources/playerimages/696679.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">87</span></div><div class="lp-pchip__nm">Raphinha</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#6EE7B7">PA<img src="https://images.fotmob.com/image_resources/playerimages/766435.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#6EE7B7;color:#6EE7B7">84</span></div><div class="lp-pchip__nm">Paquetá</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">VJ<img src="https://images.fotmob.com/image_resources/playerimages/846033.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">88</span></div><div class="lp-pchip__nm">Vinícius</div></div>
             </div>
             <div class="lp-line">
-              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">RO<img src="https://images.fotmob.com/image_resources/playerimages/895362.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">85</span></div><div class="lp-pchip__nm">Rodrygo</div></div>
+              <div class="lp-pchip"><div class="lp-pchip__av" style="border-color:#FFD84A">RO<img src="https://images.fotmob.com/image_resources/playerimages/895362.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"><span class="lp-pchip__rt" style="border-color:#FFD84A;color:#FFD84A">85</span></div><div class="lp-pchip__nm">Rodrygo</div></div>
             </div>
           </div>
       </div>
@@ -5282,7 +5335,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">ATP · Player Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div class="lp-prof__av">ZB<img src="https://etrgyofrnssrieexljmd.supabase.co/storage/v1/object/public/player-photos/atp/bergs-zizou.png?v=2" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div class="lp-prof__av">ZB<img src="https://etrgyofrnssrieexljmd.supabase.co/storage/v1/object/public/player-photos/atp/bergs-zizou.png?v=2" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"></div>
                   <div style="min-width:0"><div class="lp-prof__nf">Zizou</div><div class="lp-prof__nl">Bergs</div><div class="lp-prof__ns" style="color:#8CDC9B">🇧🇪 Grass · Model #90</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5340,7 +5393,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">Golf · Player Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div class="lp-prof__av" style="border-color:#34D399">SS<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg/330px-Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div class="lp-prof__av" style="border-color:#34D399">SS<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg/330px-Scottie_Scheffler_Ryder_Cup_2025_%28cropped%29.jpg" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"></div>
                   <div style="min-width:0"><div class="lp-prof__nf">Scottie</div><div class="lp-prof__nl">Scheffler</div><div class="lp-prof__ns" style="color:#34D399">🇺🇸 DataGolf #1</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5389,7 +5442,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">World Cup · Stat Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div class="lp-prof__av" style="border-color:#8CDC9B">IH<img src="https://images.fotmob.com/image_resources/playerimages/939780.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div class="lp-prof__av" style="border-color:#8CDC9B">IH<img src="https://images.fotmob.com/image_resources/playerimages/939780.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"></div>
                   <div style="min-width:0">
                     <div class="lp-prof__nf">Isak</div>
                     <div class="lp-prof__nl">Hien</div>
@@ -5441,7 +5494,7 @@ main, nav, footer { position: relative; z-index: 1; }
                 <div class="lp-gcard">
                   <div class="lp-gcard__t">Likely Marker</div>
                   <div class="lp-mk">
-                    <div class="lp-mk__av" style="border-color:#6BB6FF">JS<img src="https://images.fotmob.com/image_resources/playerimages/1337765.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                    <div class="lp-mk__av" style="border-color:#6BB6FF">JS<img src="https://images.fotmob.com/image_resources/playerimages/1337765.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"></div>
                     <div class="lp-mk__id"><div class="lp-mk__nm">Junnosuke Suzuki</div><div class="lp-mk__meta">🇯🇵 D · 7.30 rating</div></div>
                     <div class="lp-mk__st"><div class="lp-mk__s"><b>1.5</b><span>Tkl</span></div><div class="lp-mk__s"><b>1.0</b><span>Int</span></div><div class="lp-mk__s"><b>3.5</b><span>Duel W</span></div></div>
                   </div>
@@ -5464,7 +5517,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">UFC · Fighter Intel</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div class="lp-prof__av" style="border-color:#F472B6">VO<img src="https://etrgyofrnssrieexljmd.supabase.co/storage/v1/object/public/player-photos/ufc/vinicius-oliveira.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div class="lp-prof__av" style="border-color:#F472B6">VO<img src="https://etrgyofrnssrieexljmd.supabase.co/storage/v1/object/public/player-photos/ufc/vinicius-oliveira.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"></div>
                   <div style="min-width:0"><div class="lp-prof__nf">Vinicius</div><div class="lp-prof__nl">Oliveira</div><div class="lp-prof__ns" style="color:#8CC3F0">🇧🇷 “LokDog” · 23–4</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5516,7 +5569,7 @@ main, nav, footer { position: relative; z-index: 1; }
               <div class="lp-prof__bar"><span class="lp-prof__ey">WNBA · Projection</span></div>
               <div class="lp-prof__body">
                 <div class="lp-prof__hero">
-                  <div class="lp-prof__av" style="border-color:#6BB6FF">VB<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Veronica_Burton_Valkyries_%28cropped%29.jpg/330px-Veronica_Burton_Valkyries_%28cropped%29.jpg" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                  <div class="lp-prof__av" style="border-color:#6BB6FF">VB<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Veronica_Burton_Valkyries_%28cropped%29.jpg/330px-Veronica_Burton_Valkyries_%28cropped%29.jpg" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"></div>
                   <div style="min-width:0"><div class="lp-prof__nf">Veronica</div><div class="lp-prof__nl">Burton</div><div class="lp-prof__ns" style="color:#8CC3F0">Golden State · G/UTIL · vs ATL</div></div>
                 </div>
                 <div class="lp-gcard">
@@ -5539,7 +5592,7 @@ main, nav, footer { position: relative; z-index: 1; }
                 <div class="lp-gcard">
                   <div class="lp-gcard__t">Likely Defender · estimate</div>
                   <div class="lp-mk">
-                    <div class="lp-mk__av" style="border-color:#6BB6FF">RH<img src="https://a.espncdn.com/i/headshots/wnba/players/full/4398674.png" alt="" loading="lazy" decoding="async" onerror="this.remove()"></div>
+                    <div class="lp-mk__av" style="border-color:#6BB6FF">RH<img src="https://a.espncdn.com/i/headshots/wnba/players/full/4398674.png" alt="" loading="eager" fetchpriority="high" decoding="async" onerror="this.remove()"></div>
                     <div class="lp-mk__id"><div class="lp-mk__nm">Rhyne Howard</div><div class="lp-mk__meta">ATL · G · #2 at G</div></div>
                     <div class="lp-mk__st"><div class="lp-mk__s"><b style="color:#34D399">−4.0</b><span>FS Δ/9</span></div><div class="lp-mk__s"><b>98</b><span>Pctl</span></div></div>
                   </div>
