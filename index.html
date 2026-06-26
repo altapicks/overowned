@@ -4482,6 +4482,10 @@ main, nav, footer { position: relative; z-index: 1; }
    bottom nav. Secondary panels (Movement rail) are hidden, like the app.
    ════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+  /* MOBILE ONLY (Alta 2026-06-26): no "Take the Tour" on mobile. Hide the whole
+     #inside section + the hero "Take the Tour" button. PC keeps the full tour. */
+  #inside, a[href="#inside"] { display: none !important; }
+
   /* App breakpoint: PC tab bar hidden, bottom nav drives the views */
   .product-tabs { display: none !important; }
 
