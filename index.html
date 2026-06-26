@@ -7832,11 +7832,16 @@ main, nav, footer { position: relative; z-index: 1; }
     const sio = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
-          const target = parseInt(remEl.innerText, 10);
-          if (isFinite(target)) {
-            let n = Math.max(0, target - 5);
+          // Re-read the live target each tick so a late inventory fetch always
+          // wins the race (it sets window.__seasonLive). Without this, the count
+          // would lock onto the hardcoded "25" if it animated before the fetch.
+          const target = () => (window.__seasonLive != null ? window.__seasonLive : parseInt(remEl.innerText, 10));
+          const t0 = target();
+          if (isFinite(t0)) {
+            let n = Math.max(0, t0 - 5);
             const step = () => {
-              if (n >= target) { remEl.innerText = target; return; }
+              const t = target();
+              if (n >= t) { remEl.innerText = t; return; }
               n += 1;
               remEl.innerText = n;
               setTimeout(step, 90);
@@ -7861,6 +7866,7 @@ main, nav, footer { position: relative; z-index: 1; }
       if (!res.ok) return;
       const data = await res.json();
       if (typeof data.season_remaining === 'number') {
+        window.__seasonLive = data.season_remaining;   // source of truth for the count-up tick (beats the hardcoded default)
         document.getElementById('season-remaining').textContent = data.season_remaining;
         // Mirror the live count into the hero "spots remaining" indicator.
         const heroRem = document.getElementById('hero-spots-remaining');
