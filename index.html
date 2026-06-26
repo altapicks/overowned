@@ -5644,23 +5644,18 @@ main, nav, footer { position: relative; z-index: 1; }
         <div class="mtour__island"></div>
         <div class="mtour__screen" id="mtour-screen">
           <div class="mtour__slide is-on"><img src="/assets/tour/draws.webp" alt="Draws — live bracket with win-probability donuts" loading="eager" width="740" height="1608"></div>
-          <div class="mtour__slide"><img src="/assets/tour/match-detail.webp" alt="Match detail — final score and full serve stats" loading="lazy" width="740" height="1608"></div>
-          <div class="mtour__slide"><img src="/assets/tour/matchup-compare.webp" alt="Matchup compare — performance, serve and return bars with H2H" loading="lazy" width="740" height="1608"></div>
           <div class="mtour__slide"><img src="/assets/tour/projections.webp" alt="Projections — PrizePicks board with Edge" loading="lazy" width="740" height="1608"></div>
           <div class="mtour__slide"><img src="/assets/tour/aces.webp" alt="Aces — ace volume and aces allowed vs the PrizePicks line" loading="lazy" width="740" height="1608"></div>
-          <div class="mtour__slide"><img src="/assets/tour/player-intel.webp" alt="Player Intel — model win probability vs the live market" loading="lazy" width="740" height="1608"></div>
+          <div class="mtour__slide"><img src="/assets/tour/player-intel.webp" alt="Player Intel — scouting tendencies and service/return profile" loading="lazy" width="740" height="1608"></div>
           <div class="mtour__slide"><img src="/assets/tour/trends.webp" alt="Trends — graded hit-rate donuts by signal type" loading="lazy" width="740" height="1608"></div>
-          <div class="mtour__slide"><img src="/assets/tour/glitch-history.webp" alt="Glitch history — every graded play, hit or miss" loading="lazy" width="740" height="1608"></div>
           <div class="mtour__slide"><img src="/assets/tour/builder.webp" alt="Builder — the OverOwned lineup table" loading="lazy" width="740" height="1608"></div>
-          <div class="mtour__slide"><img src="/assets/tour/leaderboard.webp" alt="Leaderboard — surface-rating board" loading="lazy" width="740" height="1608"></div>
-          <div class="mtour__slide"><img src="/assets/tour/player-profile.webp" alt="Player profile — scouting tendencies and service/return profile" loading="lazy" width="740" height="1608"></div>
         </div>
       </div>
 
       <div class="mtour__cap" id="mtour-cap" aria-live="polite">
-        <div class="mtour__step" id="mtour-step">Step 1 of 11 &#183; Draws</div>
+        <div class="mtour__step" id="mtour-step">Step 1 of 6 &#183; Draws</div>
         <div class="mtour__title" id="mtour-title">The bracket, with live win odds</div>
-        <div class="mtour__body" id="mtour-body">Every draw rendered round-by-round with our model win&#37; on each name beside the live market price. A path-to-final ranking flags who drew the soft side &mdash; the bracket the way the sharps read it.</div>
+        <div class="mtour__body" id="mtour-body">Our model win&#37; on every name beside the live market.</div>
       </div>
 
       <div class="mtour__nav">
@@ -5672,7 +5667,7 @@ main, nav, footer { position: relative; z-index: 1; }
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
         </button>
       </div>
-      <div class="mtour__count"><b id="mtour-num">1</b> / 11 &#183; swipe or tap arrows</div>
+      <div class="mtour__count"><b id="mtour-num">1</b> / 6 &#183; swipe or tap arrows</div>
     </div>
 
     <div class="product-tabs reveal" role="tablist" id="product-tabs">
@@ -7996,29 +7991,20 @@ main, nav, footer { position: relative; z-index: 1; }
   // Captions reference the real app features (DrawWinProbDonuts, MatchupCompareModal,
   // PP projections Edge, Aces tool, Player Intel model-vs-market, Trends graded donuts,
   // OverOwned builder, surface leaderboard, draw player profile). Value only — no method.
+  // Curated 6-step flow — one short, punchy caption each. Value only, no method.
   var STEPS = [
-    { step: 'Draws',            title: 'The bracket, with live win odds',
-      body: 'Every draw rendered round-by-round with our model win% on each name beside the live market price. A path-to-final ranking flags who drew the soft side — the bracket the way the sharps read it.' },
-    { step: 'Match Detail',     title: 'The full box score, one tap away',
-      body: 'Tap any result for the final score plus the serve numbers that matter — aces, double faults, 1st &amp; 2nd-serve points won, break points, and aces allowed. The raw evidence behind every projection.' },
-    { step: 'Matchup Compare',  title: 'Two players, side by side',
-      body: 'Performance, serve, return, forehand and backhand laid out head-to-head, with the H2H record and aces-allowed split. See exactly where the edge lives before the first ball.' },
-    { step: 'Projections',      title: 'The PrizePicks board, with Edge',
-      body: 'Live PrizePicks lines with our Fan Score projection and the Edge beside each one — toggle Fan Score, Aces, Breaks or Glitches. Sorted by Edge so the best overs and unders rise to the top.' },
-    { step: 'Aces',             title: 'Ace overs/unders, priced',
-      body: 'Our independent ace projection against the PrizePicks line — ace volume vs the server, aces allowed by the returner, the resulting edge and a plain-English matchup read. Find the +EV ace bets.' },
-    { step: 'Player Intel',     title: 'Our model vs the market',
-      body: 'Our surface-aware win probability next to the live Kalshi market line, with ranking, recent form and a full service/return profile in percentiles. When the model and the market disagree, that gap is the edge.' },
-    { step: 'Trends',           title: 'Every signal, graded',
-      body: 'A grid of graded hit-rate donuts by signal type — tennis, PP glitches and more — frozen at lock and scored against the real box score. The honest track record, no cherry-picking.' },
-    { step: 'Glitch History',   title: 'The receipts, hit or miss',
-      body: 'The full list of graded glitch plays — player, line, our number and the result marked HIT or MISS. Every call out in the open so you can judge the record for yourself.' },
-    { step: 'Builder',          title: 'Lineups, the OverOwned way',
-      body: 'Pull the DK pool and build optimal lineups around our projections and ownership read — the leverage spots the field overlooks, assembled into ready-to-enter lineups in seconds.' },
-    { step: 'Leaderboard',      title: 'Every player, surface-rated',
-      body: 'A sortable board of surface ratings with serve, return and form columns — filter by Clay, Hard, Indoor or Grass. The fastest way to see who actually travels on today’s surface.' },
-    { step: 'Player Profile',   title: 'A scouting report on tap',
-      body: 'Open any player for scouting tendencies — elite hold, dominant serve, big-match record — plus ranking, win% and a percentile service/return profile. Know the player before you back them.' }
+    { step: 'Draws',        title: 'The bracket, with live win odds',
+      body: 'Our model win% on every name beside the live market.' },
+    { step: 'Projections',  title: 'The PrizePicks board, with Edge',
+      body: 'Every line, our projection, sorted by edge.' },
+    { step: 'Aces',         title: 'Ace overs/unders, priced',
+      body: 'Our ace projection vs the line — find the +EV plays.' },
+    { step: 'Player Intel', title: 'A full scouting report on tap',
+      body: 'Tendencies, ranking and a percentile serve/return profile.' },
+    { step: 'Trends',       title: 'Every signal, graded',
+      body: 'Real hit rates, scored against the box score.' },
+    { step: 'Builder',      title: 'Lineups, the OverOwned way',
+      body: 'Optimal builds around our edge — ready in seconds.' }
   ];
 
   var n = slides.length;
